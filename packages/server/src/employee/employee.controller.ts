@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
 import { EmployeeLoginDTO } from './dto/employee.dto'
 import R from 'src/utils/response'
@@ -17,5 +17,10 @@ export class EmployeeController {
       token: 'bbb',
       name: 'ccc',
     })
+  }
+
+  @Get()
+  test() {
+    return 'hello world!'
   }
 }
