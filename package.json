@@ -1,0 +1,14 @@
+{
+  "name": "sky_take_out",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
