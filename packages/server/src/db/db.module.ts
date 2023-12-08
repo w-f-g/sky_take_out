@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { Employee } from 'src/employee/entities/employee.entity'
 
 @Global()
 @Module({
@@ -15,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
           database: 'sky_take_out',
           synchronize: true,
           logging: true,
-          entities: [],
+          entities: [Employee],
           poolSize: 10,
           connectorPackage: 'mysql2',
           extra: {

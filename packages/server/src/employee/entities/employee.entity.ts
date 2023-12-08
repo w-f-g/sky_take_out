@@ -14,6 +14,7 @@ export class Employee implements IEmployeeInfo {
     name: 'name',
     comment: '姓名',
     type: 'varchar',
+    length: 32,
     collation: 'utf8_bin',
   })
   name: string
@@ -21,6 +22,7 @@ export class Employee implements IEmployeeInfo {
   @Column({
     name: 'username',
     type: 'varchar',
+    length: 32,
     comment: '用户名',
     collation: 'utf8_bin',
     unique: true,
@@ -30,6 +32,7 @@ export class Employee implements IEmployeeInfo {
   @Column({
     name: 'password',
     type: 'varchar',
+    length: 64,
     comment: '密码',
     collation: 'utf8_bin',
   })
@@ -38,6 +41,7 @@ export class Employee implements IEmployeeInfo {
   @Column({
     name: 'phone',
     type: 'varchar',
+    length: 11,
     comment: '手机号',
     collation: 'utf8_bin',
   })
@@ -46,6 +50,7 @@ export class Employee implements IEmployeeInfo {
   @Column({
     name: 'sex',
     type: 'varchar',
+    length: 2,
     comment: '性别',
     collation: 'utf8_bin',
   })
@@ -54,6 +59,7 @@ export class Employee implements IEmployeeInfo {
   @Column({
     name: 'id_number',
     type: 'varchar',
+    length: 18,
     comment: '身份证号',
     collation: 'utf8_bin',
     unique: true,

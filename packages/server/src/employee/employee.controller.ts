@@ -9,10 +9,10 @@ import { JwtService } from '@nestjs/jwt'
 @Controller('/admin/employee')
 export class EmployeeController {
   @Inject(JwtService)
-  private readonly jwtService: JwtService
+  private jwtService: JwtService
   
   @Inject(EmployeeService)
-  private readonly employeeService: EmployeeService
+  private employeeService: EmployeeService
 
   @Post('/login')
   async login(@Body() loginInfo: EmployeeLoginDTO): Promise<R<EmployeeLoginVO>> {
