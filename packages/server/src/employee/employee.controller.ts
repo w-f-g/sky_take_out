@@ -16,7 +16,6 @@ export class EmployeeController {
 
   @Post('/login')
   async login(@Body() loginInfo: EmployeeLoginDTO): Promise<R<EmployeeLoginVO>> {
-    console.log(loginInfo)
     const employee = await this.employeeService.login(loginInfo)
     const token = this.jwtService.sign({
       empId: employee.id,

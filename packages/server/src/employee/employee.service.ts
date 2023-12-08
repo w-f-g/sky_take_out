@@ -5,6 +5,7 @@ import { Employee } from './entities/employee.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EmployeeLoginDTO } from './dto/employee.dto'
 import { MessageConstant } from 'src/utils/constant'
+import { md5 } from 'src/utils'
 
 @Injectable()
 export class EmployeeService {
@@ -12,13 +13,14 @@ export class EmployeeService {
   private employeeRepository: Repository<Employee>
 
   async login({ username, password }: EmployeeLoginDTO): Promise<Employee> {
+    const _pwd = md5(password)
     const employee = await this.employeeRepository.findOneBy({
       username,
     })
     if (employee === null) {
       throw new HttpException(MessageConstant.ACCOUNT_NOT_FOUND, HttpStatus.NOT_FOUND)
     }
-    if (employee.password !== password) {
+    if (employee.password !== _pwd) {
       throw new HttpException(MessageConstant.PASSWORD_ERROR, HttpStatus.NOT_FOUND)
     }
     if (employee.status === 0) {
