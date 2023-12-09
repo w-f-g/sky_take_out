@@ -3,8 +3,8 @@ import { IEmployeeInfo } from '@sky_take_out/types'
 import { Repository } from 'typeorm'
 import { Employee } from './entities/employee.entity'
 import { InjectRepository } from '@nestjs/typeorm'
-import { EmployeeLoginDTO } from './dto/employee.dto'
-import { MessageConstant } from 'src/utils/constant'
+import { EmployeeDTO, EmployeeLoginDTO } from './dto/employee.dto'
+import { MessageConstant, StatusConstant } from 'src/utils/constant'
 import { md5 } from 'src/utils'
 
 @Injectable()
@@ -27,6 +27,29 @@ export class EmployeeService {
       throw new HttpException(MessageConstant.ACCOUNT_LOCKED, HttpStatus.NOT_FOUND)
     }
     return employee
+  }
+
+  async addEmployee(employee: EmployeeDTO) {
+    const now = new Date()
+    const _e = new Employee()
+    _e.idNumber = employee.idNumber
+    _e.name = employee.name
+    _e.phone = employee.phone
+    _e.sex = employee.sex
+    _e.username = employee.username
+
+    _e.status = StatusConstant.ENABLE
+    _e.password = md5('123456')
+    _e.createTime = now
+    _e.updateTime = now
+
+    _e.createUser = 10
+    _e.updateUser = 10
+    try {
+      await this.employeeRepository.insert(_e)
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.FORBIDDEN)
+    }
   }
   
   async findEmployeeInfoById(id: number): Promise<IEmployeeInfo> {

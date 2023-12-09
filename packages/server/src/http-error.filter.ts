@@ -1,13 +1,13 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common'
 import { Response } from 'express'
 import R from './utils/response'
+import { MessageConstant } from './utils/constant'
 
 @Catch(HttpException)
 export class HttpErrorFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const http = host.switchToHttp()
     const response = http.getResponse<Response>()
-    const statusCode = exception.getStatus()
     const exceptionResponse = exception.getResponse() as string | Record<'message', string[]>
     
     let message = exception.message
@@ -18,13 +18,12 @@ export class HttpErrorFilter implements ExceptionFilter {
         message = exception.message
       }
     }
+
+    if (message.includes('Duplicate entry')) {
+      const username = message.split(' ')[2]
+      message = username + MessageConstant.ALREADY_EXISTS
+    }
  
-    response
-      .status(
-        statusCode !== HttpStatus.UNAUTHORIZED
-          ? HttpStatus.OK
-          : statusCode
-      )
-      .json(new R(statusCode, null, message))
+    response.status(HttpStatus.OK).json(R.error(message))
   }
 }

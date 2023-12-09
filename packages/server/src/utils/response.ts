@@ -12,10 +12,10 @@ export default class R<T = null> implements IResponse<T> {
   }
 
   static success<K>(data: K) {
-    return new R<K>(200, data, 'ok')
+    return new R<K>(1, data, 'ok')
   }
 
   static error(msg: string) {
-    return new R<null>(404, null, msg)
+    return new R<null>(0, null, msg)
   }
 }

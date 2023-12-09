@@ -19,11 +19,13 @@ export interface IEmployeeLoginDTO extends Pick<IEmployee, 'username' | 'passwor
 /**
  * 员工登录返回的数据格式
  */
-export interface IEmployeeLoginVO extends Pick<IEmployee, 'id' | 'name' | 'username'> {
+export interface IEmployeeLoginVO extends Pick<IEmployee, 'id' | 'name'> {
     /**
      * jwt令牌
      */
     token: string,
+
+    userName: string,
 }
 
 /**
