@@ -29,7 +29,7 @@ export class EmployeeService {
     return employee
   }
 
-  async addEmployee(employee: EmployeeDTO) {
+  async addEmployee(employee: EmployeeDTO, empId: number) {
     const now = new Date()
     const _e = new Employee()
     _e.idNumber = employee.idNumber
@@ -43,8 +43,8 @@ export class EmployeeService {
     _e.createTime = now
     _e.updateTime = now
 
-    _e.createUser = 10
-    _e.updateUser = 10
+    _e.createUser = empId
+    _e.updateUser = empId
     try {
       await this.employeeRepository.insert(_e)
     } catch (error) {

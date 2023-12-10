@@ -1,11 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put, Request, UseGuards } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
 import { EmployeeDTO, EmployeeLoginDTO } from './dto/employee.dto'
 import R from 'src/utils/response'
 import { EmployeeLoginVO } from './vo/employee.vo'
 import { IEmployeeInfo } from '@sky_take_out/types'
 import { JwtService } from '@nestjs/jwt'
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { AuthGuard } from 'src/guards/auth.guard'
 
 @ApiTags('员工相关接口')
 @Controller('/admin/employee')
@@ -42,10 +43,13 @@ export class EmployeeController {
     return R.success(null)
   }
 
+  @ApiBearerAuth('bearer')
   @ApiOperation({ summary: '新增员工' })
+  @UseGuards(AuthGuard)
   @Post()
-  async addEmployee(@Body() employee: EmployeeDTO){
-    await this.employeeService.addEmployee(employee)
+  async addEmployee(@Body() employee: EmployeeDTO, @Request() req){
+    const { empId } = req.meta.userInfo
+    await this.employeeService.addEmployee(employee, +empId)
     return R.success(null)
   }
 
