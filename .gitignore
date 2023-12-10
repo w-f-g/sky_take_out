@@ -41,3 +41,5 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+!utils/dist

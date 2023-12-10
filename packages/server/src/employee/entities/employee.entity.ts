@@ -1,5 +1,7 @@
 import { IEmployeeInfo } from '@sky_take_out/types'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { EmployeeDTO } from '../dto/employee.dto'
+import { dateFormat } from '@sky_take_out/utils'
 
 @Entity('employee')
 export class Employee implements IEmployeeInfo {
@@ -80,6 +82,10 @@ export class Employee implements IEmployeeInfo {
     comment: '创建时间',
     default: null,
     nullable: true,
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => dateFormat(value),
+    },
   })
   createTime: Date
 
@@ -89,7 +95,10 @@ export class Employee implements IEmployeeInfo {
     comment: '更新时间',
     default: null,
     nullable: true,
-
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => dateFormat(value),
+    },
   })
   updateTime: Date
 
@@ -110,4 +119,31 @@ export class Employee implements IEmployeeInfo {
     nullable: true,
   })
   updateUser: number
+}
+
+export function buildEmployee(
+  employee: EmployeeDTO,
+  status: number,
+  password: string,
+  createTime: Date,
+  updateTime: Date,
+  createUser: number,
+  updateUser: number,
+) {
+  const _e = new Employee()
+  _e.idNumber = employee.idNumber
+  _e.name = employee.name
+  _e.phone = employee.phone
+  _e.sex = employee.sex
+  _e.username = employee.username
+
+  _e.status = status
+  _e.password = password
+  _e.createTime = createTime
+  _e.updateTime = updateTime
+
+  _e.createUser = createUser
+  _e.updateUser = updateUser
+
+  return _e
 }

@@ -1,3 +1,4 @@
+/** 员工基础类型 */
 export interface IEmployee {
     id: number,
     /** 身份证号 */
@@ -12,7 +13,7 @@ export interface IEmployee {
 }
 
 /**
- * 工登录时传递的数据模型
+ * 员工登录时传递的数据模型
  */
 export interface IEmployeeLoginDTO extends Pick<IEmployee, 'username' | 'password'> {}
 
@@ -39,7 +40,7 @@ export interface IEmployeeInfo extends IEmployee {
 }
 
 /**
- * 修改密码 DTO
+ * 修改员工密码 DTO
  */
 export interface IPasswordEditDTO {
     /**
@@ -63,5 +64,34 @@ export interface IEmployeeDTO extends Omit<IEmployee, 'password' | 'status' | 'i
     /**
      * 员工id
      */
-    id?: number;
+    id?: number,
+}
+
+/** 员工分页 DTO */
+export interface IEmployeePageQueryDTO {
+    /**
+     * 员工姓名
+     */
+    name?: string,
+    /**
+     * 页码
+     */
+    page: string,
+    /**
+     * 每页记录数
+     */
+    pageSize: string,
+}
+
+/** 员工分页 DTO */
+export interface IEmployeePageQueryVO extends IEmployee {
+    createTime: string,
+    createUser: number,
+    updateTime: string,
+    updateUser: number,
+}
+
+export interface IPageResult<T> {
+    records: T[];
+    total: number;
 }

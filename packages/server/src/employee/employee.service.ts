@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
-import { IEmployeeInfo } from '@sky_take_out/types'
-import { Repository } from 'typeorm'
-import { Employee } from './entities/employee.entity'
+import { IEmployeeInfo, IEmployeePageQueryVO } from '@sky_take_out/types'
+import { FindManyOptions, Like, Repository } from 'typeorm'
+import { Employee, buildEmployee } from './entities/employee.entity'
 import { InjectRepository } from '@nestjs/typeorm'
-import { EmployeeDTO, EmployeeLoginDTO } from './dto/employee.dto'
+import { EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO } from './dto/employee.dto'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
 import { md5 } from 'src/utils'
+import { EmployeePageVO } from './vo/employee.vo'
 
 @Injectable()
 export class EmployeeService {
@@ -31,24 +32,39 @@ export class EmployeeService {
 
   async addEmployee(employee: EmployeeDTO, empId: number) {
     const now = new Date()
-    const _e = new Employee()
-    _e.idNumber = employee.idNumber
-    _e.name = employee.name
-    _e.phone = employee.phone
-    _e.sex = employee.sex
-    _e.username = employee.username
-
-    _e.status = StatusConstant.ENABLE
-    _e.password = md5('123456')
-    _e.createTime = now
-    _e.updateTime = now
-
-    _e.createUser = empId
-    _e.updateUser = empId
+    const _e = buildEmployee(
+      employee,
+      StatusConstant.ENABLE,
+      md5('123456'),
+      now,
+      now,
+      empId,
+      empId
+    )
+    
     try {
       await this.employeeRepository.insert(_e)
     } catch (error) {
       throw new HttpException(error, HttpStatus.FORBIDDEN)
+    }
+  }
+
+  async getEmployeePage({ name, page, pageSize }: EmployeePageDTO): Promise<EmployeePageVO> {
+    const _p = +page
+    const _ps = +pageSize
+    const limitQuery: FindManyOptions<Employee> = {
+      take: _ps,
+      skip: (_p - 1) * _ps,
+    }
+    if (name) {
+      limitQuery.where = {
+        name: Like(`%${name}%`),
+      }
+    }
+    const [employees, total] = await this.employeeRepository.findAndCount(limitQuery)
+    return {
+      records: employees as unknown as IEmployeePageQueryVO[],
+      total,
     }
   }
   

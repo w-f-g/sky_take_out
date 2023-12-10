@@ -1,7 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IEmployeeDTO, IEmployeeLoginDTO } from '@sky_take_out/types'
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IEmployeeDTO, IEmployeeLoginDTO, IEmployeePageQueryDTO } from '@sky_take_out/types'
+import { IsInt, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator'
 
+/** 员工登录 */
 export class EmployeeLoginDTO implements IEmployeeLoginDTO {
   @ApiProperty({ name: 'password' })
   @IsString()
@@ -14,6 +15,7 @@ export class EmployeeLoginDTO implements IEmployeeLoginDTO {
   username: string
 }
 
+/** 新增员工 */
 export class EmployeeDTO implements IEmployeeDTO {
   @ApiPropertyOptional({ name: 'id' })
   @IsInt()
@@ -44,4 +46,22 @@ export class EmployeeDTO implements IEmployeeDTO {
   @IsString()
   @IsNotEmpty()
   username: string
+}
+
+/** 员工分页 */
+export class EmployeePageDTO implements IEmployeePageQueryDTO {
+  @ApiPropertyOptional({ name: 'name' })
+  @IsString()
+  @IsOptional()
+  name?: string
+
+  @ApiProperty({ name: 'page' })
+  @IsNumberString()
+  @IsNotEmpty()
+  page: string
+
+  @ApiProperty({ name: 'pageSize' })
+  @IsNumberString()
+  @IsNotEmpty()
+  pageSize: string
 }

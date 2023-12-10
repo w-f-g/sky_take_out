@@ -1,11 +1,11 @@
-import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put, Request, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put, Query, Request, UseGuards } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
-import { EmployeeDTO, EmployeeLoginDTO } from './dto/employee.dto'
+import { EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO } from './dto/employee.dto'
 import R from 'src/utils/response'
-import { EmployeeLoginVO } from './vo/employee.vo'
+import { EmployeeLoginVO, EmployeePageVO } from './vo/employee.vo'
 import { IEmployeeInfo } from '@sky_take_out/types'
 import { JwtService } from '@nestjs/jwt'
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from 'src/guards/auth.guard'
 
 @ApiTags('员工相关接口')
@@ -51,6 +51,19 @@ export class EmployeeController {
     const { empId } = req.meta.userInfo
     await this.employeeService.addEmployee(employee, +empId)
     return R.success(null)
+  }
+
+  @ApiBearerAuth('bearer')
+  @ApiOkResponse({
+    type: EmployeePageVO,
+  })
+  @ApiOperation({ summary: '员工分页查询' })
+  @UseGuards(AuthGuard)
+  @Get('/page')
+  async getEmployeePage(@Query() query: EmployeePageDTO) {
+    console.log(query)
+    const res = await this.employeeService.getEmployeePage(query)
+    return R.success(res)
   }
 
   @Get('/:id')
