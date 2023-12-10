@@ -67,6 +67,20 @@ export class EmployeeService {
       total,
     }
   }
+
+  async changeEmployeeStatus(status: number, id: number) {
+    const employee = await this.employeeRepository.findOneBy({
+      id,
+    })
+    // 查询账号是否存在
+    if (employee === null) {
+      throw new HttpException(MessageConstant.ACCOUNT_NOT_FOUND, HttpStatus.NOT_FOUND)
+    }
+    await this.employeeRepository.update(id, {
+      status,
+    })
+
+  }
   
   async findEmployeeInfoById(id: number): Promise<IEmployeeInfo> {
     const info = await this.employeeRepository.findOneBy({

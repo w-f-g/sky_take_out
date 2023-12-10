@@ -66,6 +66,18 @@ export class EmployeeController {
     return R.success(res)
   }
 
+  @ApiOperation({ summary: '启用禁用员工账号' })
+  @ApiBearerAuth('bearer')
+  @UseGuards(AuthGuard)
+  @Post('/status/:status')
+  async changeEmployeeStatus(
+    @Param('status') status: number,
+    @Query('id') id: number
+  ) {
+    await this.employeeService.changeEmployeeStatus(status, id)
+    return R.success(null)
+  }
+
   @Get('/:id')
   async getEmployeeInfoById(@Param('id') id: number): Promise<R<IEmployeeInfo>> {
     const info = await this.employeeService.findEmployeeInfoById(id)
