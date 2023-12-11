@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IEmployeeLoginVO, IEmployeePageQueryVO, IPageResult } from '@sky_take_out/types'
+import { IEmployeeLoginVO, IEmployeeVO, IPageResult } from '@sky_take_out/types'
 
 export class EmployeeLoginVO implements IEmployeeLoginVO {
   @ApiProperty()
@@ -15,7 +15,7 @@ export class EmployeeLoginVO implements IEmployeeLoginVO {
   userName: string
 }
 
-class EmployeePageRecord implements IEmployeePageQueryVO{
+export class EmployeeVO implements IEmployeeVO{
   @ApiProperty()
   createTime: string
   @ApiProperty()
@@ -42,9 +42,9 @@ class EmployeePageRecord implements IEmployeePageQueryVO{
   username: string
 }
 
-export class EmployeePageVO implements IPageResult<IEmployeePageQueryVO> {
-  @ApiProperty({ name: 'records', type: [EmployeePageRecord] })
-  records: IEmployeePageQueryVO[]
+export class EmployeePageVO implements IPageResult<IEmployeeVO> {
+  @ApiProperty({ name: 'records', type: [EmployeeVO] })
+  records: IEmployeeVO[]
 
   @ApiProperty()
   total: number

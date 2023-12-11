@@ -2,8 +2,7 @@ import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put, Query, Req
 import { EmployeeService } from './employee.service'
 import { EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO } from './dto/employee.dto'
 import R from 'src/utils/response'
-import { EmployeeLoginVO, EmployeePageVO } from './vo/employee.vo'
-import { IEmployeeInfo } from '@sky_take_out/types'
+import { EmployeeLoginVO, EmployeePageVO, EmployeeVO } from './vo/employee.vo'
 import { JwtService } from '@nestjs/jwt'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from 'src/guards/auth.guard'
@@ -78,8 +77,12 @@ export class EmployeeController {
     return R.success(null)
   }
 
+  @ApiOkResponse({ type: EmployeeVO })
+  @ApiOperation({ summary: '根据id查询员工' })
+  @ApiBearerAuth('bearer')
+  @UseGuards(AuthGuard)
   @Get('/:id')
-  async getEmployeeInfoById(@Param('id') id: number): Promise<R<IEmployeeInfo>> {
+  async getEmployeeInfoById(@Param('id') id: number) {
     const info = await this.employeeService.findEmployeeInfoById(id)
     return R.success(info)
   }

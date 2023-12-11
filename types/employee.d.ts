@@ -84,7 +84,7 @@ export interface IEmployeePageQueryDTO {
 }
 
 /** 员工分页 DTO */
-export interface IEmployeePageQueryVO extends IEmployee {
+export interface IEmployeeVO extends IEmployee {
     createTime: string,
     createUser: number,
     updateTime: string,

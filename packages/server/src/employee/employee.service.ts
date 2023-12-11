@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
-import { IEmployeeInfo, IEmployeePageQueryVO } from '@sky_take_out/types'
+import { IEmployeeVO } from '@sky_take_out/types'
 import { FindManyOptions, Like, Repository } from 'typeorm'
 import { Employee, buildEmployee } from './entities/employee.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO } from './dto/employee.dto'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
 import { md5 } from 'src/utils'
-import { EmployeePageVO } from './vo/employee.vo'
+import { EmployeePageVO, EmployeeVO } from './vo/employee.vo'
 
 @Injectable()
 export class EmployeeService {
@@ -63,7 +63,7 @@ export class EmployeeService {
     }
     const [employees, total] = await this.employeeRepository.findAndCount(limitQuery)
     return {
-      records: employees as unknown as IEmployeePageQueryVO[],
+      records: employees as unknown as IEmployeeVO[],
       total,
     }
   }
@@ -82,10 +82,14 @@ export class EmployeeService {
 
   }
   
-  async findEmployeeInfoById(id: number): Promise<IEmployeeInfo> {
+  async findEmployeeInfoById(id: number): Promise<EmployeeVO> {
     const info = await this.employeeRepository.findOneBy({
       id,
     })
-    return info
+    if (info === null) {
+      throw new HttpException(MessageConstant.ACCOUNT_NOT_FOUND, HttpStatus.NOT_FOUND)
+    }
+    info.password = '*****'
+    return info as unknown as EmployeeVO
   }
 }
