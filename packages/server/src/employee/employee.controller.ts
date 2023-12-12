@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put, Query, Request, UseGuards } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
-import { EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO } from './dto/employee.dto'
+import { EditEmployeeDTO, EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO, PasswordEditDTO } from './dto/employee.dto'
 import R from 'src/utils/response'
 import { EmployeeLoginVO, EmployeePageVO, EmployeeVO } from './vo/employee.vo'
 import { JwtService } from '@nestjs/jwt'
@@ -51,6 +51,16 @@ export class EmployeeController {
     await this.employeeService.addEmployee(employee, +empId)
     return R.success(null)
   }
+  
+  @ApiBearerAuth('bearer')
+  @ApiOperation({ summary: '编辑员工信息' })
+  @UseGuards(AuthGuard)
+  @Put()
+  async editEmployeeIndo(@Body() employee: EditEmployeeDTO, @Request() req) {
+    const { empId } = req.meta.userInfo
+    await this.employeeService.editEmployee(employee, +empId)
+    return R.success(null)
+  }
 
   @ApiBearerAuth('bearer')
   @ApiOkResponse({
@@ -71,9 +81,11 @@ export class EmployeeController {
   @Post('/status/:status')
   async changeEmployeeStatus(
     @Param('status') status: number,
-    @Query('id') id: number
+    @Query('id') id: number,
+    @Request() req
   ) {
-    await this.employeeService.changeEmployeeStatus(status, id)
+    const { empId } = req.meta.userInfo
+    await this.employeeService.changeEmployeeStatus(status, id, +empId)
     return R.success(null)
   }
 
@@ -87,9 +99,13 @@ export class EmployeeController {
     return R.success(info)
   }
 
-
+  @ApiOperation({ summary: '修改密码' })
+  @ApiBearerAuth('bearer')
+  @UseGuards(AuthGuard)
   @Put('/editPassword')
-  editPassword(@Body() info) {
-    return R.success('ok')
+  async editPassword(@Body() data: PasswordEditDTO, @Request() req) {
+    const { empId } = req.meta.userInfo
+    await this.employeeService.editPassword(data, +empId)
+    return R.success(null)
   }
 }

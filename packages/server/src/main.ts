@@ -7,7 +7,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   app.useGlobalFilters(new HttpErrorFilter())
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(new ValidationPipe({
+    // 禁止传入未定义的字段
+    forbidNonWhitelisted: true,
+    whitelist: true,
+  }))
   
   const swaggerConfig = new DocumentBuilder()
     .setTitle('苍穹外卖')
