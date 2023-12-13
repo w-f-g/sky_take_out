@@ -1,3 +1,5 @@
+import { IPageQuery } from "./common";
+
 /** 员工基础类型 */
 export interface IEmployee {
     id: number,
@@ -32,7 +34,7 @@ export interface IEmployeeLoginVO extends Pick<IEmployee, 'id' | 'name'> {
 /**
  * 员工信息
  */
-export interface IEmployeeInfo extends IEmployee {
+export interface IEmployeeEntity extends IEmployee {
     createTime: Date,
     createUser: number,
     updateTime: Date,
@@ -68,19 +70,11 @@ export interface IEmployeeDTO extends Omit<IEmployee, 'password' | 'status' | 'i
 }
 
 /** 员工分页 DTO */
-export interface IEmployeePageQueryDTO {
+export interface IEmployeePageQueryDTO extends IPageQuery {
     /**
      * 员工姓名
      */
     name?: string,
-    /**
-     * 页码
-     */
-    page: string,
-    /**
-     * 每页记录数
-     */
-    pageSize: string,
 }
 
 /** 员工分页 DTO */
@@ -89,9 +83,4 @@ export interface IEmployeeVO extends IEmployee {
     createUser: number,
     updateTime: string,
     updateUser: number,
-}
-
-export interface IPageResult<T> {
-    records: T[];
-    total: number;
 }
