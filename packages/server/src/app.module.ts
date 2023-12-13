@@ -4,6 +4,7 @@ import { DBModule } from './db/db.module'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'
 import { resolve } from 'path'
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { resolve } from 'path'
         expiresIn: '1h',
       },
     }),
+    CategoryModule,
   ],
 })
 export class AppModule {}

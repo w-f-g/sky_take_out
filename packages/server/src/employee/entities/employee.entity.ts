@@ -1,10 +1,10 @@
-import { IEmployeeInfo } from '@sky_take_out/types'
+import { IEmployeeEntity } from '@sky_take_out/types'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { EmployeeDTO } from '../dto/employee.dto'
 import { dateFormat } from '@sky_take_out/utils'
 
 @Entity('employee')
-export class Employee implements IEmployeeInfo {
+export class Employee implements IEmployeeEntity {
   @PrimaryGeneratedColumn({
     name: 'id',
     comment: '主键',
