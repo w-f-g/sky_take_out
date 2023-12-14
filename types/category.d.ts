@@ -23,7 +23,9 @@ export interface ICategoryVO extends Omit<ICategoryEntity, 'createTime' | 'updat
 }
 
 /** 修改分类 DTO */
-export interface IEditCategoryDTO extends Omit<ICategory, 'status'> {}
+export interface IEditCategoryDTO extends Omit<ICategory, 'status' | 'type'> {
+  type: 1 | 2,
+}
 
 /** 新增分类 DTO */
 export interface IAddCategoryDTO extends Omit<IEditCategoryDTO, 'id'> {
@@ -35,7 +37,7 @@ export interface ICategoryPageQueryDTO extends IPageQuery {
   /** 分类名称 */
   name?: string,
   /** 分类类型：1为菜品分类，2为套餐分类 */
-  type: '1' | '2',
+  type: 1 | 2,
 }
 
 // declare const test: IEditCategoryDTO

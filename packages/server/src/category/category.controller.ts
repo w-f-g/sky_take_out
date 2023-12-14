@@ -1,23 +1,32 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Request, UseGuards } from '@nestjs/common'
 import { CategoryService } from './category.service'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AddCategoryDTO, CategoryPageQueryDTO, EditCategoryDTO } from './dto/category.dto'
 import R from 'src/utils/response'
-import { CategoryVO } from './vo/category.vo'
+import { CategoryPageVO } from './vo/category.vo'
+import { AuthGuard } from 'src/guards/auth.guard'
 
+@ApiBearerAuth('bearer')
 @ApiTags('分类相关接口')
+@UseGuards(AuthGuard)
 @Controller('/admin/category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @ApiOperation({ summary: '修改分类' })
   @Put()
-  async editCategory(@Body() data: EditCategoryDTO) {
+  async editCategory(@Body() data: EditCategoryDTO, @Request() req) {
+    const { empId } = req.meta.userInfo
+    await this.categoryService.editCategoryService(data, +empId)
     return R.success(null)
   }
 
+  @ApiOkResponse({ type: CategoryPageVO })
+  @ApiOperation({ summary: '分类分页查询' })
   @Get('/page')
-  async categoryPageQuery(@Query() query: CategoryPageQueryDTO): Promise<R<CategoryVO>> {
-    return R.success(null)
+  async categoryPageQuery(@Query() query: CategoryPageQueryDTO): Promise<R<CategoryPageVO>> {
+    const res = await this.categoryService.categoryPageQueryService(query)
+    return R.success(res)
   }
 
   @Post('/status/:status')

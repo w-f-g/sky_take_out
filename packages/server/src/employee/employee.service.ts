@@ -60,7 +60,10 @@ export class EmployeeService {
     _e.updateUser = empId
     _e.updateTime = new Date()
     try {
-      await this.employeeRepository.update(employee.id, _e)
+      const res = await this.employeeRepository.update(employee.id, _e)
+      if (res.affected === 0) {
+        throw new Error(`更新失败id: ${employee.id} 记录不存在`)
+      }
     } catch (error) {
       throw new HttpException(error, HttpStatus.FORBIDDEN)
     }

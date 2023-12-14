@@ -42,6 +42,14 @@ export enum StatusConstant {
 }
 
 /**
+ * 分类类型
+ */
+export enum CategoryType {
+  DISHES = 1,
+  SET_MEAL = 2,
+}
+
+/**
  * 公共字段自动填充相关常量
  */
 export enum AutoFillConstant {
