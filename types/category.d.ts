@@ -29,7 +29,7 @@ export interface IEditCategoryDTO extends Omit<ICategory, 'status' | 'type'> {
 
 /** 新增分类 DTO */
 export interface IAddCategoryDTO extends Omit<IEditCategoryDTO, 'id'> {
-  id?: number,
+  // id?: number,
 }
 
 /** 分类分页查询 DTO */

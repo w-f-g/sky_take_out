@@ -37,10 +37,12 @@ export class CategoryPageQueryDTO implements ICategoryPageQueryDTO {
   type: 1 | 2
   
   @ApiProperty()
+  @IsString()
   @IsNotEmpty()
   page: string
 
   @ApiProperty()
+  @IsString()
   @IsNotEmpty()
   pageSize: string
 }
@@ -48,13 +50,12 @@ export class CategoryPageQueryDTO implements ICategoryPageQueryDTO {
 /** 新增分类 DTO */
 export class AddCategoryDTO implements IAddCategoryDTO {
   @ApiProperty()
-  id?: number
-
-  @ApiProperty()
+  @IsString()
   @IsNotEmpty()
   name: string
 
   @ApiProperty()
+  @IsInt()
   @IsNotEmpty()
   sort: number
 

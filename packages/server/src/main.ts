@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   app.useGlobalFilters(new HttpErrorFilter())
   app.useGlobalPipes(new ValidationPipe({
+    transform: true,
     // 禁止传入未定义的字段
     forbidNonWhitelisted: true,
     whitelist: true,
