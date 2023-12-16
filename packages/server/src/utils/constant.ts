@@ -49,6 +49,11 @@ export enum CategoryType {
   SET_MEAL = 2,
 }
 
+export enum CategoryTypeString {
+  DISHES = '1',
+  SET_MEAL = '2',
+}
+
 /**
  * 公共字段自动填充相关常量
  */

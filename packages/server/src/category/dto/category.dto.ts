@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { IAddCategoryDTO, ICategoryPageQueryDTO, IEditCategoryDTO } from '@sky_take_out/types'
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator'
-import { CategoryType } from 'src/utils/constant'
+import { CategoryType, CategoryTypeString } from 'src/utils/constant'
 
 /** 修改分类 DTO */
 export class EditCategoryDTO implements IEditCategoryDTO {
@@ -33,7 +33,7 @@ export class CategoryPageQueryDTO implements ICategoryPageQueryDTO {
   name?: string
   
   @ApiProperty()
-  @IsEnum(CategoryType)
+  @IsEnum(CategoryTypeString)
   type: 1 | 2
   
   @ApiProperty()
