@@ -1,4 +1,4 @@
-import { IPageQuery } from "./common";
+import { IEntityCommon, IPageQuery } from "./common";
 
 /** 分类模块基础类型 */
 export interface ICategory {
@@ -10,12 +10,7 @@ export interface ICategory {
 }
 
 /** 分类模块 entity */
-export interface ICategoryEntity extends ICategory {
-  createTime: Date,
-  createUser: number,
-  updateTime: Date,
-  updateUser: number,
-}
+export interface ICategoryEntity extends ICategory, IEntityCommon {}
 
 export interface ICategoryVO extends Omit<ICategoryEntity, 'createTime' | 'updateTime'> {
   createTime: string,
@@ -40,4 +35,4 @@ export interface ICategoryPageQueryDTO extends IPageQuery {
   type: 1 | 2,
 }
 
-// declare const test: IEditCategoryDTO
+// declare const test: ICategoryEntity

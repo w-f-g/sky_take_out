@@ -1,4 +1,4 @@
-import { IPageQuery } from "./common";
+import { IEntityCommon, IPageQuery } from "./common";
 
 /** 员工基础类型 */
 export interface IEmployee {
@@ -34,12 +34,7 @@ export interface IEmployeeLoginVO extends Pick<IEmployee, 'id' | 'name'> {
 /**
  * 员工信息
  */
-export interface IEmployeeEntity extends IEmployee {
-    createTime: Date,
-    createUser: number,
-    updateTime: Date,
-    updateUser: number,
-}
+export interface IEmployeeEntity extends IEmployee, IEntityCommon {}
 
 /**
  * 修改员工密码 DTO

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { IEmployeeVO } from '@sky_take_out/types'
 import { FindManyOptions, Like, Repository } from 'typeorm'
-import { Employee, buildEmployee } from './entities/employee.entity'
+import { Employee } from './entities/employee.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EditEmployeeDTO, EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO, PasswordEditDTO } from './dto/employee.dto'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
@@ -33,16 +33,13 @@ export class EmployeeService {
 
   /** 新增员工 service */
   async addEmployee(employee: EmployeeDTO, empId: number) {
-    const now = new Date()
-    const _e = buildEmployee(
-      employee,
-      StatusConstant.ENABLE,
-      md5('123456'),
-      now,
-      now,
-      empId,
-      empId
-    )
+    const _e = Employee.build({
+      ...employee,
+      status: StatusConstant.ENABLE,
+      password: md5('123456'),
+      createUser: empId,
+      updateUser: empId,
+    })
     
     try {
       await this.employeeRepository.insert(_e)
@@ -53,12 +50,8 @@ export class EmployeeService {
 
   /** 编辑员工信息 service */
   async editEmployee(employee: EditEmployeeDTO, empId: number) {
-    const _e = new Employee()
-    Object.entries(employee).forEach(([k, v]) => {
-      _e[k] = v
-    })
+    const _e = Employee.build(employee)
     _e.updateUser = empId
-    _e.updateTime = new Date()
     try {
       const res = await this.employeeRepository.update(employee.id, _e)
       if (res.affected === 0) {
@@ -98,11 +91,11 @@ export class EmployeeService {
     if (employee === null) {
       throw new HttpException(MessageConstant.ACCOUNT_NOT_FOUND, HttpStatus.NOT_FOUND)
     }
-    await this.employeeRepository.update(id, {
+    const _e = Employee.build({
       status,
       updateUser: empId,
-      updateTime: new Date(),
     })
+    await this.employeeRepository.update(id, _e)
 
   }
   
@@ -118,6 +111,7 @@ export class EmployeeService {
     return info as unknown as EmployeeVO
   }
 
+  /** 修改员工密码 service */
   async editPassword(data: PasswordEditDTO, empId: number) {
     const info = await this.employeeRepository.findOneBy({
       id: data.empId,
@@ -141,13 +135,13 @@ export class EmployeeService {
       )
     }
 
-    // 买密码
-    try {
-      await this.employeeRepository.update(data.empId, {
+    const _e = Employee.build({
         password: _newPassword,
         updateUser: empId,
-        updateTime: new Date(),
       })
+    // 改密码
+    try {
+      await this.employeeRepository.update(data.empId, _e)
     } catch (error) {
       throw new HttpException(error, HttpStatus.FORBIDDEN)
     }

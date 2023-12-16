@@ -14,11 +14,7 @@ export class CategoryService {
 
   /** 修改分类 service */
   async editCategoryService(data: EditCategoryDTO, empId: number) {
-    const _c = new Category()
-    Object.entries(data).forEach(([k, v]) => {
-      _c[k] = v
-    })
-    _c.updateTime = new Date()
+    const _c = Category.build(data)
     _c.updateUser = empId
     try {
       const res = await this.categoryRepository.update(data.id, _c)
@@ -53,13 +49,7 @@ export class CategoryService {
 
   /** 新增分类 service */
   async addCategoryService(data: AddCategoryDTO, empId: number) {
-    const _c = new Category()
-    Object.entries(data).forEach(([k, v]) => {
-      _c[k] = v
-    })
-    const now = new Date()
-    _c.createTime = now
-    _c.updateTime = now
+    const _c = Category.build(data)
     _c.createUser = empId
     _c.updateUser = empId
     _c.status = 0
@@ -86,12 +76,12 @@ export class CategoryService {
 
   /** 启用、禁用分类 service */
   async changeCategoryStatusService(id: string, status: StatusConstant, empId: number) {
+    const _c = Category.build({
+      status,
+      updateUser: empId,
+    })
     try {
-      const res = await this.categoryRepository.update(id, {
-        status,
-        updateTime: new Date(),
-        updateUser: empId,
-      })
+      const res = await this.categoryRepository.update(id, _c)
       if (res.affected === 0) {
         throw new Error(`更新失败id: ${id} 记录不存在`)
       }

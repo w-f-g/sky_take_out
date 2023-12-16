@@ -1,10 +1,10 @@
 import { IEmployeeEntity } from '@sky_take_out/types'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { EmployeeDTO } from '../dto/employee.dto'
-import { dateFormat } from '@sky_take_out/utils'
+import { CommonEntity } from 'src/common.entity'
 
 @Entity('employee')
-export class Employee implements IEmployeeEntity {
+export class Employee extends CommonEntity implements IEmployeeEntity {
   @PrimaryGeneratedColumn({
     name: 'id',
     comment: '主键',
@@ -76,49 +76,13 @@ export class Employee implements IEmployeeEntity {
   })
   status: number
 
-  @Column({
-    name: 'create_time',
-    type: 'datetime',
-    comment: '创建时间',
-    default: null,
-    nullable: true,
-    transformer: {
-      to: (value: Date) => value,
-      from: (value: Date) => dateFormat(value),
-    },
-  })
-  createTime: Date
-
-  @Column({
-    name: 'update_time',
-    type: 'datetime',
-    comment: '更新时间',
-    default: null,
-    nullable: true,
-    transformer: {
-      to: (value: Date) => value,
-      from: (value: Date) => dateFormat(value),
-    },
-  })
-  updateTime: Date
-
-  @Column({
-    name: 'create_user',
-    type: 'bigint',
-    comment: '创建人',
-    default: null,
-    nullable: true,
-  })
-  createUser: number
-
-  @Column({
-    name: 'update_user',
-    type: 'bigint',
-    comment: '修改人',
-    default: null,
-    nullable: true,
-  })
-  updateUser: number
+  static build(data: Partial<Record<keyof Employee, Employee[keyof Employee]>>): Employee {
+    const _e = new Employee()
+    Object.entries(data).forEach(([k, v]) => {
+      _e[k] = v
+    })
+    return _e
+  }
 }
 
 export function buildEmployee(

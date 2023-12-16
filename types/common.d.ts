@@ -17,3 +17,11 @@ export interface IResponse<T = null> {
     data: T,
     msg: string,
 }
+
+/** entity 实体类中的公共字段 */
+export interface IEntityCommon {
+  createTime: Date,
+  createUser: number,
+  updateTime: Date,
+  updateUser: number,
+}

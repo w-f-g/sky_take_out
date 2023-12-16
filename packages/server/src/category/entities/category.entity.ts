@@ -1,9 +1,9 @@
 import { ICategoryEntity } from '@sky_take_out/types'
-import { dateFormat } from '@sky_take_out/utils'
+import { CommonEntity } from 'src/common.entity'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('category')
-export class Category implements ICategoryEntity {
+export class Category extends CommonEntity implements ICategoryEntity {
   @PrimaryGeneratedColumn({
     name: 'id',
     comment: '主键',
@@ -45,48 +45,12 @@ export class Category implements ICategoryEntity {
     default: null,
   })
   type: number
-  
-  @Column({
-    name: 'create_time',
-    type: 'datetime',
-    comment: '创建时间',
-    default: null,
-    nullable: true,
-    transformer: {
-      to: (value: Date) => value,
-      from: (value: Date) => dateFormat(value),
-    },
-  })
-  createTime: Date
-  
-  @Column({
-    name: 'create_user',
-    type: 'bigint',
-    comment: '创建人',
-    default: null,
-    nullable: true,
-  })
-  createUser: number
-  
-  @Column({
-    name: 'update_time',
-    type: 'datetime',
-    comment: '更新时间',
-    default: null,
-    nullable: true,
-    transformer: {
-      to: (value: Date) => value,
-      from: (value: Date) => dateFormat(value),
-    },
-  })
-  updateTime: Date
-  
-  @Column({
-    name: 'update_user',
-    type: 'bigint',
-    comment: '修改人',
-    default: null,
-    nullable: true,
-  })
-  updateUser: number
+
+  static build(data: Partial<Record<keyof Category, Category[keyof Category]>>): Category {
+    const _c = new Category()
+    Object.entries(data).forEach(([k, v]) => {
+      _c[k] = v
+    })
+    return _c
+  }
 }
