@@ -1,15 +1,13 @@
-import { Body, Controller, Delete, Get, Param, ParseEnumPipe, Post, Put, Query, Request, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseEnumPipe, Post, Put, Query, Request } from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AddCategoryDTO, CategoryPageQueryDTO, EditCategoryDTO } from './dto/category.dto'
 import R from 'src/utils/response'
 import { CategoryPageVO } from './vo/category.vo'
-import { AuthGuard } from 'src/guards/auth.guard'
 import { CategoryType, StatusConstant } from 'src/utils/constant'
 
 @ApiBearerAuth('bearer')
 @ApiTags('分类相关接口')
-@UseGuards(AuthGuard)
 @Controller('/admin/category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -17,7 +15,7 @@ export class CategoryController {
   @ApiOperation({ summary: '修改分类' })
   @Put()
   async editCategory(@Body() data: EditCategoryDTO, @Request() req) {
-    const { empId } = req.meta.userInfo
+    const { empId } = req.user
     await this.categoryService.editCategoryService(data, +empId)
     return R.success(null)
   }
@@ -41,7 +39,7 @@ export class CategoryController {
     status: StatusConstant,
     @Request() req
   ) {
-    const { empId } = req.meta.userInfo
+    const { empId } = req.user
     await this.categoryService.changeCategoryStatusService(id, status, +empId)
     return R.success(null)
   }
@@ -49,7 +47,7 @@ export class CategoryController {
   @ApiOperation({ summary: '新增分类' })
   @Post()
   async addCategory(@Body() data: AddCategoryDTO, @Request() req) {
-    const { empId } = req.meta.userInfo
+    const { empId } = req.user
     await this.categoryService.addCategoryService(data, +empId)
     return R.success(null)
   }

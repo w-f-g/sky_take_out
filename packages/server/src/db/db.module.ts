@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Category } from 'src/category/entities/category.entity'
 import { Employee } from 'src/employee/entities/employee.entity'
+import { isDev } from 'src/utils'
 
 @Global()
 @Module({
@@ -16,7 +17,7 @@ import { Employee } from 'src/employee/entities/employee.entity'
           password: process.env.MYSQL_PASSWORD,
           database: 'sky_take_out',
           synchronize: true,
-          logging: true,
+          logging: !isDev(),
           entities: [Employee, Category],
           poolSize: 10,
           connectorPackage: 'mysql2',

@@ -1,10 +1,16 @@
-import { Module } from '@nestjs/common'
 import { EmployeeModule } from './employee/employee.module'
 import { DBModule } from './db/db.module'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'
 import { resolve } from 'path'
-import { CategoryModule } from './category/category.module';
+import { CategoryModule } from './category/category.module'
+import { AuthGuard } from './auth/auth.guard'
+import { ClsModule } from 'nestjs-cls'
+import { Module } from '@nestjs/common'
+import { AsyncLocalStorage } from 'async_hooks'
+import { APP_GUARD } from '@nestjs/core'
+
+export const asyncLocal = new AsyncLocalStorage()
 
 @Module({
   imports: [
@@ -14,8 +20,6 @@ import { CategoryModule } from './category/category.module';
         resolve(process.cwd(), '.env.production'),
       ],
     }),
-    EmployeeModule,
-    DBModule,
     JwtModule.register({
       global: true,
       secret: '福生无量天尊',
@@ -23,7 +27,21 @@ import { CategoryModule } from './category/category.module';
         expiresIn: '1h',
       },
     }),
+    ClsModule.forRoot({
+      // global: true,
+      middleware: {
+        mount: true,
+      },
+    }),
+    DBModule,
+    EmployeeModule,
     CategoryModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {}

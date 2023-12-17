@@ -1,5 +1,6 @@
 import { IEntityCommon } from '@sky_take_out/types'
 import { dateFormat } from '@sky_take_out/utils'
+import { executionAsyncResource } from 'async_hooks'
 import { BeforeInsert, BeforeUpdate, Column } from 'typeorm'
 
 export class CommonEntity implements IEntityCommon {
@@ -49,14 +50,38 @@ export class CommonEntity implements IEntityCommon {
 
   @BeforeUpdate()
   handleBeforeUpdate() {
-    console.log(new Date())
+    const id = this.getUserId()
+    if (id !== null) {
+      this.updateUser = id
+    }
     this.updateTime = new Date()
   }
 
   @BeforeInsert()
   handleBeforeInsert() {
+    const id = this.getUserId()
+    if (id !== null) {
+      this.createUser = id
+      this.updateUser = id
+    }
     const now = new Date()
     this.createTime = now
     this.updateTime = now
+  }
+
+  private getUserId() {
+    const res = executionAsyncResource()
+    const keys = Object.getOwnPropertySymbols(res)
+    for (const k of keys) {
+      const target = res[k]
+      if (
+        typeof target === 'object' &&
+        typeof target.user === 'object' &&
+        target.user.empId
+      ) {
+        return Number(target.user.empId)
+      }
+    }
+    return null
   }
 }
