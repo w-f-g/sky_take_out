@@ -54,6 +54,11 @@ export enum CategoryTypeString {
   SET_MEAL = '2',
 }
 
+export enum SexType {
+  MAN = '1',
+  WOMAN = '0',
+}
+
 /**
  * 公共字段自动填充相关常量
  */

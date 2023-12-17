@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { IEmployeeDTO, IEmployeeLoginDTO, IEmployeePageQueryDTO, IPasswordEditDTO } from '@sky_take_out/types'
-import { IsInt, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator'
+import { IsEnum, IsInt, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator'
+import { SexType } from 'src/utils/constant'
 
 /** 员工登录 */
 export class EmployeeLoginDTO implements IEmployeeLoginDTO {
@@ -38,9 +39,8 @@ export class EmployeeDTO implements IEmployeeDTO {
   phone: string
   
   @ApiProperty({ name: 'sex' })
-  @IsString()
-  @IsNotEmpty()
-  sex: string
+  @IsEnum(SexType)
+  sex: '1' | '0'
   
   @ApiProperty({ name: 'username' })
   @IsString()
