@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put, Query, Request } from '@nestjs/common'
+import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put, Query } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
 import { EditEmployeeDTO, EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO, PasswordEditDTO } from './dto/employee.dto'
 import R from 'src/utils/response'
@@ -47,17 +47,15 @@ export class EmployeeController {
 
   @ApiOperation({ summary: '新增员工' })
   @Post()
-  async addEmployee(@Body() employee: EmployeeDTO, @Request() req){
-    const { empId } = req.user
-    await this.employeeService.addEmployee(employee, +empId)
+  async addEmployee(@Body() employee: EmployeeDTO){
+    await this.employeeService.addEmployee(employee)
     return R.success(null)
   }
   
   @ApiOperation({ summary: '编辑员工信息' })
   @Put()
-  async editEmployeeIndo(@Body() employee: EditEmployeeDTO, @Request() req) {
-    const { empId } = req.user
-    await this.employeeService.editEmployee(employee, +empId)
+  async editEmployeeIndo(@Body() employee: EditEmployeeDTO) {
+    await this.employeeService.editEmployee(employee)
     return R.success(null)
   }
 
@@ -77,10 +75,8 @@ export class EmployeeController {
   async changeEmployeeStatus(
     @Param('status') status: number,
     @Query('id') id: number,
-    @Request() req
   ) {
-    const { empId } = req.user
-    await this.employeeService.changeEmployeeStatus(status, id, +empId)
+    await this.employeeService.changeEmployeeStatus(status, id)
     return R.success(null)
   }
 
@@ -94,9 +90,8 @@ export class EmployeeController {
 
   @ApiOperation({ summary: '修改密码' })
   @Put('/editPassword')
-  async editPassword(@Body() data: PasswordEditDTO, @Request() req) {
-    const { empId } = req.user
-    await this.employeeService.editPassword(data, +empId)
+  async editPassword(@Body() data: PasswordEditDTO) {
+    await this.employeeService.editPassword(data)
     return R.success(null)
   }
 }

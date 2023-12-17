@@ -13,9 +13,8 @@ export class CategoryService {
   private categoryRepository: Repository<Category>
 
   /** 修改分类 service */
-  async editCategoryService(data: EditCategoryDTO, empId: number) {
+  async editCategoryService(data: EditCategoryDTO) {
     const _c = Category.build(data)
-    _c.updateUser = empId
     try {
       const res = await this.categoryRepository.update(data.id, _c)
       if (res.affected === 0) {
@@ -48,10 +47,8 @@ export class CategoryService {
   }
 
   /** 新增分类 service */
-  async addCategoryService(data: AddCategoryDTO, empId: number) {
+  async addCategoryService(data: AddCategoryDTO) {
     const _c = Category.build(data)
-    _c.createUser = empId
-    _c.updateUser = empId
     _c.status = 0
 
     try {
@@ -75,10 +72,9 @@ export class CategoryService {
   }
 
   /** 启用、禁用分类 service */
-  async changeCategoryStatusService(id: string, status: StatusConstant, empId: number) {
+  async changeCategoryStatusService(id: string, status: StatusConstant) {
     const _c = Category.build({
       status,
-      updateUser: empId,
     })
     try {
       const res = await this.categoryRepository.update(id, _c)

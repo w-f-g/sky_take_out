@@ -32,13 +32,11 @@ export class EmployeeService {
   }
 
   /** 新增员工 service */
-  async addEmployee(employee: EmployeeDTO, empId: number) {
+  async addEmployee(employee: EmployeeDTO) {
     const _e = Employee.build({
       ...employee,
       status: StatusConstant.ENABLE,
       password: md5('123456'),
-      createUser: empId,
-      updateUser: empId,
     })
     
     try {
@@ -49,9 +47,8 @@ export class EmployeeService {
   }
 
   /** 编辑员工信息 service */
-  async editEmployee(employee: EditEmployeeDTO, empId: number) {
+  async editEmployee(employee: EditEmployeeDTO) {
     const _e = Employee.build(employee)
-    _e.updateUser = empId
     try {
       const res = await this.employeeRepository.update(employee.id, _e)
       if (res.affected === 0) {
@@ -83,7 +80,7 @@ export class EmployeeService {
   }
 
   /** 启用禁用员工账号 service */
-  async changeEmployeeStatus(status: number, id: number, empId: number) {
+  async changeEmployeeStatus(status: number, id: number) {
     const employee = await this.employeeRepository.findOneBy({
       id,
     })
@@ -93,7 +90,6 @@ export class EmployeeService {
     }
     const _e = Employee.build({
       status,
-      updateUser: empId,
     })
     await this.employeeRepository.update(id, _e)
 
@@ -112,7 +108,7 @@ export class EmployeeService {
   }
 
   /** 修改员工密码 service */
-  async editPassword(data: PasswordEditDTO, empId: number) {
+  async editPassword(data: PasswordEditDTO) {
     const info = await this.employeeRepository.findOneBy({
       id: data.empId,
     })
@@ -137,7 +133,6 @@ export class EmployeeService {
 
     const _e = Employee.build({
         password: _newPassword,
-        updateUser: empId,
       })
     // 改密码
     try {
