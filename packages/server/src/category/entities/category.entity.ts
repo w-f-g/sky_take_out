@@ -1,5 +1,5 @@
 import { ICategoryEntity } from '@sky_take_out/types'
-import { CommonEntity } from 'src/common.entity'
+import { CommonEntity } from 'src/common/entities/common.entity'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('category')

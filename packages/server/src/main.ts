@@ -1,11 +1,13 @@
 import { NestFactory } from '@nestjs/core'
+import { NestExpressApplication } from '@nestjs/platform-express'
 import { AppModule } from './app.module'
 import { HttpErrorFilter } from './http-error.filter'
 import { ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { resolve } from 'path'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
   app.useGlobalFilters(new HttpErrorFilter())
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
@@ -26,6 +28,10 @@ async function bootstrap() {
     .build()
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig)
   SwaggerModule.setup('doc', app, swaggerDocument)
+  
+  app.useStaticAssets(resolve(__dirname, '../public'), {
+    prefix: '/public',
+  })
   
   await app.listen(process.env.PORT)
 }

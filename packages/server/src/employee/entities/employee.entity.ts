@@ -1,7 +1,6 @@
 import { IEmployeeEntity } from '@sky_take_out/types'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { EmployeeDTO } from '../dto/employee.dto'
-import { CommonEntity } from 'src/common.entity'
+import { CommonEntity } from 'src/common/entities/common.entity'
 
 @Entity('employee')
 export class Employee extends CommonEntity implements IEmployeeEntity {
@@ -83,31 +82,4 @@ export class Employee extends CommonEntity implements IEmployeeEntity {
     })
     return _e
   }
-}
-
-export function buildEmployee(
-  employee: EmployeeDTO,
-  status: number,
-  password: string,
-  createTime: Date,
-  updateTime: Date,
-  createUser: number,
-  updateUser: number,
-) {
-  const _e = new Employee()
-  _e.idNumber = employee.idNumber
-  _e.name = employee.name
-  _e.phone = employee.phone
-  _e.sex = employee.sex
-  _e.username = employee.username
-
-  _e.status = status
-  _e.password = password
-  _e.createTime = createTime
-  _e.updateTime = updateTime
-
-  _e.createUser = createUser
-  _e.updateUser = updateUser
-
-  return _e
 }

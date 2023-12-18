@@ -7,10 +7,8 @@ import { CategoryModule } from './category/category.module'
 import { AuthGuard } from './auth/auth.guard'
 import { ClsModule } from 'nestjs-cls'
 import { Module } from '@nestjs/common'
-import { AsyncLocalStorage } from 'async_hooks'
 import { APP_GUARD } from '@nestjs/core'
-
-export const asyncLocal = new AsyncLocalStorage()
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -36,6 +34,7 @@ export const asyncLocal = new AsyncLocalStorage()
     DBModule,
     EmployeeModule,
     CategoryModule,
+    CommonModule,
   ],
   providers: [
     {

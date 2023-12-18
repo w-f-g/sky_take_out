@@ -32,11 +32,13 @@
     "@sky_take_out/utils": "workspace:^",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "multer": "1.4.5-lts.1",
     "mysql2": "^3.6.5",
     "nestjs-cls": "^3.6.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -44,8 +46,10 @@
     "@nestjs/testing": "^10.0.0",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
+    "@types/multer": "^1.4.11",
     "@types/node": "^20.3.1",
     "@types/supertest": "^2.0.12",
+    "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "eslint": "^8.42.0",
     "eslint-plugin-prettier": "^5.0.0",
