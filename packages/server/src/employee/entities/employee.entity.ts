@@ -1,8 +1,9 @@
 import { IEmployeeEntity } from '@sky_take_out/types'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
 import { CommonEntity } from 'src/common/entities/common.entity'
 
 @Entity('employee')
+@Index('idx_username', ['username'], { unique: true })
 export class Employee extends CommonEntity implements IEmployeeEntity {
   @PrimaryGeneratedColumn({
     name: 'id',
@@ -26,7 +27,6 @@ export class Employee extends CommonEntity implements IEmployeeEntity {
     length: 32,
     comment: '用户名',
     collation: 'utf8_bin',
-    unique: true,
   })
   username: string
 

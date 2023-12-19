@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Category } from 'src/category/entities/category.entity'
+import { Dish, DishFlavor } from 'src/dish/entities/dish.entity'
 import { Employee } from 'src/employee/entities/employee.entity'
 import { isDev } from 'src/utils'
 
@@ -18,7 +19,7 @@ import { isDev } from 'src/utils'
           database: 'sky_take_out',
           synchronize: true,
           logging: !isDev(),
-          entities: [Employee, Category],
+          entities: [Employee, Category, Dish, DishFlavor],
           poolSize: 10,
           connectorPackage: 'mysql2',
           extra: {

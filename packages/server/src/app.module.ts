@@ -9,6 +9,7 @@ import { ClsModule } from 'nestjs-cls'
 import { Module } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { CommonModule } from './common/common.module';
+import { DishModule } from './dish/dish.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { CommonModule } from './common/common.module';
     EmployeeModule,
     CategoryModule,
     CommonModule,
+    DishModule,
   ],
   providers: [
     {
