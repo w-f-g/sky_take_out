@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IEmployeeDTO, IEmployeeLoginDTO, IEmployeePageQueryDTO, IPasswordEditDTO } from '@sky_take_out/types'
+import { IAddEmployeeDTO, IEmployeeDTO, IEmployeeLoginDTO, IEmployeePageQueryDTO, IPasswordEditDTO } from '@sky_take_out/types'
 import { IsEnum, IsInt, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator'
 import { SexType } from 'src/utils/constant'
 
@@ -17,11 +17,11 @@ export class EmployeeLoginDTO implements IEmployeeLoginDTO {
 }
 
 /** 新增员工 */
-export class EmployeeDTO implements IEmployeeDTO {
-  @ApiPropertyOptional({ name: 'id' })
-  @IsInt()
-  @IsOptional()
-  id?: number
+export class EmployeeDTO implements IAddEmployeeDTO {
+  // @ApiPropertyOptional({ name: 'id' })
+  // @IsInt()
+  // @IsOptional()
+  // id?: number
 
   @ApiProperty({ name: 'idNumber' })
   @IsString()
@@ -48,7 +48,7 @@ export class EmployeeDTO implements IEmployeeDTO {
   username: string
 }
 
-export class EditEmployeeDTO extends EmployeeDTO {
+export class EditEmployeeDTO extends EmployeeDTO implements IEmployeeDTO {
   @ApiProperty()
   @IsNotEmpty()
   id: number

@@ -7,3 +7,17 @@ export const md5 = (str: string) => {
   hash.update(str)
   return hash.digest('hex')
 }
+
+interface Constructor<T extends object> {
+  new(): T
+}
+
+export const buildEntity = <T extends object , K extends keyof T>(Instance: Constructor<T>, data: Partial<Record<K, T[K]>>): T => {
+  const ins = new Instance()
+  Object.entries(data).forEach(([k, v]) => {
+    if (Object.hasOwn(ins, k)) {
+      ins[k] = v
+    }
+  })
+  return ins
+}

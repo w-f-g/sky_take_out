@@ -6,6 +6,7 @@ import { AddCategoryDTO, CategoryPageQueryDTO, EditCategoryDTO } from './dto/cat
 import { CategoryPageVO, CategoryVO } from './vo/category.vo'
 import { ICategoryVO } from '@sky_take_out/types'
 import { CategoryType, StatusConstant } from 'src/utils/constant'
+import { buildEntity } from 'src/utils'
 
 @Injectable()
 export class CategoryService {
@@ -14,7 +15,7 @@ export class CategoryService {
 
   /** 修改分类 service */
   async editCategoryService(data: EditCategoryDTO) {
-    const _c = Category.build(data)
+    const _c = buildEntity(Category, data)
     try {
       const res = await this.categoryRepository.update(data.id, _c)
       if (res.affected === 0) {
@@ -48,7 +49,7 @@ export class CategoryService {
 
   /** 新增分类 service */
   async addCategoryService(data: AddCategoryDTO) {
-    const _c = Category.build(data)
+    const _c = buildEntity(Category, data)
     _c.status = 0
 
     try {
@@ -73,7 +74,7 @@ export class CategoryService {
 
   /** 启用、禁用分类 service */
   async changeCategoryStatusService(id: string, status: StatusConstant) {
-    const _c = Category.build({
+    const _c = buildEntity(Category, {
       status,
     })
     try {

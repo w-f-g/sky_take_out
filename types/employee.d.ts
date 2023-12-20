@@ -57,12 +57,9 @@ export interface IPasswordEditDTO {
 /**
  * EmployeeDTO
  */
-export interface IEmployeeDTO extends Omit<IEmployee, 'password' | 'status' | 'id'> {
-    /**
-     * 员工id
-     */
-    id?: number,
-}
+export interface IEmployeeDTO extends Omit<IEmployee, 'password' | 'status'> {}
+
+export interface IAddEmployeeDTO extends Omit<IEmployeeDTO, 'id'> {}
 
 /** 员工分页 DTO */
 export interface IEmployeePageQueryDTO extends IPageQuery {

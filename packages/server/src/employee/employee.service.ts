@@ -5,7 +5,7 @@ import { Employee } from './entities/employee.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EditEmployeeDTO, EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO, PasswordEditDTO } from './dto/employee.dto'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
-import { md5 } from 'src/utils'
+import { buildEntity, md5 } from 'src/utils'
 import { EmployeePageVO, EmployeeVO } from './vo/employee.vo'
 
 @Injectable()
@@ -33,7 +33,7 @@ export class EmployeeService {
 
   /** 新增员工 service */
   async addEmployee(employee: EmployeeDTO) {
-    const _e = Employee.build({
+    const _e = buildEntity(Employee, {
       ...employee,
       status: StatusConstant.ENABLE,
       password: md5('123456'),
@@ -48,7 +48,7 @@ export class EmployeeService {
 
   /** 编辑员工信息 service */
   async editEmployee(employee: EditEmployeeDTO) {
-    const _e = Employee.build(employee)
+    const _e = buildEntity(Employee, employee)
     try {
       const res = await this.employeeRepository.update(employee.id, _e)
       if (res.affected === 0) {
@@ -88,7 +88,7 @@ export class EmployeeService {
     if (employee === null) {
       throw new HttpException(MessageConstant.ACCOUNT_NOT_FOUND, HttpStatus.NOT_FOUND)
     }
-    const _e = Employee.build({
+    const _e = buildEntity(Employee, {
       status,
     })
     await this.employeeRepository.update(id, _e)
@@ -131,9 +131,9 @@ export class EmployeeService {
       )
     }
 
-    const _e = Employee.build({
-        password: _newPassword,
-      })
+    const _e = buildEntity(Employee, {
+      password: _newPassword,
+    })
     // 改密码
     try {
       await this.employeeRepository.update(data.empId, _e)

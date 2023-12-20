@@ -4,7 +4,6 @@ export interface IDish {
   id: number
   name: string
   categoryId: number
-  categoryName: string
   price: number
   image: string
   description: string
@@ -12,7 +11,9 @@ export interface IDish {
   flavors: IDishFlavor[]
 }
 
-export interface IDishEntity extends Omit<IDish, 'categoryName' | 'flavors'>, IEntityCommon {}
+export interface IAddDish extends Omit<IDish, 'id'> {}
+
+export interface IDishEntity extends Omit<IDish, 'flavors'>, IEntityCommon {}
 
 /**
  * DishFlavor
