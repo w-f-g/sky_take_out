@@ -21,3 +21,5 @@ export const buildEntity = <T extends object , K extends keyof T>(Instance: Cons
   })
   return ins
 }
+
+export const isEmpty = (value: unknown) => value === null || value === undefined

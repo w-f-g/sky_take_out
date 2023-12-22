@@ -1,6 +1,7 @@
 import { IDishEntity, IDishFlavorEntity } from '@sky_take_out/types'
+import { Category } from 'src/category/entities/category.entity'
 import { CommonEntity } from 'src/common/entities/common.entity'
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('dish')
 @Index('idx_dish_name', ['name'], { unique: true })
@@ -68,6 +69,14 @@ export class Dish extends CommonEntity implements IDishEntity {
     comment: '0 停售 1 起售',
   })
   status: number
+
+  @JoinColumn({
+    name: 'category_id',
+  })
+  @ManyToOne(() => Category, c => c.id, {
+    cascade: false,
+  })
+  category: Category
 }
 
 @Entity('dish_flavor')
