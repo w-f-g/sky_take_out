@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { IEmployeeVO } from '@sky_take_out/types'
-import { FindManyOptions, Like, Repository } from 'typeorm'
+import { FindManyOptions, Like, Repository, UpdateResult } from 'typeorm'
 import { Employee } from './entities/employee.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EditEmployeeDTO, EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO, PasswordEditDTO } from './dto/employee.dto'
@@ -80,19 +80,19 @@ export class EmployeeService {
   }
 
   /** 启用禁用员工账号 service */
-  async changeEmployeeStatus(status: number, id: number) {
-    const employee = await this.employeeRepository.findOneBy({
-      id,
-    })
-    // 查询账号是否存在
-    if (employee === null) {
-      throw new HttpException(MessageConstant.ACCOUNT_NOT_FOUND, HttpStatus.NOT_FOUND)
-    }
+  async changeEmployeeStatus(status: StatusConstant, id: number) {
     const _e = buildEntity(Employee, {
       status,
     })
-    await this.employeeRepository.update(id, _e)
-
+    let res: UpdateResult
+    try {
+      res = await this.employeeRepository.update(id, _e)
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.FORBIDDEN)
+    }
+    if (res.affected === 0) {
+      throw new HttpException(MessageConstant.ACCOUNT_NOT_FOUND, HttpStatus.NOT_FOUND)
+    }
   }
   
   /** 根据id查询员工 service */

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseEnumPipe, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseEnumPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AddCategoryDTO, CategoryPageQueryDTO, EditCategoryDTO } from './dto/category.dto'
@@ -30,7 +30,7 @@ export class CategoryController {
   @ApiOperation({ summary: '启用、禁用分类' })
   @Post('/status/:status')
   async changeCategoryStatus(
-    @Query('id') id: string,
+    @Query('id', new ParseIntPipe()) id: number,
     @Param(
       'status',
       new ParseEnumPipe(StatusConstant)
@@ -50,7 +50,7 @@ export class CategoryController {
 
   @ApiOperation({ summary: '根据id删除分类' })
   @Delete()
-  async deleteCategory(@Query('id') id: string) {
+  async deleteCategory(@Query('id', new ParseIntPipe()) id: number) {
     await this.categoryService.deleteCategoryServer(id)
     return R.success(null)
   }

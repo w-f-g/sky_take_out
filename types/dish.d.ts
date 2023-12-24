@@ -46,3 +46,8 @@ export interface IDishPageVO extends Omit<IDish, 'categoryId' | 'flavors'> {
   categoryName: string,
   updateTime: string,
 }
+
+export interface IDishVO extends IDish {
+  categoryName: string,
+  updateTime: string,
+}

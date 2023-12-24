@@ -5,13 +5,17 @@ import { FindManyOptions, Like, Repository } from 'typeorm'
 import { AddCategoryDTO, CategoryPageQueryDTO, EditCategoryDTO } from './dto/category.dto'
 import { CategoryPageVO, CategoryVO } from './vo/category.vo'
 import { ICategoryVO } from '@sky_take_out/types'
-import { CategoryType, StatusConstant } from 'src/utils/constant'
+import { CategoryType, MessageConstant, StatusConstant } from 'src/utils/constant'
 import { buildEntity } from 'src/utils'
+import { Dish } from 'src/dish/entities/dish.entity'
 
 @Injectable()
 export class CategoryService {
   @InjectRepository(Category)
   private categoryRepository: Repository<Category>
+
+  @InjectRepository(Dish)
+  private dishRepository: Repository<Dish>
 
   /** 修改分类 service */
   async editCategoryService(data: EditCategoryDTO) {
@@ -60,8 +64,16 @@ export class CategoryService {
   }
 
   /**  根据id删除分类service */
-  async deleteCategoryServer(id: string) {
-    // TODO 关联菜品的分类不能被删除
+  async deleteCategoryServer(id: number) {
+    const dishCount = await this.dishRepository.createQueryBuilder()
+      .where({
+        categoryId: id,
+      })
+      .getCount()
+    if (dishCount > 0) {
+      throw new HttpException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH, HttpStatus.FORBIDDEN)
+    }
+    // TODO 关联套餐的分类不能被删除
     try {
       const res = await this.categoryRepository.delete(id)
       if (res.affected === 0) {
@@ -73,7 +85,7 @@ export class CategoryService {
   }
 
   /** 启用、禁用分类 service */
-  async changeCategoryStatusService(id: string, status: StatusConstant) {
+  async changeCategoryStatusService(id: number, status: StatusConstant) {
     const _c = buildEntity(Category, {
       status,
     })

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Get, HttpStatus, Inject, Param, ParseEnumPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
 import { EditEmployeeDTO, EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO, PasswordEditDTO } from './dto/employee.dto'
 import R from 'src/utils/response'
@@ -6,6 +6,7 @@ import { EmployeeLoginVO, EmployeePageVO, EmployeeVO } from './vo/employee.vo'
 import { JwtService } from '@nestjs/jwt'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { SkipAuth } from 'src/auth/skip-auth.decorator'
+import { StatusConstant } from 'src/utils/constant'
 
 @ApiTags('员工相关接口')
 @ApiBearerAuth('bearer')
@@ -65,7 +66,6 @@ export class EmployeeController {
   @ApiOperation({ summary: '员工分页查询' })
   @Get('/page')
   async getEmployeePage(@Query() query: EmployeePageDTO) {
-    console.log(query)
     const res = await this.employeeService.getEmployeePage(query)
     return R.success(res)
   }
@@ -73,8 +73,8 @@ export class EmployeeController {
   @ApiOperation({ summary: '启用禁用员工账号' })
   @Post('/status/:status')
   async changeEmployeeStatus(
-    @Param('status') status: number,
-    @Query('id') id: number,
+    @Param('status', new ParseEnumPipe(StatusConstant)) status: StatusConstant,
+    @Query('id', new ParseIntPipe()) id: number,
   ) {
     await this.employeeService.changeEmployeeStatus(status, id)
     return R.success(null)
@@ -83,7 +83,7 @@ export class EmployeeController {
   @ApiOkResponse({ type: EmployeeVO })
   @ApiOperation({ summary: '根据id查询员工' })
   @Get('/:id')
-  async getEmployeeInfoById(@Param('id') id: number) {
+  async getEmployeeInfoById(@Param('id', new ParseIntPipe()) id: number) {
     const info = await this.employeeService.findEmployeeInfoById(id)
     return R.success(info)
   }
