@@ -46,12 +46,4 @@ export class Category extends CommonEntity implements ICategoryEntity {
     default: null,
   })
   type: number
-
-  static build(data: Partial<Record<keyof Category, Category[keyof Category]>>): Category {
-    const _c = new Category()
-    Object.entries(data).forEach(([k, v]) => {
-      _c[k] = v
-    })
-    return _c
-  }
 }

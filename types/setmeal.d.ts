@@ -1,0 +1,42 @@
+import { IEntityCommon } from "./common";
+
+export interface ISetmeal {
+  /** 套餐id */
+  id: number,
+  /** 分类id */
+  categoryId: number,
+  /** 套餐名称 */
+  name: string,
+  /** 套餐价格 */
+  price: number,
+  /** 套餐状态：1位起售 0为停售 */
+  status: number,
+  /** 套餐描述 */
+  description: string,
+  /** 套餐图片 */
+  image: string,
+  /** 套餐包含的菜品 */
+  setmealDishes: ISetmealDish[],
+}
+
+export interface ISetmealEntity extends Omit<ISetmeal, 'setmealDishes'>, IEntityCommon {}
+
+/**
+ * SetmealDish
+ */
+export interface ISetmealDish {
+  /** 套餐和菜品关系id */
+  id: number,
+  /** 套餐id */
+  setmealId: number,
+  /** 菜品id */
+  dishId: number,
+  /** 菜品名称 */
+  name: string,
+  /** 菜品价格 */
+  price: number,
+  /** 份数 */
+  copies: number,
+}
+
+export interface ISetmealDishEntity extends ISetmealDish, IEntityCommon {}

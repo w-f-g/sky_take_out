@@ -74,12 +74,4 @@ export class Employee extends CommonEntity implements IEmployeeEntity {
     default: 1,
   })
   status: number
-
-  static build(data: Partial<Record<keyof Employee, Employee[keyof Employee]>>): Employee {
-    const _e = new Employee()
-    Object.entries(data).forEach(([k, v]) => {
-      _e[k] = v
-    })
-    return _e
-  }
 }

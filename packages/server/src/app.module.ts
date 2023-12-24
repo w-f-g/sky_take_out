@@ -10,6 +10,7 @@ import { Module } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { CommonModule } from './common/common.module';
 import { DishModule } from './dish/dish.module';
+import { SetmealModule } from './setmeal/setmeal.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { DishModule } from './dish/dish.module';
     CategoryModule,
     CommonModule,
     DishModule,
+    SetmealModule,
   ],
   providers: [
     {
