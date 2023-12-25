@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common'
 import { SetmealService } from './setmeal.service'
 import R from 'src/utils/response'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
@@ -33,7 +33,14 @@ export class SetmealController {
 
   @ApiOperation({ summary: '批量删除套餐' })
   @Delete()
-  async deleteSetmeal() {
+  async deleteSetmeal(
+    @Query(
+      'ids',
+      new ParseArrayPipe({ items: Number })
+    )
+    ids: number[]
+  ) {
+    await this.setmealService.deleteSetmealByIds(ids)
     return R.success(null)
   }
 
