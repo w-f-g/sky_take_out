@@ -7,6 +7,7 @@ import { buildEntity, isEmpty } from 'src/utils'
 import { DishPageResult, DishPageVO, DishVO } from './vo/dish.vo'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
 import { IDishFlavor } from '@sky_take_out/types'
+import { SetmealDish } from 'src/setmeal/entities/setmeal.entity'
 
 @Injectable()
 export class DishService {
@@ -15,6 +16,9 @@ export class DishService {
 
   @InjectRepository(DishFlavor)
   private dishFlavorRepository: Repository<DishFlavor>
+
+  @InjectRepository(SetmealDish)
+  private setmealDishRepository: Repository<SetmealDish>
 
   /** 向口味表插入数据 */
   private async insertDishFlavor(dishFlavors: DishFlavorDTO[], dishId: number) {
@@ -98,7 +102,12 @@ export class DishService {
     if (flag) {
       throw new HttpException(MessageConstant.DISH_ON_SALE, HttpStatus.FORBIDDEN)
     }
-    // TODO 被套餐关联的菜品不能删除
+    // 被套餐关联的菜品不能删除
+    const setmealOptions = ids.map(x => ({ dishId: x }))
+    const setmealDishes = await this.setmealDishRepository.findBy(setmealOptions)
+    if (setmealDishes.length > 0) {
+      throw new HttpException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL, HttpStatus.FORBIDDEN)
+    }
 
     // 删除菜品
     await this.dishRepository.delete(ids)
