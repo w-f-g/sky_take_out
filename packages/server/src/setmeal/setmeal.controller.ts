@@ -1,8 +1,14 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common'
 import { SetmealService } from './setmeal.service'
 import R from 'src/utils/response'
-import { ApiOperation } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { SetmealVO } from './vo/setmeal.vo'
+import { SkipAuth } from 'src/auth/skip-auth.decorator'
+import { SetmealAddDTO } from './dto/setmeal.dto'
 
+@ApiBearerAuth('bearer')
+@ApiTags('套餐相关接口')
+@SkipAuth()
 @Controller('/admin/setmeal')
 export class SetmealController {
   constructor(private readonly setmealService: SetmealService) {}
@@ -33,13 +39,16 @@ export class SetmealController {
 
   @ApiOperation({ summary: '新增套餐' })
   @Post()
-  async addSetmeal() {
+  async addSetmeal(@Body() data: SetmealAddDTO) {
+    await this.setmealService.addSetmeal(data)
     return R.success(null)
   }
 
+  @ApiOkResponse({ type: SetmealVO })
   @ApiOperation({ summary: '根据id查询套餐' })
   @Get('/:id')
-  async getSetmealById() {
-    return R.success(null)
+  async getSetmealById(@Param('id', new ParseIntPipe()) id: number) {
+    const res = await this.setmealService.getSetmealById(id)
+    return R.success(res)
   }
 }

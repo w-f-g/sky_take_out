@@ -40,3 +40,13 @@ export interface ISetmealDish {
 }
 
 export interface ISetmealDishEntity extends ISetmealDish, IEntityCommon {}
+
+export interface ISetmealDishAdd extends Omit<ISetmealDish, 'id'> {}
+
+export interface ISetmealAddDTO extends Omit<ISetmeal, 'id' | 'setmealDishes'> {
+  setmealDishes: ISetmealDishAdd[],
+}
+
+export interface ISetmealVO extends ISetmeal {
+  updateTime: string,
+}
