@@ -37,9 +37,6 @@ export class DishPageResult implements IPageResult<DishPageVO> {
 
 export class DishVO implements IDishVO {
   @ApiProperty()
-  categoryName: string
-
-  @ApiProperty()
   updateTime: string
 
   @ApiProperty()

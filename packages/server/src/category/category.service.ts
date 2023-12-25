@@ -8,6 +8,7 @@ import { ICategoryVO } from '@sky_take_out/types'
 import { CategoryType, MessageConstant, StatusConstant } from 'src/utils/constant'
 import { buildEntity } from 'src/utils'
 import { Dish } from 'src/dish/entities/dish.entity'
+import { Setmeal } from 'src/setmeal/entities/setmeal.entity'
 
 @Injectable()
 export class CategoryService {
@@ -16,6 +17,9 @@ export class CategoryService {
 
   @InjectRepository(Dish)
   private dishRepository: Repository<Dish>
+
+  @InjectRepository(Setmeal)
+  private setmealRepository: Repository<Setmeal>
 
   /** 修改分类 service */
   async editCategoryService(data: EditCategoryDTO) {
@@ -65,15 +69,24 @@ export class CategoryService {
 
   /**  根据id删除分类service */
   async deleteCategoryServer(id: number) {
-    const dishCount = await this.dishRepository.createQueryBuilder()
+    const getDishCount = this.dishRepository.createQueryBuilder()
       .where({
         categoryId: id,
-      })
-      .getCount()
+      }).getCount
+
+    const getSetmealCount = this.setmealRepository.createQueryBuilder()
+      .where({
+        categoryId: id,
+      }).getCount
+
+    const [dishCount, setmealCount] = await Promise.all([getDishCount(), getSetmealCount()])
     if (dishCount > 0) {
       throw new HttpException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH, HttpStatus.FORBIDDEN)
     }
     // TODO 关联套餐的分类不能被删除
+    if (setmealCount> 0) {
+      throw new HttpException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL, HttpStatus.FORBIDDEN)
+    }
     try {
       const res = await this.categoryRepository.delete(id)
       if (res.affected === 0) {
