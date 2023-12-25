@@ -67,7 +67,7 @@ export class CategoryService {
     }
   }
 
-  /**  根据id删除分类service */
+  /**  根据id删除分类 service */
   async deleteCategoryServer(id: number) {
     const getDishCount = this.dishRepository.createQueryBuilder()
       .where({
@@ -80,10 +80,11 @@ export class CategoryService {
       }).getCount
 
     const [dishCount, setmealCount] = await Promise.all([getDishCount(), getSetmealCount()])
+    // 关联菜品的分类不能被删除
     if (dishCount > 0) {
       throw new HttpException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH, HttpStatus.FORBIDDEN)
     }
-    // TODO 关联套餐的分类不能被删除
+    // 关联套餐的分类不能被删除
     if (setmealCount> 0) {
       throw new HttpException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL, HttpStatus.FORBIDDEN)
     }
