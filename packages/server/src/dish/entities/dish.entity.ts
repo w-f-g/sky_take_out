@@ -70,9 +70,7 @@ export class Dish extends CommonEntity implements IDishEntity {
   })
   status: number
 
-  @JoinColumn({
-    name: 'category_id',
-  })
+  @JoinColumn({ name: 'category_id' })
   @ManyToOne(() => Category, c => c.id, {
     cascade: false,
   })

@@ -1,21 +1,22 @@
-import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common'
 import { SetmealService } from './setmeal.service'
 import R from 'src/utils/response'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { SetmealVO } from './vo/setmeal.vo'
 import { SkipAuth } from 'src/auth/skip-auth.decorator'
-import { SetmealAddDTO } from './dto/setmeal.dto'
+import { SetmealAddDTO, SetmealDTO } from './dto/setmeal.dto'
+import { StatusConstant } from 'src/utils/constant'
 
 @ApiBearerAuth('bearer')
 @ApiTags('套餐相关接口')
-@SkipAuth()
 @Controller('/admin/setmeal')
 export class SetmealController {
   constructor(private readonly setmealService: SetmealService) {}
 
   @ApiOperation({ summary: '修改套餐' })
   @Put()
-  async editSetmeal() {
+  async editSetmeal(@Body() data: SetmealDTO) {
+    await this.setmealService.editSetmeal(data)
     return R.success(null)
   }
 
@@ -26,12 +27,22 @@ export class SetmealController {
   }
 
   @ApiOperation({ summary: '套餐起售、停售' })
+  @SkipAuth()
   @Post('/status/:status')
-  async changeSetmealStatus() {
+  async changeSetmealStatus(
+    @Query('id', new ParseIntPipe()) id: number,
+    @Param(
+      'status',
+      new ParseEnumPipe(StatusConstant),
+    )
+    status: StatusConstant
+  ) {
+    await this.setmealService.changeSetmealStatus(id, status)
     return R.success(null)
   }
 
   @ApiOperation({ summary: '批量删除套餐' })
+  @SkipAuth()
   @Delete()
   async deleteSetmeal(
     @Query(
@@ -45,6 +56,7 @@ export class SetmealController {
   }
 
   @ApiOperation({ summary: '新增套餐' })
+  @SkipAuth()
   @Post()
   async addSetmeal(@Body() data: SetmealAddDTO) {
     await this.setmealService.addSetmeal(data)

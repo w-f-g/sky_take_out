@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { ISetmealAddDTO, ISetmealDishAdd } from '@sky_take_out/types'
+import { ISetmeal, ISetmealAddDTO, ISetmealDish, ISetmealDishAdd } from '@sky_take_out/types'
 import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator'
 import { StatusConstant } from 'src/utils/constant'
 
@@ -30,7 +30,7 @@ export class SetmealDishAdd implements ISetmealDishAdd {
   copies: number
 }
 
-export class SetmealAddDTO implements ISetmealAddDTO {
+class SetmealCommon {
   @ApiProperty()
   @IsInt()
   @IsNotEmpty()
@@ -58,8 +58,28 @@ export class SetmealAddDTO implements ISetmealAddDTO {
   @IsString()
   @IsNotEmpty()
   image: string
-  
+}
+
+export class SetmealAddDTO extends SetmealCommon implements ISetmealAddDTO {
   @ApiProperty({ type: [SetmealDishAdd] })
   @IsArray()
   setmealDishes: SetmealDishAdd[]
+}
+
+class SetmealDish extends SetmealDishAdd implements ISetmealDish {
+  @ApiProperty()
+  @IsInt()
+  @IsNotEmpty()
+  id: number
+}
+
+export class SetmealDTO extends SetmealCommon implements ISetmeal {
+  @ApiProperty()
+  @IsInt()
+  @IsNotEmpty()
+  id: number
+  
+  @ApiProperty({ type: [SetmealDish] })
+  @IsArray()
+  setmealDishes: ISetmealDish[]
 }

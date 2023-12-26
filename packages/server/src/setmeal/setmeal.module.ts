@@ -3,10 +3,11 @@ import { SetmealService } from './setmeal.service'
 import { SetmealController } from './setmeal.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Setmeal, SetmealDish } from './entities/setmeal.entity'
+import { Dish } from 'src/dish/entities/dish.entity'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Setmeal, SetmealDish])
+    TypeOrmModule.forFeature([Setmeal, SetmealDish, Dish])
   ],
   controllers: [SetmealController],
   providers: [SetmealService],

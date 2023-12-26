@@ -5,8 +5,9 @@ import { In, Repository } from 'typeorm'
 import { SetmealVO } from './vo/setmeal.vo'
 import { buildEntity } from 'src/utils'
 import { ISetmealDish } from '@sky_take_out/types'
-import { SetmealAddDTO, SetmealDishAdd } from './dto/setmeal.dto'
+import { SetmealAddDTO, SetmealDTO, SetmealDishAdd } from './dto/setmeal.dto'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
+import { Dish } from 'src/dish/entities/dish.entity'
 
 @Injectable()
 export class SetmealService {
@@ -16,16 +17,75 @@ export class SetmealService {
   @InjectRepository(SetmealDish)
   private setmealDishRepository: Repository<SetmealDish>
 
+  @InjectRepository(Dish)
+  private dishRepository: Repository<Dish>
+
   private async insertSetmealDish(setmealId: number, setmealDishes: SetmealDishAdd[]) {
     const data = setmealDishes.map(s => {
-      return {
+      return buildEntity(SetmealDish, {
         ...s,
         id: null,
         setmealId,
-      }
+      })
     })
     if (data.length > 0) {
       await this.setmealDishRepository.insert(data)
+    }
+  }
+
+  /** 修改套餐 service */
+  async editSetmeal(data: SetmealDTO) {
+    const setmeal = buildEntity(Setmeal, data)
+    const setmealId = setmeal.id
+
+    try {
+      // 修改套餐
+      const res = await this.setmealRepository.update(setmealId, setmeal)  
+      if (res.affected === 0) {
+        throw new Error(`更新失败id: ${setmealId} 记录不存在`)
+      }
+      // 删除套餐和菜品的关联关系
+      await this.setmealDishRepository.delete({
+        setmealId,
+      })
+      // 重新插入套餐和菜品的关联关系
+      await this.insertSetmealDish(setmealId, data.setmealDishes)
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.FORBIDDEN)
+    }
+  }
+
+  async changeSetmealStatus(id: number, status: StatusConstant) {
+    if (status === StatusConstant.ENABLE) {
+      // 起售套餐时，如果套餐内包含停售的菜品，则不能起售
+      const query = this.dishRepository.query(
+        'SELECT dish.* FROM dish LEFT JOIN setmeal_dish sDish ON dish.id = sDish.dish_id where sDish.setmeal_id = ?',
+        [id]
+      )
+      // const queryBuilder = this.dishRepository.createQueryBuilder('dish')
+      //   .leftJoinAndSelect('dish.setmealDish', 'setmealDish')
+      //   .select(['dish.*'])
+      //   .where('setmealDish.setmeal_id = :setmealId', { setmealId: id })
+
+      const dishs: Dish[] = await query
+      if (dishs && dishs.length > 0) {
+        const flag = dishs.some(d => d.status === StatusConstant.DISABLE)
+        if (flag) {
+          throw new HttpException(MessageConstant.SETMEAL_ENABLE_FAILED, HttpStatus.FORBIDDEN)
+        }
+      }
+    }
+    // 修改套餐状态
+    const setmeal = buildEntity(Setmeal, {
+      status,
+    })
+    try {
+      const res = await this.setmealRepository.update(id, setmeal)
+      if (res.affected === 0) {
+        throw new Error(`更新失败id: ${id} 记录不存在`)
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.FORBIDDEN)
     }
   }
 
