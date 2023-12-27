@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { ISetmeal, ISetmealAddDTO, ISetmealDish, ISetmealDishAdd, ISetmealPageQueryDTO } from '@sky_take_out/types'
+import { ISetmealAddDTO, ISetmealDish, ISetmealDishAdd, ISetmealEditDTO, ISetmealPageQueryDTO } from '@sky_take_out/types'
 import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator'
-import { StatusConstant, SexType as StatusConstantStr } from 'src/utils/constant'
+import { SexType as StatusConstantStr } from 'src/utils/constant'
 
 export class SetmealDishAdd implements ISetmealDishAdd {
   @ApiProperty()
@@ -46,9 +46,9 @@ class SetmealCommon {
   @IsNotEmpty()
   price: number
   
-  @ApiProperty()
-  @IsEnum(StatusConstant)
-  status: 0 | 1
+  // @ApiProperty()
+  // @IsEnum(StatusConstant)
+  // status: 0 | 1
   
   @ApiProperty()
   @IsString()
@@ -73,7 +73,7 @@ class SetmealDish extends SetmealDishAdd implements ISetmealDish {
   id: number
 }
 
-export class SetmealDTO extends SetmealCommon implements ISetmeal {
+export class SetmealDTO extends SetmealCommon implements ISetmealEditDTO {
   @ApiProperty()
   @IsInt()
   @IsNotEmpty()

@@ -3,7 +3,6 @@ import { SetmealService } from './setmeal.service'
 import R from 'src/utils/response'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { SetmealVO } from './vo/setmeal.vo'
-import { SkipAuth } from 'src/auth/skip-auth.decorator'
 import { SetmealAddDTO, SetmealDTO, SetmealPageQueryDTO } from './dto/setmeal.dto'
 import { StatusConstant } from 'src/utils/constant'
 
@@ -21,7 +20,6 @@ export class SetmealController {
   }
 
   @ApiOperation({ summary: '分页查询' })
-  @SkipAuth()
   @Get('/page')
   async getSetmealPageQuery(@Query() query: SetmealPageQueryDTO) {
     const res = await this.setmealService.getSetmealPageQuery(query)
@@ -29,7 +27,6 @@ export class SetmealController {
   }
 
   @ApiOperation({ summary: '套餐起售、停售' })
-  @SkipAuth()
   @Post('/status/:status')
   async changeSetmealStatus(
     @Query('id', new ParseIntPipe()) id: number,
@@ -44,7 +41,6 @@ export class SetmealController {
   }
 
   @ApiOperation({ summary: '批量删除套餐' })
-  @SkipAuth()
   @Delete()
   async deleteSetmeal(
     @Query(
@@ -58,7 +54,6 @@ export class SetmealController {
   }
 
   @ApiOperation({ summary: '新增套餐' })
-  @SkipAuth()
   @Post()
   async addSetmeal(@Body() data: SetmealAddDTO) {
     await this.setmealService.addSetmeal(data)

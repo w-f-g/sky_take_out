@@ -137,10 +137,13 @@ export class SetmealService {
   /** 新增套餐 service */
   async addSetmeal(data: SetmealAddDTO) {
     const setmeal = buildEntity(Setmeal, data)
-
-    const res = await this.setmealRepository.insert(setmeal)
-    const setmealId = res.identifiers[0].id
-    await this.insertSetmealDish(setmealId, data.setmealDishes)
+    try {
+      const res = await this.setmealRepository.insert(setmeal)
+      const setmealId = res.identifiers[0].id
+      await this.insertSetmealDish(setmealId, data.setmealDishes)
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.FORBIDDEN)
+    }
   }
 
   /** 批量删除套餐 service */
