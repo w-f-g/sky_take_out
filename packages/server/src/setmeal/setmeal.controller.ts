@@ -4,7 +4,7 @@ import R from 'src/utils/response'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { SetmealVO } from './vo/setmeal.vo'
 import { SkipAuth } from 'src/auth/skip-auth.decorator'
-import { SetmealAddDTO, SetmealDTO } from './dto/setmeal.dto'
+import { SetmealAddDTO, SetmealDTO, SetmealPageQueryDTO } from './dto/setmeal.dto'
 import { StatusConstant } from 'src/utils/constant'
 
 @ApiBearerAuth('bearer')
@@ -21,9 +21,11 @@ export class SetmealController {
   }
 
   @ApiOperation({ summary: '分页查询' })
+  @SkipAuth()
   @Get('/page')
-  async getSetmealPageQuery() {
-    return R.success(null)
+  async getSetmealPageQuery(@Query() query: SetmealPageQueryDTO) {
+    const res = await this.setmealService.getSetmealPageQuery(query)
+    return R.success(res)
   }
 
   @ApiOperation({ summary: '套餐起售、停售' })

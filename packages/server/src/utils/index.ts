@@ -23,3 +23,7 @@ export const buildEntity = <T extends object , K extends keyof T>(Instance: Cons
 }
 
 export const isEmpty = (value: unknown) => value === null || value === undefined
+
+export function camelToSnake(camelCaseString: string): string {
+    return camelCaseString.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`)
+}

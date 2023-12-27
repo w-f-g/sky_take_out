@@ -1,7 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { ISetmeal, ISetmealAddDTO, ISetmealDish, ISetmealDishAdd } from '@sky_take_out/types'
-import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator'
-import { StatusConstant } from 'src/utils/constant'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { ISetmeal, ISetmealAddDTO, ISetmealDish, ISetmealDishAdd, ISetmealPageQueryDTO } from '@sky_take_out/types'
+import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator'
+import { StatusConstant, SexType as StatusConstantStr } from 'src/utils/constant'
 
 export class SetmealDishAdd implements ISetmealDishAdd {
   @ApiProperty()
@@ -82,4 +82,32 @@ export class SetmealDTO extends SetmealCommon implements ISetmeal {
   @ApiProperty({ type: [SetmealDish] })
   @IsArray()
   setmealDishes: ISetmealDish[]
+}
+
+export class SetmealPageQueryDTO implements ISetmealPageQueryDTO {
+  @ApiPropertyOptional()
+  @IsNumberString()
+  @IsOptional()
+  categoryId?: string
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  name?: string
+
+  @ApiPropertyOptional()
+  @IsEnum(StatusConstantStr)
+  @IsOptional()
+  status?: 0 | 1
+  
+  @ApiProperty()
+  @IsNumberString()
+  @IsNotEmpty()
+  page: string
+
+  @ApiProperty()
+  @IsNumberString()
+  @IsNotEmpty()
+  pageSize: string
 }

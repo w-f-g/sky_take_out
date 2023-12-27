@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Setmeal, SetmealDish } from './entities/setmeal.entity'
 import { In, Repository } from 'typeorm'
-import { SetmealVO } from './vo/setmeal.vo'
-import { buildEntity } from 'src/utils'
+import { SetmealPageResult, SetmealVO } from './vo/setmeal.vo'
+import { buildEntity, camelToSnake, isEmpty } from 'src/utils'
 import { ISetmealDish } from '@sky_take_out/types'
-import { SetmealAddDTO, SetmealDTO, SetmealDishAdd } from './dto/setmeal.dto'
+import { SetmealAddDTO, SetmealDTO, SetmealDishAdd, SetmealPageQueryDTO } from './dto/setmeal.dto'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
 import { Dish } from 'src/dish/entities/dish.entity'
 
@@ -55,6 +55,55 @@ export class SetmealService {
     }
   }
 
+  /** 分页查询 service */
+  async getSetmealPageQuery(query: SetmealPageQueryDTO): Promise<SetmealPageResult> {
+    const _ps = +query.pageSize
+    const take = +query.page
+    const skip = (take - 1) * _ps
+
+    const querySqlMap = {
+      categoryId: v => '= ' + v,
+      name: v => `LIKE '%${v}%'`,
+      status: v => '= ' + v,
+    }
+
+    let where = Object.keys(querySqlMap)
+      .filter(k => !isEmpty(query[k]))
+      .map(k => {
+        const value = query[k]
+        return `s.${camelToSnake(k)} ${querySqlMap[k](value)}`
+      })
+      .join(' AND ')
+    where = where !== '' ? `WHERE ${where}` : ''
+
+    const sql = `
+      SELECT
+        s.id, s.category_id as categoryId, s.name,
+        s.price, s.status, s.description,
+        s.image, DATE_FORMAT(s.update_time, '%Y-%m-%d %H:%i:%s') as updateTime, c.name as categoryName
+      FROM setmeal s
+      LEFT JOIN category c
+      ON s.category_id = c.id
+      ${where}
+      LIMIT ${skip}, ${_ps}
+    `
+    const totalSql = `
+      SELECT COUNT(0) as count
+      FROM setmeal s
+      LEFT JOIN category c
+      ON s.category_id = c.id
+      ${where}
+    `
+    const pagesQuery = this.setmealRepository.query(sql)
+    const totalQuery = this.setmealRepository.query(totalSql)
+    const [records, total] = await Promise.all([pagesQuery, totalQuery])
+    return {
+      records,
+      total: total[0].count,
+    }
+  }
+
+  /** 套餐起售、停售 service */
   async changeSetmealStatus(id: number, status: StatusConstant) {
     if (status === StatusConstant.ENABLE) {
       // 起售套餐时，如果套餐内包含停售的菜品，则不能起售
@@ -62,10 +111,6 @@ export class SetmealService {
         'SELECT dish.* FROM dish LEFT JOIN setmeal_dish sDish ON dish.id = sDish.dish_id where sDish.setmeal_id = ?',
         [id]
       )
-      // const queryBuilder = this.dishRepository.createQueryBuilder('dish')
-      //   .leftJoinAndSelect('dish.setmealDish', 'setmealDish')
-      //   .select(['dish.*'])
-      //   .where('setmealDish.setmeal_id = :setmealId', { setmealId: id })
 
       const dishs: Dish[] = await query
       if (dishs && dishs.length > 0) {

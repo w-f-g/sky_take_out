@@ -1,4 +1,4 @@
-import { IEntityCommon } from "./common";
+import { IEntityCommon, IPageQuery } from "./common";
 
 export interface ISetmeal {
   /** 套餐id */
@@ -49,4 +49,15 @@ export interface ISetmealAddDTO extends Omit<ISetmeal, 'id' | 'setmealDishes'> {
 
 export interface ISetmealVO extends ISetmeal {
   updateTime: string,
+}
+
+export interface ISetmealPageQueryDTO extends IPageQuery {
+  categoryId?: string,
+  name?: string,
+  status?: number,
+}
+
+export interface ISetmealPageVO extends Omit<ISetmeal, 'setmealDishes'> {
+  updateTime: string,
+  categoryName: string,
 }
