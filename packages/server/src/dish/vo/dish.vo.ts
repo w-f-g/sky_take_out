@@ -28,7 +28,7 @@ export class DishPageVO implements IDishPageVO {
 }
 
 export class DishPageResult implements IPageResult<DishPageVO> {
-  @ApiProperty({ name: 'records', type: DishPageVO })
+  @ApiProperty({ name: 'records', type: [DishPageVO] })
   records: DishPageVO[]
 
   @ApiProperty()

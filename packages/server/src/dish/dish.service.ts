@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Dish, DishFlavor } from './entities/dish.entity'
-import { FindOptionsWhere, In, Like, Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 import { AddDishDTO, DishDTO, DishFlavorDTO, DishPageQueryDTO } from './dto/dish.dto'
-import { buildEntity, isEmpty } from 'src/utils'
-import { DishPageResult, DishPageVO, DishVO } from './vo/dish.vo'
+import { buildEntity, camelToSnake, isEmpty } from 'src/utils'
+import { DishPageResult, DishVO } from './vo/dish.vo'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
 import { IDishFlavor } from '@sky_take_out/types'
 import { SetmealDish } from 'src/setmeal/entities/setmeal.entity'
@@ -37,53 +37,63 @@ export class DishService {
   /** 新增菜品 service */
   async addDish(data: AddDishDTO) {
     const dish = buildEntity(Dish, data)
-    // 向菜品表插入一条数据
-    const res = await this.dishRepository.insert(dish)
-    const dishId: number = res.identifiers[0].id
-    // 向口味表插入数据
-    await this.insertDishFlavor(data.flavors, dishId)
+    try {
+      // 向菜品表插入一条数据
+      const res = await this.dishRepository.insert(dish)
+      const dishId: number = res.identifiers[0].id
+      // 向口味表插入数据
+      await this.insertDishFlavor(data.flavors, dishId)
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.FORBIDDEN)
+    }
   }
 
   /** 菜品分页查询 service */
   async getDishPage(query: DishPageQueryDTO): Promise<DishPageResult> {
     const _p = +query.page
     const _ps = +query.pageSize
-
-    const where: FindOptionsWhere<Dish> = {}
-    const { name, categoryId, status } = query
-    if (!isEmpty(name)) {
-      where['name'] = Like(`%${name}%`)
-    }
-    if (!isEmpty(categoryId)) {
-      where['categoryId'] = Number(categoryId)
-    }
-    if (!isEmpty(status)){
-      where['status'] = status
+    const skip = (_p - 1) * _ps
+    
+    const querySqlMap = {
+      categoryId: v => '= ' + v,
+      name: v => `LIKE '%${v}%'`,
+      status: v => '= ' + v,
     }
 
-    const queryBuilder = this.dishRepository.createQueryBuilder('dish')
-      .leftJoinAndSelect('dish.category', 'category')
-      .select([
-        'dish.id as id',
-        'dish.name as name',
-        'dish.price as price',
-        'dish.image as image',
-        'dish.status as status',
-        'dish.description as description',
-        'dish.updateTime as updateTime',
-        'category.name as categoryName',
-      ])
-      .where(where)
-      .take(_ps)
-      .skip((_p - 1) * _ps)
-      .orderBy('dish.createTime', 'DESC')
-    const [data, total] = await Promise.all([
-      queryBuilder.getRawMany<DishPageVO>(),
-      queryBuilder.getCount()
-    ])
+    let where = Object.keys(querySqlMap)
+      .filter(k => !isEmpty(query[k]))
+      .map(k => {
+        const value = query[k]
+        return `s.${camelToSnake(k)} ${querySqlMap[k](value)}`
+      })
+      .join(' AND ')
+    where = where !== '' ? `WHERE ${where}` : ''
+    
+    const sql = `
+      SELECT
+        d.id, d.category_id as categoryId, d.name,
+        d.price, d.status, d.description,
+        d.image, DATE_FORMAT(d.update_time, '%Y-%m-%d %H:%i:%s') as updateTime, c.name as categoryName
+      FROM dish d
+      LEFT JOIN category c
+      ON d.category_id = c.id
+      ${where}
+      ORDER BY d.create_time DESC
+      LIMIT ${skip}, ${_ps}
+    `
+    const totalSql = `
+      SELECT COUNT(0) as count
+      FROM dish d
+      LEFT JOIN category c
+      ON d.category_id = c.id
+      ${where}
+    `
+    const pagesQuery = this.dishRepository.query(sql)
+    const totalQuery = this.dishRepository.query(totalSql)
+    const [records, total] = await Promise.all([pagesQuery, totalQuery])
     return {
-      total,
-      records: data
+      records,
+      total: total[0].count,
     }
   }
 
