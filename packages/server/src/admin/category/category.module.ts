@@ -3,8 +3,8 @@ import { CategoryService } from './category.service'
 import { CategoryController } from './category.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Category } from './entities/category.entity'
-import { Dish } from 'src/dish/entities/dish.entity'
-import { Setmeal } from 'src/setmeal/entities/setmeal.entity'
+import { Dish } from 'src/admin/dish/entities/dish.entity'
+import { Setmeal } from 'src/admin/setmeal/entities/setmeal.entity'
 
 @Module({
   imports: [

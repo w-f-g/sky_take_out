@@ -7,8 +7,8 @@ import { CategoryPageVO, CategoryVO } from './vo/category.vo'
 import { ICategoryVO } from '@sky_take_out/types'
 import { CategoryType, MessageConstant, StatusConstant } from 'src/utils/constant'
 import { buildEntity } from 'src/utils'
-import { Dish } from 'src/dish/entities/dish.entity'
-import { Setmeal } from 'src/setmeal/entities/setmeal.entity'
+import { Dish } from 'src/admin/dish/entities/dish.entity'
+import { Setmeal } from 'src/admin/setmeal/entities/setmeal.entity'
 
 @Injectable()
 export class CategoryService {

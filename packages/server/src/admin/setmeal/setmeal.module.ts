@@ -3,7 +3,7 @@ import { SetmealService } from './setmeal.service'
 import { SetmealController } from './setmeal.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Setmeal, SetmealDish } from './entities/setmeal.entity'
-import { Dish } from 'src/dish/entities/dish.entity'
+import { Dish } from 'src/admin/dish/entities/dish.entity'
 
 @Module({
   imports: [

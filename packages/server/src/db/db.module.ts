@@ -1,10 +1,11 @@
 import { Global, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Category } from 'src/category/entities/category.entity'
-import { Dish, DishFlavor } from 'src/dish/entities/dish.entity'
-import { Employee } from 'src/employee/entities/employee.entity'
-import { Setmeal, SetmealDish } from 'src/setmeal/entities/setmeal.entity'
+import { Category } from 'src/admin/category/entities/category.entity'
+import { Dish, DishFlavor } from 'src/admin/dish/entities/dish.entity'
+import { Employee } from 'src/admin/employee/entities/employee.entity'
+import { Setmeal, SetmealDish } from 'src/admin/setmeal/entities/setmeal.entity'
 import { isDev } from 'src/utils'
+import { RedisService } from './redis.service'
 
 @Global()
 @Module({
@@ -33,6 +34,8 @@ import { isDev } from 'src/utils'
         }
       },
     }),
-  ]
+  ],
+  providers: [RedisService],
+  exports: [RedisService],
 })
 export class DBModule {}

@@ -7,7 +7,7 @@ import { buildEntity, camelToSnake, isEmpty } from 'src/utils'
 import { ISetmealDish } from '@sky_take_out/types'
 import { SetmealAddDTO, SetmealDTO, SetmealDishAdd, SetmealPageQueryDTO } from './dto/setmeal.dto'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
-import { Dish } from 'src/dish/entities/dish.entity'
+import { Dish } from 'src/admin/dish/entities/dish.entity'
 
 @Injectable()
 export class SetmealService {
