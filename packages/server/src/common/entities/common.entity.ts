@@ -76,10 +76,10 @@ export class CommonEntity implements IEntityCommon {
       const target = res[k]
       if (
         typeof target === 'object' &&
-        typeof target.user === 'object' &&
-        target.user.empId
+        typeof target.employee === 'object' &&
+        target.employee.empId
       ) {
-        return Number(target.user.empId)
+        return Number(target.employee.empId)
       }
     }
     return null

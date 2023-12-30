@@ -1,13 +1,15 @@
-import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { SetmealService } from './setmeal.service'
 import R from 'src/utils/response'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
-import { SetmealVO } from './vo/setmeal.vo'
+import { SetmealPageResult, SetmealVO } from './vo/setmeal.vo'
 import { SetmealAddDTO, SetmealDTO, SetmealPageQueryDTO } from './dto/setmeal.dto'
 import { StatusConstant } from 'src/utils/constant'
+import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 
 @ApiBearerAuth('bearer')
 @ApiTags('套餐相关接口')
+@UseGuards(AdminAuthGuard)
 @Controller('/admin/setmeal')
 export class SetmealController {
   constructor(private readonly setmealService: SetmealService) {}
@@ -19,6 +21,7 @@ export class SetmealController {
     return R.success(null)
   }
 
+  @ApiOkResponse({ type: SetmealPageResult })
   @ApiOperation({ summary: '分页查询' })
   @Get('/page')
   async getSetmealPageQuery(@Query() query: SetmealPageQueryDTO) {

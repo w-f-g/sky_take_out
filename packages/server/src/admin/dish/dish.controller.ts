@@ -1,13 +1,16 @@
-import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { DishService } from './dish.service'
 import R from 'src/utils/response'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AddDishDTO, DishDTO, DishPageQueryDTO } from './dto/dish.dto'
 import { DishPageResult, DishVO } from './vo/dish.vo'
 import { StatusConstant } from 'src/utils/constant'
+import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
+import { Dish } from './entities/dish.entity'
 
 @ApiBearerAuth('bearer')
 @ApiTags('菜品相关接口')
+@UseGuards(AdminAuthGuard)
 @Controller('/admin/dish')
 export class DishController {
   constructor(private readonly dishService: DishService) {}
@@ -41,6 +44,7 @@ export class DishController {
     return R.success(null)
   }
 
+  @ApiOkResponse({ type: [Dish] })
   @ApiOperation({ summary: '根据分类id查询菜品' })
   @Get('/list')
   async getDishByCategoryId(@Query('categoryId', new ParseIntPipe()) categoryId: number) {

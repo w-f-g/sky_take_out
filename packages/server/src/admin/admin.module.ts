@@ -12,6 +12,6 @@ import { ShopModule } from './shop/shop.module'
     DishModule,
     SetmealModule,
     ShopModule,
-  ]
+  ],
 })
 export class AdminModule {}

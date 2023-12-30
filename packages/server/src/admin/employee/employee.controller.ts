@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Inject, Param, ParseEnumPipe, ParseIntPipe, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Get, HttpStatus, Inject, Param, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
 import { EditEmployeeDTO, EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO, PasswordEditDTO } from './dto/employee.dto'
 import R from 'src/utils/response'
@@ -7,9 +7,11 @@ import { JwtService } from '@nestjs/jwt'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { SkipAuth } from 'src/auth/skip-auth.decorator'
 import { StatusConstant } from 'src/utils/constant'
+import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 
 @ApiTags('员工相关接口')
 @ApiBearerAuth('bearer')
+@UseGuards(AdminAuthGuard)
 @Controller('/admin/employee')
 export class EmployeeController {
   @Inject(JwtService)

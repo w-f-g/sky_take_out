@@ -1,12 +1,14 @@
-import { Controller, Get, Inject, Param, ParseEnumPipe, Put } from '@nestjs/common'
+import { Controller, Get, Inject, Param, ParseEnumPipe, Put, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { RedisClientType } from 'redis'
+import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 import { REDIS_SERVICE_KEY } from 'src/db/redis.service'
 import { StatusConstant } from 'src/utils/constant'
 import R from 'src/utils/response'
 
 @ApiBearerAuth('bearer')
 @ApiTags('店铺操作接口')
+@UseGuards(AdminAuthGuard)
 @Controller('/admin/shop')
 export class AdminShopController {
 

@@ -6,7 +6,7 @@ import { ClsService, InjectCls } from 'nestjs-cls'
 import { SKIP_AUTH_KEY } from './skip-auth.decorator'
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class UserAuthGuard implements CanActivate {
 
   @Inject(JwtService)
   private jwtService: JwtService
@@ -30,25 +30,24 @@ export class AuthGuard implements CanActivate {
     }
     
     const request: Request = context.switchToHttp().getRequest()
-    const authorization = request.header('authorization') || ''
-    const token = authorization.replace('Bearer ', '')
+    const token = request.header('Authorization') || ''
 
     if (token === '') {
       throw new UnauthorizedException('请先登录！')
     }
     try {
-      const info: Record<'empId', number> = await this.jwtService.verifyAsync(token)
-      if (info.empId) {
-        this.clsService.set('user', info)
-        // 注入解析 token 获取的用户信息，绕开 ts 的类型检查
-        Object.defineProperty(request, 'user', {
-          get() {
-            return info
-          }
-        })
-        return Promise.resolve(true)
-      }
-      throw new UnauthorizedException('token 解析异常！')
+      const info = await this.jwtService.verifyAsync(token)
+      this.clsService.set('user', info)
+      // 注入解析 token 获取的用户信息，绕开 ts 的类型检查
+      Object.defineProperty(request, 'user', {
+        get() {
+          return info
+        }
+      })
+      return Promise.resolve(true)
+      // if (info.empId) {
+      // }
+      // throw new UnauthorizedException('token 解析异常！')
     } catch(error) {
       console.log(error)
       throw new UnauthorizedException('身份过期，请重新登录！')

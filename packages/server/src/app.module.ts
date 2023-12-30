@@ -2,10 +2,8 @@ import { DBModule } from './db/db.module'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'
 import { resolve } from 'path'
-import { AuthGuard } from './auth/auth.guard'
 import { ClsModule } from 'nestjs-cls'
 import { Module } from '@nestjs/common'
-import { APP_GUARD } from '@nestjs/core'
 import { CommonModule } from './common/common.module'
 import { AdminModule } from './admin/admin.module'
 import { UserModule } from './user/user.module'
@@ -26,7 +24,7 @@ import { UserModule } from './user/user.module'
       },
     }),
     ClsModule.forRoot({
-      // global: true,
+      global: true,
       middleware: {
         mount: true,
       },
@@ -35,12 +33,6 @@ import { UserModule } from './user/user.module'
     CommonModule,
     AdminModule,
     UserModule,
-  ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
   ],
 })
 export class AppModule {}
