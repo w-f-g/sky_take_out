@@ -4,7 +4,7 @@ dist
 dist-ssr
 *.local
 packages/server/public
-packages/server/wxapp
+packages/wxapp
 
 # Logs
 logs
