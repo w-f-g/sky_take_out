@@ -37,17 +37,17 @@ export class UserAuthGuard implements CanActivate {
     }
     try {
       const info = await this.jwtService.verifyAsync(token)
-      this.clsService.set('user', info)
-      // 注入解析 token 获取的用户信息，绕开 ts 的类型检查
-      Object.defineProperty(request, 'user', {
-        get() {
-          return info
-        }
-      })
-      return Promise.resolve(true)
-      // if (info.empId) {
-      // }
-      // throw new UnauthorizedException('token 解析异常！')
+      if (info.userId) {
+        this.clsService.set('user', info)
+        // 注入解析 token 获取的用户信息，绕开 ts 的类型检查
+        Object.defineProperty(request, 'user', {
+          get() {
+            return info
+          }
+        })
+        return Promise.resolve(true)
+      }
+      throw new UnauthorizedException('token 解析异常！')
     } catch(error) {
       console.log(error)
       throw new UnauthorizedException('身份过期，请重新登录！')

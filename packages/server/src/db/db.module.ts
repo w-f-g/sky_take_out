@@ -6,6 +6,7 @@ import { Employee } from 'src/admin/employee/entities/employee.entity'
 import { Setmeal, SetmealDish } from 'src/admin/setmeal/entities/setmeal.entity'
 import { isDev } from 'src/utils'
 import { RedisService } from './redis.service'
+import { User } from 'src/user/user/entities/user.entity'
 
 @Global()
 @Module({
@@ -25,6 +26,7 @@ import { RedisService } from './redis.service'
             Employee, Category,
             Dish, DishFlavor,
             Setmeal, SetmealDish,
+            User,
           ],
           poolSize: 10,
           connectorPackage: 'mysql2',

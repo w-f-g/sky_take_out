@@ -6,7 +6,7 @@ import { ClsModule } from 'nestjs-cls'
 import { Module } from '@nestjs/common'
 import { CommonModule } from './common/common.module'
 import { AdminModule } from './admin/admin.module'
-import { UserModule } from './user/user.module'
+import { UserRootModule } from './user/user.module'
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { UserModule } from './user/user.module'
       global: true,
       secret: '福生无量天尊',
       signOptions: {
-        expiresIn: '1h',
+        expiresIn: '2h',
       },
     }),
     ClsModule.forRoot({
@@ -32,7 +32,7 @@ import { UserModule } from './user/user.module'
     DBModule,
     CommonModule,
     AdminModule,
-    UserModule,
+    UserRootModule,
   ],
 })
 export class AppModule {}
