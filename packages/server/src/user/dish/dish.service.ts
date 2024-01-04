@@ -30,6 +30,7 @@ export class DishService {
     return dishFlavor
   }
 
+  /** C端-根据分类id查询菜品 service */
   async list(categoryId: number): Promise<DishVO[]> {
     // 查询相关菜品
     const dishs: Record<string, any>[] = await this.dishRepository.findBy({

@@ -18,3 +18,10 @@ export interface IUserEntity {
   avatar: string,
   createTime: Date,
 }
+
+export interface IUserSetmealDishVO {
+  copies: number,
+  description: string,
+  image: string,
+  name: string,
+}

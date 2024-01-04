@@ -10,6 +10,7 @@ export class CategoryService {
   @InjectRepository(Category)
   private categoryRepository: Repository<Category>
   
+  /** C端-查询分类 service */
   async list(type: CategoryType | undefined): Promise<CategoryVO[]> {
     if (type !== undefined && !(type in CategoryType)) {
       throw new HttpException('type 值应为1、2', HttpStatus.FORBIDDEN)
