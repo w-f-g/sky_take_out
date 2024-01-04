@@ -34,6 +34,10 @@ export class Setmeal extends CommonEntity implements ISetmealEntity {
     precision: 10,
     scale: 2,
     comment: '套餐价格',
+    transformer: {
+      to: v => v,
+      from: v => Number(v),
+    },
   })
   price: number
 
@@ -114,6 +118,10 @@ export class SetmealDish extends CommonEntity implements ISetmealDishEntity {
     nullable: true,
     default: null,
     comment: '菜品单价（冗余字段）',
+    transformer: {
+      to: v => v,
+      from: v => Number(v),
+    },
   })
   price: number
   

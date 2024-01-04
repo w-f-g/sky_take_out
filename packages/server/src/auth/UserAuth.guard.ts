@@ -30,7 +30,7 @@ export class UserAuthGuard implements CanActivate {
     }
     
     const request: Request = context.switchToHttp().getRequest()
-    const token = request.header('Authorization') || ''
+    const token = request.header('authentication') || ''
 
     if (token === '') {
       throw new UnauthorizedException('请先登录！')

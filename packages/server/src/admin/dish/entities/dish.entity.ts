@@ -36,6 +36,10 @@ export class Dish extends CommonEntity implements IDishEntity {
     nullable: true,
     default: null,
     comment: '菜品价格',
+    transformer: {
+      to: v => v,
+      from: v => Number(v),
+    },
   })
   price: number
 
