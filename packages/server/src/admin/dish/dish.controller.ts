@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { DishService } from './dish.service'
 import R from 'src/utils/response'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
@@ -7,18 +7,27 @@ import { DishPageResult, DishVO } from './vo/dish.vo'
 import { StatusConstant } from 'src/utils/constant'
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 import { Dish } from './entities/dish.entity'
+import { REDIS_SERVICE_KEY } from 'src/db/redis.service'
+import { RedisClientType } from 'redis'
 
 @ApiBearerAuth('bearer')
 @ApiTags('菜品相关接口')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/dish')
 export class DishController {
-  constructor(private readonly dishService: DishService) {}
+  @Inject()
+  private readonly dishService: DishService
+  
+  @Inject(REDIS_SERVICE_KEY)
+  private redisClient: RedisClientType
+
+  private REDIS_KEY_PREFIX = 'SKY_TAKE_OUT_DISH_'
 
   @ApiOperation({ summary: '修改菜品' })
   @Put()
   async editDish(@Body() dish: DishDTO) {
     await this.dishService.editDish(dish)
+    await this.clearCache()
     return R.success(null)
   }
   
@@ -34,6 +43,7 @@ export class DishController {
     ids: number[],
   ) {
     await this.dishService.deleteDishs(ids)
+    await this.clearCache()
     return R.success(null)
   }
   
@@ -41,6 +51,8 @@ export class DishController {
   @Post()
   async addDish(@Body() data: AddDishDTO) {
     await this.dishService.addDish(data)
+    // 清理缓存数据
+    await this.redisClient.del(this.REDIS_KEY_PREFIX + data.categoryId)
     return R.success(null)
   }
 
@@ -79,6 +91,13 @@ export class DishController {
     status: StatusConstant,
   ) {
     await this.dishService.changeDishStatus(id, status)
+    await this.clearCache()
     return R.success(null)
+  }
+
+  private async clearCache() {
+    // 将所有的菜品缓存数据清理掉，所有以 SKY_TAKE_OUT_DISH_ 开头的 key
+    const keys = await this.redisClient.keys(this.REDIS_KEY_PREFIX + '*')
+    await this.redisClient.del(keys)
   }
 }
