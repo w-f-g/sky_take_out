@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { SetmealService } from './setmeal.service'
 import R from 'src/utils/response'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
@@ -6,18 +6,27 @@ import { SetmealPageResult, SetmealVO } from './vo/setmeal.vo'
 import { SetmealAddDTO, SetmealDTO, SetmealPageQueryDTO } from './dto/setmeal.dto'
 import { StatusConstant } from 'src/utils/constant'
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
+import { REDIS_SERVICE_KEY } from 'src/db/redis.service'
+import { RedisClientType } from 'redis'
 
 @ApiBearerAuth('bearer')
 @ApiTags('套餐相关接口')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/setmeal')
 export class SetmealController {
-  constructor(private readonly setmealService: SetmealService) {}
+  @Inject(SetmealService)
+  private readonly setmealService: SetmealService
+
+  @Inject(REDIS_SERVICE_KEY)
+  private redisClient: RedisClientType
+  
+  private REDIS_KEY_PREFIX = 'SKY_TAKE_OUT_SETMEAL_'
 
   @ApiOperation({ summary: '修改套餐' })
   @Put()
   async editSetmeal(@Body() data: SetmealDTO) {
     await this.setmealService.editSetmeal(data)
+    await this.clearCache()
     return R.success(null)
   }
 
@@ -40,6 +49,7 @@ export class SetmealController {
     status: StatusConstant
   ) {
     await this.setmealService.changeSetmealStatus(id, status)
+    await this.clearCache()
     return R.success(null)
   }
 
@@ -53,6 +63,7 @@ export class SetmealController {
     ids: number[]
   ) {
     await this.setmealService.deleteSetmealByIds(ids)
+    await this.clearCache()
     return R.success(null)
   }
 
@@ -60,6 +71,8 @@ export class SetmealController {
   @Post()
   async addSetmeal(@Body() data: SetmealAddDTO) {
     await this.setmealService.addSetmeal(data)
+    // 清理缓存数据
+    await this.redisClient.del(this.REDIS_KEY_PREFIX + data.categoryId)
     return R.success(null)
   }
 
@@ -69,5 +82,11 @@ export class SetmealController {
   async getSetmealById(@Param('id', new ParseIntPipe()) id: number) {
     const res = await this.setmealService.getSetmealById(id)
     return R.success(res)
+  }
+  
+  private async clearCache() {
+    // 将所有的菜品缓存数据清理掉，所有以 SKY_TAKE_OUT_DISH_ 开头的 key
+    const keys = await this.redisClient.keys(this.REDIS_KEY_PREFIX + '*')
+    await this.redisClient.del(keys)
   }
 }
