@@ -7,6 +7,7 @@ import { Setmeal, SetmealDish } from 'src/admin/setmeal/entities/setmeal.entity'
 import { isDev } from 'src/utils'
 import { RedisService } from './redis.service'
 import { User } from 'src/user/user/entities/user.entity'
+import { ShoppingCart } from 'src/user/shopping-cart/entities/shopping-cart.entity'
 
 @Global()
 @Module({
@@ -26,7 +27,7 @@ import { User } from 'src/user/user/entities/user.entity'
             Employee, Category,
             Dish, DishFlavor,
             Setmeal, SetmealDish,
-            User,
+            User, ShoppingCart,
           ],
           poolSize: 10,
           connectorPackage: 'mysql2',

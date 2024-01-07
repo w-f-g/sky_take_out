@@ -14,3 +14,12 @@ export interface IShoppingCart {
 export interface IShoppingCartEntity extends Omit<IShoppingCart, 'createTime'> {
   createTime: Date
 }
+
+export interface IShoppingCartDTO {
+    /** 口味 */
+    dishFlavor?: string,
+    /** 菜品id */
+    dishId?: number,
+    /** 套餐id */
+    setmealId?: number,
+}

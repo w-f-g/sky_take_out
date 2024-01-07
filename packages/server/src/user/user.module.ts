@@ -4,6 +4,7 @@ import { WXUserModule } from './user/user.module'
 import { UserCategoryModule } from './category/category.module'
 import { UserDishModule } from './dish/dish.module'
 import { UserSetmealModule } from './setmeal/setmeal.module'
+import { UserShoppingCartModule } from './shopping-cart/shopping-cart.module'
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UserSetmealModule } from './setmeal/setmeal.module'
     UserCategoryModule,
     UserDishModule,
     UserSetmealModule,
+    UserShoppingCartModule,
   ]
 })
 export class UserRootModule {}
