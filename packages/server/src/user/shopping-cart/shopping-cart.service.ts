@@ -22,6 +22,7 @@ export class ShoppingCartService {
   @InjectCls()
   private clsService: ClsService
 
+  /** 查看购物车 service */
   async list() {
     const user = this.clsService.get('user')
     const userId = user.userId
@@ -32,11 +33,12 @@ export class ShoppingCartService {
     return list
   }
 
+  /** 添加购物车 service */
   async add(data: ShoppingCartDTO) {
     const user = this.clsService.get('user')
     const userId = user.userId
     const where: FindOptionsWhere<ShoppingCart> = {
-      userId: user.userId,
+      userId,
     }
     const shoppingCart = buildEntity(ShoppingCart, {
       ...data,
@@ -73,5 +75,45 @@ export class ShoppingCartService {
     shoppingCart.createTime = new Date()
     // 添加购物车
     await this.shoppingCartRepository.insert(shoppingCart)
+  }
+
+  /** 清空购物车 service */
+  async clean() {
+    const user = this.clsService.get('user')
+    const userId = user.userId
+
+    await this.shoppingCartRepository.delete({ userId })
+  }
+
+  /** 删除购物车中一个商品 service */
+  async sub(data: ShoppingCartDTO) {
+    const user = this.clsService.get('user')
+    const userId = user.userId
+    const where: FindOptionsWhere<ShoppingCart> = {
+      userId,
+    }
+    const isSetmeal = !isEmpty(data.setmealId)
+    if (isSetmeal) {
+      where.setmealId = data.setmealId
+    } else {
+      where.dishId = data.dishId
+    }
+    // 判断是否存在购物车数据
+    const cart = await this.shoppingCartRepository.findOneBy(where)
+    const number = cart.number
+    // 如果只有 1 份就直接删除该商品
+    if (number === 1) {
+      await this.shoppingCartRepository.delete({
+        id: cart.id,
+      })
+    } else {
+      // 否则就减 1
+      const shoppingCart = buildEntity(ShoppingCart, {
+        ...data,
+        userId,
+        number: number - 1,
+      })
+      await this.shoppingCartRepository.update(cart.id, shoppingCart)
+    }
   }
 }

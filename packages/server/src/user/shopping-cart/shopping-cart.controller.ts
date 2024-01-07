@@ -24,6 +24,7 @@ export class ShoppingCartController {
   @ApiOperation({ summary: '删除购物车中一个商品' })
   @Post('/sub')
   async sub(@Body() data: ShoppingCartDTO) {
+    await this.shoppingCartService.sub(data)
     return R.success(null)
   }
 
@@ -37,6 +38,7 @@ export class ShoppingCartController {
   @ApiOperation({ summary: '清空购物车' })
   @Delete('/clean')
   async clean() {
+    await this.shoppingCartService.clean()
     return R.success(null)
   }
 }
