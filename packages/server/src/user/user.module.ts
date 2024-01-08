@@ -5,6 +5,7 @@ import { UserCategoryModule } from './category/category.module'
 import { UserDishModule } from './dish/dish.module'
 import { UserSetmealModule } from './setmeal/setmeal.module'
 import { UserShoppingCartModule } from './shopping-cart/shopping-cart.module'
+import { UserAddressBookModule } from './address-book/address-book.module'
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserShoppingCartModule } from './shopping-cart/shopping-cart.module'
     UserDishModule,
     UserSetmealModule,
     UserShoppingCartModule,
+    UserAddressBookModule,
   ]
 })
 export class UserRootModule {}

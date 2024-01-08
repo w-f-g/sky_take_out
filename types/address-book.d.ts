@@ -14,3 +14,9 @@ export interface IAddressBook {
   label: string,
   isDefault: number,
 }
+
+export interface IAddressBookDTO extends Omit<IAddressBook, 'label'> {
+  label: number,
+  name: string,
+  type: number,
+}

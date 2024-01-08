@@ -48,6 +48,14 @@ export class AddressBookService {
   }
 
   /** 根据id修改地址 service */
+  async editAddress(data: AddressBookDTO) {
+    const userId = this.getUserId()
+
+    const addressBook = buildEntity(AddressBook, data)
+    addressBook.userId = userId
+
+    await this.addressBookRepository.update({ id: data.id }, addressBook)
+  }
 
   /** 根据id删除地址 service */
   async deleteAddressById(id: number) {
@@ -66,5 +74,18 @@ export class AddressBookService {
       userId,
     })
     return res
+  }
+
+  async setDefaultAddress(id: number) {
+    const userId = this.getUserId()
+    const address = buildEntity(AddressBook, {
+      userId,
+      isDefault: 0,
+    })
+    await this.addressBookRepository.update({ userId }, address)
+
+    address.id = id
+    address.isDefault = 1
+    await this.addressBookRepository.update({ userId }, address)
   }
 }

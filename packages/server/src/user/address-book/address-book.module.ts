@@ -11,4 +11,4 @@ import { AddressBook } from './entities/address-book.entity'
   controllers: [AddressBookController],
   providers: [AddressBookService],
 })
-export class AddressBookModule {}
+export class UserAddressBookModule {}

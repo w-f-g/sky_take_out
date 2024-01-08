@@ -141,6 +141,10 @@ export class AddressBook implements IAddressBook {
     type: 'boolean',
     comment: '默认 0 否 1是',
     default: 0,
+    transformer: {
+      to: v => v,
+      from: v => Number(v),
+    },
   })
   isDefault: number
 }

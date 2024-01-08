@@ -38,7 +38,8 @@ export class AddressBookController {
 
   @ApiOperation({ summary: '根据id修改地址' })
   @Put()
-  async editAddress() {
+  async editAddress(@Body() data: AddressBookDTO) {
+    await this.addressBookService.editAddress(data)
     return R.success(null)
   }
 
@@ -58,8 +59,9 @@ export class AddressBookController {
   }
 
   @ApiOperation({ summary: '设置默认地址' })
-  @Put('/defalut')
+  @Put('/default')
   async setDefaultAddress(@Body('id', new ParseIntPipe()) id: number) {
+    await this.addressBookService.setDefaultAddress(id)
     return R.success(null)
   }
 }
