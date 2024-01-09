@@ -3,7 +3,7 @@ import { AddressBookService } from './address-book.service'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
 import R from 'src/utils/response'
-import { AddressBookDTO } from './dto/address-book.dto'
+import { AddressBookDTO, EditAddressBookDTO } from './dto/address-book.dto'
 import { AddressBookVO } from './vo/address-book.vo'
 
 @ApiBearerAuth('bearer')
@@ -38,7 +38,7 @@ export class AddressBookController {
 
   @ApiOperation({ summary: '根据id修改地址' })
   @Put()
-  async editAddress(@Body() data: AddressBookDTO) {
+  async editAddress(@Body() data: EditAddressBookDTO) {
     await this.addressBookService.editAddress(data)
     return R.success(null)
   }

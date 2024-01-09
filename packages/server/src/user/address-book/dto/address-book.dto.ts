@@ -1,18 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IAddressBookDTO } from '@sky_take_out/types'
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IAddressBookDTO, IEditAddressBookDTO } from '@sky_take_out/types'
+import { IsInt, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator'
 
 export class AddressBookDTO implements IAddressBookDTO {
-  @ApiPropertyOptional()
-  @IsInt()
-  @IsOptional()
-  id: number
-
-  @ApiPropertyOptional()
-  @IsInt()
-  @IsOptional()
-  userId: number
-
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
@@ -82,4 +72,11 @@ export class AddressBookDTO implements IAddressBookDTO {
   @IsInt()
   @IsOptional()
   isDefault: number
+}
+
+export class EditAddressBookDTO extends AddressBookDTO implements IEditAddressBookDTO {
+  @ApiProperty()
+  @IsNumberString()
+  @IsNotEmpty()
+  id: number
 }

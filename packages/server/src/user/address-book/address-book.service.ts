@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { AddressBookDTO } from './dto/address-book.dto'
+import { AddressBookDTO, EditAddressBookDTO } from './dto/address-book.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AddressBook } from './entities/address-book.entity'
 import { Repository } from 'typeorm'
@@ -48,7 +48,7 @@ export class AddressBookService {
   }
 
   /** 根据id修改地址 service */
-  async editAddress(data: AddressBookDTO) {
+  async editAddress(data: EditAddressBookDTO) {
     const userId = this.getUserId()
 
     const addressBook = buildEntity(AddressBook, data)
@@ -76,6 +76,7 @@ export class AddressBookService {
     return res
   }
 
+  /** 设置默认地址 service */
   async setDefaultAddress(id: number) {
     const userId = this.getUserId()
     const address = buildEntity(AddressBook, {
@@ -84,8 +85,7 @@ export class AddressBookService {
     })
     await this.addressBookRepository.update({ userId }, address)
 
-    address.id = id
     address.isDefault = 1
-    await this.addressBookRepository.update({ userId }, address)
+    await this.addressBookRepository.update({ id, userId }, address)
   }
 }

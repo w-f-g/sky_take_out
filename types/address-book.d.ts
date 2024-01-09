@@ -15,8 +15,12 @@ export interface IAddressBook {
   isDefault: number,
 }
 
-export interface IAddressBookDTO extends Omit<IAddressBook, 'label'> {
+export interface IAddressBookDTO extends Omit<IAddressBook, 'label' | 'userId' | 'id'> {
   label: number,
   name: string,
   type: number,
+}
+
+export interface IEditAddressBookDTO extends IAddressBookDTO {
+  id: number,
 }
