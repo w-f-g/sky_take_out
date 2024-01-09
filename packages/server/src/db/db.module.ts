@@ -9,6 +9,7 @@ import { RedisService } from './redis.service'
 import { User } from 'src/user/user/entities/user.entity'
 import { ShoppingCart } from 'src/user/shopping-cart/entities/shopping-cart.entity'
 import { AddressBook } from 'src/user/address-book/entities/address-book.entity'
+import { Order, OrderDetail } from 'src/user/order/entities/order.entity'
 
 @Global()
 @Module({
@@ -29,6 +30,7 @@ import { AddressBook } from 'src/user/address-book/entities/address-book.entity'
             Dish, DishFlavor,
             Setmeal, SetmealDish,
             User, ShoppingCart, AddressBook,
+            Order, OrderDetail,
           ],
           poolSize: 10,
           connectorPackage: 'mysql2',
