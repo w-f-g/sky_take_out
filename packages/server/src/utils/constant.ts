@@ -71,3 +71,24 @@ export enum AutoFillConstant {
   SET_CREATE_USER = 'setCreateUser',
   SET_UPDATE_USER = 'setUpdateUser',
 }
+
+export enum OrderStatus {
+  /**
+   * 订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
+   */
+  PENDING_PAYMENT = 1,
+  TO_BE_CONFIRMED = 2,
+  CONFIRMED = 3,
+  DELIVERY_IN_PROGRESS = 4,
+  COMPLETED = 5,
+  CANCELLED = 6,
+}
+
+export enum PayStatus {
+  /**
+   * 支付状态 0未支付 1已支付 2退款
+   */
+  UN_PAID = 0,
+  PAID = 1,
+  REFUND = 2,
+}
