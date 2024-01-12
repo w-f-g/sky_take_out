@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { OrderSubmitVO } from './vo/order.vo'
-import { OrderSubmitDTO } from './dto/order.dto'
+import { OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Order, OrderDetail } from './entities/order.entity'
 import { Repository } from 'typeorm'
@@ -9,6 +9,7 @@ import { ShoppingCart } from '../shopping-cart/entities/shopping-cart.entity'
 import { buildEntity, isEmpty } from 'src/utils'
 import { MessageConstant, OrderStatus, PayStatus } from 'src/utils/constant'
 import { ClsService, InjectCls } from 'nestjs-cls'
+import { dateFormat } from '@sky_take_out/utils'
 
 @Injectable()
 export class OrderService {
@@ -68,9 +69,20 @@ export class OrderService {
     await this.shoppingCartRepository.delete({ userId })
     return {
       id: order.id,
-      orderTime: order.orderTime,
+      orderTime: dateFormat(order.orderTime),
       orderAmount: order.amount,
       orderNumber: order.number,
     }
+  }
+
+  async paySuccess(data: OrderPaymentDTO) {
+    const o = await this.orderRepository.findOneBy({ number: data.orderNumber })
+    const order = buildEntity(Order, {
+      id: o.id,
+      status: OrderStatus.TO_BE_CONFIRMED,
+      payStatus: PayStatus.PAID,
+      checkoutTime: new Date(),
+    })
+    await this.orderRepository.update(o.id, order)
   }
 }

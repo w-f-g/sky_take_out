@@ -68,3 +68,10 @@ export interface IOrderSubmitVO {
   /** 下单时间 */
   orderTime: Date | string,
 }
+
+export interface IOrderPaymentDTO {
+  /** 订单号 */
+  orderNumber: string,
+  /** 支付方式 */
+  payMethod: number,
+}

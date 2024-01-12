@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common'
 import { OrderService } from './order.service'
 import R from 'src/utils/response'
-import { OrderSubmitDTO } from './dto/order.dto'
+import { OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
 import { OrderSubmitVO } from './vo/order.vo'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
@@ -53,7 +53,9 @@ export class OrderController {
 
   @ApiOperation({ summary: '订单支付' })
   @Put('/payment')
-  async paymentOrder() {
+  async paymentOrder(@Body() data: OrderPaymentDTO) {
+    // TODO: 个人暂时没有开通微信商家支付的需求，所以这里只模拟支付成功的情况
+    await this.orderService.paySuccess(data)
     return R.success(null)
   }
 }

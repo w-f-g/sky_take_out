@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IOrdersSubmitDTO } from '@sky_take_out/types'
+import { IOrderPaymentDTO, IOrdersSubmitDTO } from '@sky_take_out/types'
 import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsNumber, IsNumberString, IsString } from 'class-validator'
-import { StatusConstant, CategoryType as PayMethod } from 'src/utils/constant'
+import { StatusConstant, PayMethod } from 'src/utils/constant'
 
 export class OrderSubmitDTO implements IOrdersSubmitDTO {
   @ApiProperty()
@@ -44,4 +44,15 @@ export class OrderSubmitDTO implements IOrdersSubmitDTO {
   @ApiProperty()
   @IsEnum(StatusConstant)
   tablewareStatus: 0 | 1
+}
+
+export class OrderPaymentDTO implements IOrderPaymentDTO {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  orderNumber: string
+
+  @ApiProperty()
+  @IsEnum(PayMethod)
+  payMethod: number
 }

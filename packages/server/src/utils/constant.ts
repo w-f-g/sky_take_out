@@ -92,3 +92,8 @@ export enum PayStatus {
   PAID = 1,
   REFUND = 2,
 }
+
+export enum PayMethod {
+  WX = 1,
+  ZFB = 2,
+}

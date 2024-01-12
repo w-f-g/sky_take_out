@@ -1,7 +1,8 @@
 import { IOrder, IOrderDetail } from '@sky_take_out/types'
+import { dateFormat } from '@sky_take_out/utils'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity('order')
+@Entity('orders')
 export class Order implements IOrder {
   @PrimaryGeneratedColumn({
     name: 'id',
@@ -47,6 +48,10 @@ export class Order implements IOrder {
     name: 'order_time',
     type: 'datetime',
     comment: '下单时间',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => dateFormat(value),
+    },
   })
   orderTime: Date | string
 
@@ -56,6 +61,10 @@ export class Order implements IOrder {
     nullable: true,
     default: null,
     comment: '结账时间',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => dateFormat(value),
+    },
   })
   checkoutTime: Date | string
 
@@ -171,6 +180,10 @@ export class Order implements IOrder {
     nullable: true,
     default: null,
     comment: '订单取消时间',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => dateFormat(value),
+    },
   })
   cancelTime: Date | string
 
@@ -180,6 +193,10 @@ export class Order implements IOrder {
     nullable: true,
     default: null,
     comment: '预计送达时间',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => dateFormat(value),
+    },
   })
   estimatedDeliveryTime: Date | string
   
@@ -200,6 +217,10 @@ export class Order implements IOrder {
     nullable: true,
     default: null,
     comment: '送达时间',
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => dateFormat(value),
+    },
   })
   deliveryTime: Date | string
 
