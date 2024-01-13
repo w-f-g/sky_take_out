@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
-import { OrderSubmitVO } from './vo/order.vo'
-import { OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
+import { HistoryOrdersVO, OrderSubmitVO, OrderVO } from './vo/order.vo'
+import { HistoryOrdersDTO, OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Order, OrderDetail } from './entities/order.entity'
-import { Repository } from 'typeorm'
+import { FindOptionsWhere, Repository } from 'typeorm'
 import { AddressBook } from '../address-book/entities/address-book.entity'
 import { ShoppingCart } from '../shopping-cart/entities/shopping-cart.entity'
 import { buildEntity, isEmpty } from 'src/utils'
@@ -84,5 +84,36 @@ export class OrderService {
       checkoutTime: new Date(),
     })
     await this.orderRepository.update(o.id, order)
+  }
+
+  async historyOrders({ page, pageSize, status }: HistoryOrdersDTO): Promise<HistoryOrdersVO> {
+    const _p = +page
+    const _ps = +pageSize
+    const userId = this.getUserId()
+    const where: FindOptionsWhere<Order> = { userId }
+    if (!isEmpty(status) && status.toString() !== '') {
+      where.status = status
+    }
+    const [orders, total] = await this.orderRepository.findAndCount({
+      take: _ps,
+      skip: (_p - 1) * _ps,
+      where,
+    })
+
+    const records: OrderVO[] = []
+    const orderDetails = orders.map(o => this.orderDetailRepository.findBy({ orderId: o.id}))
+    let index = 0
+    for await (const orderDetail of orderDetails) {
+      const order = buildEntity(OrderVO, {
+        ...orders[index],
+        orderDetailList: orderDetail,
+      })
+      records.push(order)
+      index++
+    }
+    return {
+      records,
+      total,
+    }
   }
 }

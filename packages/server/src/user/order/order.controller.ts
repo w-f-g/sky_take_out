@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { OrderService } from './order.service'
 import R from 'src/utils/response'
-import { OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
+import { HistoryOrdersDTO, OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
 import { OrderSubmitVO } from './vo/order.vo'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
+import { isEmpty } from 'src/utils'
+import { OrderStatus } from 'src/utils/constant'
 
 @ApiBearerAuth('bearer')
 @ApiTags('C端-订单接口')
@@ -27,8 +29,15 @@ export class OrderController {
 
   @ApiOperation({ summary: '历史订单查询' })
   @Get('/historyOrders')
-  async historyOrders() {
-    return R.success([])
+  async historyOrders(@Query() query: HistoryOrdersDTO) {
+    if (!isEmpty(query.status) && query.status.toString() !== '') {
+      const _status = Number(query.status)
+      if (!(_status in OrderStatus)) {
+        throw new HttpException('status must be one of the following values: 1, 2, 3, 4, 5, 6', HttpStatus.FORBIDDEN)
+      }
+    }
+    const res = await this.orderService.historyOrders(query)
+    return R.success(res)
   }
 
   @ApiOperation({ summary: '取消订单' })

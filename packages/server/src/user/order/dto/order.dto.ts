@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { IOrderPaymentDTO, IOrdersSubmitDTO } from '@sky_take_out/types'
-import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsNumber, IsNumberString, IsString } from 'class-validator'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { IHistoryOrdersDTO, IOrderPaymentDTO, IOrdersSubmitDTO } from '@sky_take_out/types'
+import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator'
 import { StatusConstant, PayMethod } from 'src/utils/constant'
 
 export class OrderSubmitDTO implements IOrdersSubmitDTO {
@@ -55,4 +55,20 @@ export class OrderPaymentDTO implements IOrderPaymentDTO {
   @ApiProperty()
   @IsEnum(PayMethod)
   payMethod: number
+}
+
+export class HistoryOrdersDTO implements IHistoryOrdersDTO {
+  @ApiPropertyOptional()
+  @IsOptional()
+  status?: number
+
+  @ApiProperty()
+  @IsNumberString()
+  @IsNotEmpty()
+  page: string
+
+  @ApiProperty()
+  @IsNumberString()
+  @IsNotEmpty()
+  pageSize: string
 }

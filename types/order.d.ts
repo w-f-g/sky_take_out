@@ -1,3 +1,4 @@
+import { IPageQuery } from './common.d';
 export interface IOrder {
   id: number,
   number: string,
@@ -74,4 +75,12 @@ export interface IOrderPaymentDTO {
   orderNumber: string,
   /** 支付方式 */
   payMethod: number,
+}
+
+export interface IHistoryOrdersDTO extends IPageQuery {
+  status?: number,
+}
+
+export interface IOrderVO extends IOrder {
+  orderDetailList: IOrderDetail[],
 }
