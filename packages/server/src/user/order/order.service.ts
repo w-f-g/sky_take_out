@@ -75,6 +75,7 @@ export class OrderService {
     }
   }
 
+  /** 订单支付 service */
   async paySuccess(data: OrderPaymentDTO) {
     const o = await this.orderRepository.findOneBy({ number: data.orderNumber })
     const order = buildEntity(Order, {
@@ -86,6 +87,7 @@ export class OrderService {
     await this.orderRepository.update(o.id, order)
   }
 
+  /** 历史订单查询 service */
   async historyOrders({ page, pageSize, status }: HistoryOrdersDTO): Promise<HistoryOrdersVO> {
     const _p = +page
     const _ps = +pageSize
@@ -115,5 +117,18 @@ export class OrderService {
       records,
       total,
     }
+  }
+
+  /** 查询订单详情 service */
+  async getOrdereDetailById(id: number) {
+    const userId = this.getUserId()
+    const orderQuery = this.orderRepository.findOneBy({ id, userId })
+    const orderDetailListQuery = this.orderDetailRepository.findBy({ orderId: id })
+
+    const [order, orderDetailList] = await Promise.all([orderQuery, orderDetailListQuery])
+    return buildEntity(OrderVO, {
+      ...order,
+      orderDetailList,
+    })
   }
 }

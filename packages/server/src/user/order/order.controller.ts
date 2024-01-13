@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, 
 import { OrderService } from './order.service'
 import R from 'src/utils/response'
 import { HistoryOrdersDTO, OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
-import { OrderSubmitVO } from './vo/order.vo'
+import { HistoryOrdersVO, OrderSubmitVO, OrderVO } from './vo/order.vo'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
 import { isEmpty } from 'src/utils'
@@ -27,6 +27,7 @@ export class OrderController {
     return R.success(null)
   }
 
+  @ApiOkResponse({ type: HistoryOrdersVO })
   @ApiOperation({ summary: '历史订单查询' })
   @Get('/historyOrders')
   async historyOrders(@Query() query: HistoryOrdersDTO) {
@@ -46,10 +47,12 @@ export class OrderController {
     return R.success(null)
   }
 
+  @ApiOkResponse({ type: OrderVO })
   @ApiOperation({ summary: '查询订单详情' })
   @Get('/orderDetail/:id')
   async getOrdereDetailById(@Param('id', new ParseIntPipe()) id: number) {
-    return R.success(null)
+    const res = await this.orderService.getOrdereDetailById(id)
+    return R.success(res)
   }
 
   @ApiOkResponse({ type: OrderSubmitVO })
