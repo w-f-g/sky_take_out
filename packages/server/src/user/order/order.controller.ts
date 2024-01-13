@@ -14,16 +14,17 @@ import { OrderStatus } from 'src/utils/constant'
 @Controller('/user/order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
-
+  
   @ApiOperation({ summary: '催单' })
   @Get('/reminder/:id')
   async reminderOrder(@Param('id', new ParseIntPipe()) id: number) {
     return R.success(null)
   }
-
+  
   @ApiOperation({ summary: '再来一单' })
   @Post('/repetition/:id')
   async repetitionOrder(@Param('id', new ParseIntPipe()) id: number) {
+    await this.orderService.repetitionOrder(id)
     return R.success(null)
   }
 
@@ -44,6 +45,7 @@ export class OrderController {
   @ApiOperation({ summary: '取消订单' })
   @Put('/cancel/:id')
   async cancelOrder(@Param('id', new ParseIntPipe()) id: number) {
+    await this.orderService.cancelOrder(id)
     return R.success(null)
   }
 

@@ -20297,7 +20297,7 @@ exports.paymentOrder = paymentOrder;var repetitionOrder = function repetitionOrd
     (0, _request.request)({
       url: "/user/order/repetition/".concat(params),
       method: 'POST',
-      params: params }));};exports.repetitionOrder = repetitionOrder;
+    }));};exports.repetitionOrder = repetitionOrder;
 
 /***/ }),
 

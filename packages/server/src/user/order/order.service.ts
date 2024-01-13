@@ -131,4 +131,42 @@ export class OrderService {
       orderDetailList,
     })
   }
+
+  /** 取消订单 service */
+  async cancelOrder(id: number) {
+    const userId = this.getUserId()
+    const orderQuery = await this.orderRepository.findOneBy({ id, userId })
+    // 商家已接单状态下，用户取消订单需电话沟通商家
+    // 派送中状态下，用户取消订单需电话沟通商家
+    if (orderQuery.status > 2) {
+      throw new HttpException(MessageConstant.ORDER_STATUS_ERROR, HttpStatus.FORBIDDEN)
+    } 
+    // 待支付和待接单状态下，用户可直接取消订单
+    const order = new Order()
+    // 如果在待接单状态下取消订单，需要给用户退款
+    if (orderQuery.status === OrderStatus.TO_BE_CONFIRMED) {
+      // 调用微信接口进行退款（略）
+      order.payStatus = PayStatus.REFUND
+    }
+    // 取消订单后需要将订单状态修改为“已取消”
+    order.status = OrderStatus.CANCELLED
+    order.cancelReason = '用户取消'
+    order.cancelTime = new Date()
+    await this.orderRepository.update({ id, userId }, order)
+  }
+
+  /** 再来一单 service */
+  async repetitionOrder(id: number) {
+    const userId = this.getUserId()
+    const orderDetailList = await this.orderDetailRepository.findBy({ orderId: id })
+    const shoppingCarts = orderDetailList.map(od => {
+      return buildEntity(ShoppingCart, {
+        ...od,
+        userId,
+        id: null,
+        createTime: new Date(),
+      })
+    })
+    await this.shoppingCartRepository.insert(shoppingCarts)
+  }
 }
