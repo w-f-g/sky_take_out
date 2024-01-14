@@ -3,7 +3,7 @@ import { OrderService } from './order.service'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 import R from 'src/utils/response'
-import { AdminConfirmOrderDTO, AdminSearchOrderDTO } from './dto/order.dto'
+import { AdminCancelOrderDTO, AdminConfirmOrderDTO, AdminRejectionOrderDTO, AdminSearchOrderDTO } from './dto/order.dto'
 import { AdminOrderStatisticsVO, AdminOrderVO, AdminSearchOrderPageResult } from './vo/order.vo'
 
 @ApiBearerAuth('bearer')
@@ -15,7 +15,8 @@ export class OrderController {
 
   @ApiOperation({ summary: '取消订单' })
   @Put('/cancel')
-  async cancelOrder() {
+  async cancelOrder(@Body() data: AdminCancelOrderDTO) {
+    await this.orderService.cancelOrder(data)
     return R.success(null)
   }
 
@@ -35,7 +36,8 @@ export class OrderController {
 
   @ApiOperation({ summary: '拒单' })
   @Put('/rejection')
-  async rejectionOrder() {
+  async rejectionOrder(@Body() data: AdminRejectionOrderDTO) {
+    await this.orderService.rejectionOrder(data)
     return R.success(null)
   }
 

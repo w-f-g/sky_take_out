@@ -46,3 +46,17 @@ export class AdminConfirmOrderDTO {
   @IsNotEmpty()
   id: number
 }
+
+export class AdminRejectionOrderDTO extends AdminConfirmOrderDTO {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  rejectionReason: string
+}
+
+export class AdminCancelOrderDTO extends AdminConfirmOrderDTO {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  cancelReason: string
+}

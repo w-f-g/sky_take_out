@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common'
-import { AdminSearchOrderDTO } from './dto/order.dto'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { AdminCancelOrderDTO, AdminRejectionOrderDTO, AdminSearchOrderDTO } from './dto/order.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Order, OrderDetail } from 'src/user/order/entities/order.entity'
 import { Between, FindOptionsWhere, Repository } from 'typeorm'
 import { isEmpty } from 'class-validator'
 import { AdminOrderStatisticsVO, AdminOrderVO, AdminSearchOrderPageResult, AdminSearchOrderVO } from './vo/order.vo'
 import { buildEntity } from 'src/utils'
-import { OrderStatus } from 'src/utils/constant'
+import { MessageConstant, OrderStatus, PayStatus } from 'src/utils/constant'
 
 type OrderStatisticsQuery = {
   status: OrderStatus,
@@ -110,5 +110,42 @@ export class OrderService {
       status: OrderStatus.CONFIRMED
     })
     await this.orderRepository.update(id, order)
+  }
+  
+  /** 拒单 service */
+  async rejectionOrder({ id, rejectionReason }: AdminRejectionOrderDTO) {
+    const orderQuery = await this.orderRepository.findOneBy({ id })
+    // 只有订单处于“待接单”状态时可以执行拒单操作
+    if (isEmpty(orderQuery) || orderQuery.status !== OrderStatus.TO_BE_CONFIRMED) {
+      throw new HttpException(MessageConstant.ORDER_STATUS_ERROR, HttpStatus.FORBIDDEN)
+    }
+    // 商家拒单时，如果用户已经完成了支付，需要为用户退款
+    if (orderQuery.payStatus === PayStatus.PAID) {
+      // 退款
+    }
+    // 商家拒单时需要指定拒单原因
+    const order = buildEntity(Order, {
+      rejectionReason,
+      cancelTime: new Date(),
+      status: OrderStatus.CANCELLED,
+    })
+    await this.orderRepository.update(id, order)
+  }
+  
+  /** 取消订单 service */
+  async cancelOrder({ id, cancelReason }: AdminCancelOrderDTO) {
+    const orderQuery = await this.orderRepository.findOneBy({ id })
+    // 商家取消订单时，如果用户已经完成了支付，需要为用户退款
+    if (orderQuery.payStatus === PayStatus.PAID) {
+      // 退款
+    }
+  
+    const order = buildEntity(Order, {
+      cancelReason,
+      cancelTime: new Date(),
+      status: OrderStatus.CANCELLED,
+    })
+    await this.orderRepository.update(id, order)
+
   }
 }
