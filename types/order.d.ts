@@ -1,4 +1,5 @@
-import { IPageQuery } from './common.d';
+import { IPageQuery } from './common.d'
+
 export interface IOrder {
   id: number,
   number: string,
@@ -82,5 +83,30 @@ export interface IHistoryOrdersDTO extends IPageQuery {
 }
 
 export interface IOrderVO extends IOrder {
+  orderDetailList: IOrderDetail[],
+}
+
+export interface IAdminSearchOrderDTO extends IPageQuery {
+    beginTime?: string,
+    endTime?: string,
+    number?: string,
+    phone?: string,
+    status?: string,
+}
+
+export interface IAdminSearchOrderVO extends IOrder {
+  orderDishes: string,
+}
+
+export interface IAdminOrderStatisticsVO {
+    /** 待派送数量 */
+    confirmed: number,
+    /** 派送中数量 */
+    deliveryInProgress: number,
+    /** 待接单数量 */
+    toBeConfirmed: number,
+}
+
+export interface IAdminOrderVO extends IAdminSearchOrderVO {
   orderDetailList: IOrderDetail[],
 }

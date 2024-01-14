@@ -33,9 +33,7 @@ export class OrderDetailVO implements IOrderDetail {
   amount: number
 }
 
-export class OrderVO implements IOrderVO {
-  @ApiProperty()
-  orderDetailList: OrderDetailVO[]
+export class Order_VO {
   @ApiProperty()
   id: number
   @ApiProperty()
@@ -84,6 +82,11 @@ export class OrderVO implements IOrderVO {
   tablewareNumber: number
   @ApiProperty()
   tablewareStatus: number
+}
+
+export class OrderVO extends Order_VO implements IOrderVO {
+  @ApiProperty()
+  orderDetailList: OrderDetailVO[]
 }
 
 export class HistoryOrdersVO implements IPageResult<OrderVO> {
