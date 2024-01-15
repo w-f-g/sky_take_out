@@ -146,6 +146,34 @@ export class OrderService {
       status: OrderStatus.CANCELLED,
     })
     await this.orderRepository.update(id, order)
+  }
 
+  /** 派单 service */
+  async deliveryOrder(id: number) {
+    const orderQuery = await this.orderRepository.findOneBy({ id })
+    // 只有状态为“待派送”的订单可以执行派送订单操作
+    if (isEmpty(orderQuery) || orderQuery.status !== OrderStatus.CONFIRMED) {
+      throw new HttpException(MessageConstant.ORDER_STATUS_ERROR, HttpStatus.FORBIDDEN)
+    }
+    
+    const order = buildEntity(Order, {
+      status: OrderStatus.DELIVERY_IN_PROGRESS,
+    })
+    await this.orderRepository.update(id, order)
+  }
+
+  /** 完成订单 service */
+  async completeOrder(id: number) {
+    const orderQuery = await this.orderRepository.findOneBy({ id })
+    // 只有状态为“派送中”的订单可以执行订单完成操作
+    if (isEmpty(orderQuery) || orderQuery.status !== OrderStatus.DELIVERY_IN_PROGRESS) {
+      throw new HttpException(MessageConstant.ORDER_STATUS_ERROR, HttpStatus.FORBIDDEN)
+    }
+    
+    const order = buildEntity(Order, {
+      status: OrderStatus.COMPLETED,
+      deliveryTime: new Date(),
+    })
+    await this.orderRepository.update(id, order)
   }
 }

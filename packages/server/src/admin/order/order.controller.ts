@@ -30,7 +30,8 @@ export class OrderController {
 
   @ApiOperation({ summary: '完成订单' })
   @Put('/complete/:id')
-  async completeOrder() {
+  async completeOrder(@Param('id', new ParseIntPipe()) id: number) {
+    await this.orderService.completeOrder(id)
     return R.success(null)
   }
 
@@ -58,7 +59,8 @@ export class OrderController {
 
   @ApiOperation({ summary: '派送订单' })
   @Put('/delivery/:id')
-  async deliveryOrder() {
+  async deliveryOrder(@Param('id', new ParseIntPipe()) id: number) {
+    await this.orderService.deliveryOrder(id)
     return R.success(null)
   }
 
