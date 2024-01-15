@@ -7,6 +7,8 @@ import { Module } from '@nestjs/common'
 import { CommonModule } from './common/common.module'
 import { AdminModule } from './admin/admin.module'
 import { UserRootModule } from './user/user.module'
+import { TaskModule } from './task/task.module'
+import { ScheduleModule } from '@nestjs/schedule'
 
 @Module({
   imports: [
@@ -29,10 +31,12 @@ import { UserRootModule } from './user/user.module'
         mount: true,
       },
     }),
+    ScheduleModule.forRoot(),
     DBModule,
     CommonModule,
     AdminModule,
     UserRootModule,
+    TaskModule,
   ],
 })
 export class AppModule {}
