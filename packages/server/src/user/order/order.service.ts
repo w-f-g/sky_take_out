@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
 import { HistoryOrdersVO, OrderSubmitVO, OrderVO } from './vo/order.vo'
 import { HistoryOrdersDTO, OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
 import { InjectRepository } from '@nestjs/typeorm'
@@ -10,6 +10,7 @@ import { buildEntity, isEmpty } from 'src/utils'
 import { MessageConstant, OrderStatus, PayStatus } from 'src/utils/constant'
 import { ClsService, InjectCls } from 'nestjs-cls'
 import { dateFormat } from '@sky_take_out/utils'
+import { WebsocketGateway } from 'src/websocket/websocket.gateway'
 
 @Injectable()
 export class OrderService {
@@ -27,6 +28,9 @@ export class OrderService {
   
   @InjectCls()
   private clsService: ClsService
+
+  @Inject(WebsocketGateway)
+  private webscoketGateway: WebsocketGateway
 
   private getUserId() {
     const user = this.clsService.get('user')
@@ -85,6 +89,14 @@ export class OrderService {
       checkoutTime: new Date(),
     })
     await this.orderRepository.update(o.id, order)
+
+    // 通过 websocket 向管理端推送消息
+    const map = {
+      type: 1,
+      orderId: o.id,
+      content: `订单号：${o.number}`,
+    }
+    this.webscoketGateway.emitAllClient(map)
   }
 
   /** 历史订单查询 service */
@@ -168,5 +180,20 @@ export class OrderService {
       })
     })
     await this.shoppingCartRepository.insert(shoppingCarts)
+  }
+  
+  /** 催单 service */
+  async reminderOrder(id: number) {
+    const userId = this.getUserId()
+    const orderQuery = await this.orderRepository.findOneBy({ id, userId })
+    if (isEmpty(orderQuery)) {
+      throw new HttpException(MessageConstant.ORDER_STATUS_ERROR, HttpStatus.FORBIDDEN)
+    }
+    const map = {
+      type: 2,
+      orderId: id,
+      content: `订单号：${orderQuery.number}`,
+    }
+    this.webscoketGateway.emitAllClient(map)
   }
 }

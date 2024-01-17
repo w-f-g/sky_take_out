@@ -18,6 +18,7 @@ export class OrderController {
   @ApiOperation({ summary: '催单' })
   @Get('/reminder/:id')
   async reminderOrder(@Param('id', new ParseIntPipe()) id: number) {
+    await this.orderService.reminderOrder(id)
     return R.success(null)
   }
   

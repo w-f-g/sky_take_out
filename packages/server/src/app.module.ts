@@ -9,6 +9,7 @@ import { AdminModule } from './admin/admin.module'
 import { UserRootModule } from './user/user.module'
 import { TaskModule } from './task/task.module'
 import { ScheduleModule } from '@nestjs/schedule'
+import { WebsocketModule } from './websocket/websocket.module'
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ScheduleModule } from '@nestjs/schedule'
     AdminModule,
     UserRootModule,
     TaskModule,
+    WebsocketModule,
   ],
 })
 export class AppModule {}

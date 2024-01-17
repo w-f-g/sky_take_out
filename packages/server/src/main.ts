@@ -5,6 +5,7 @@ import { HttpErrorFilter } from './http-error.filter'
 import { ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { resolve } from 'path'
+import { WsAdapter } from '@nestjs/platform-ws'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
@@ -32,6 +33,8 @@ async function bootstrap() {
   app.useStaticAssets(resolve(__dirname, '../public'), {
     prefix: '/public',
   })
+  
+  app.useWebSocketAdapter(new WsAdapter(app))
   
   await app.listen(process.env.PORT)
 }
