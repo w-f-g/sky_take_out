@@ -1,12 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { IAddCategoryDTO, ICategoryPageQueryDTO, IEditCategoryDTO } from '@sky_take_out/types'
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator'
-import { CategoryType, CategoryTypeString } from 'src/utils/constant'
+import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator'
+import { CategoryTypeString } from 'src/utils/constant'
 
 /** 修改分类 DTO */
 export class EditCategoryDTO implements IEditCategoryDTO {
   @ApiProperty()
-  @IsInt()
+  @IsNumberString()
   @IsNotEmpty()
   id: number
 
@@ -16,13 +16,14 @@ export class EditCategoryDTO implements IEditCategoryDTO {
   name: string
   
   @ApiProperty()
-  @IsInt()
+  @IsNumberString()
   @IsNotEmpty()
   sort: number
 
   @ApiProperty()
-  @IsEnum(CategoryType)
-  type: 1 | 2
+  @IsEnum(CategoryTypeString)
+  @IsOptional()
+  type?: 1 | 2
 }
 
 /** 分类分页查询 DTO */
@@ -34,7 +35,8 @@ export class CategoryPageQueryDTO implements ICategoryPageQueryDTO {
   
   @ApiProperty()
   @IsEnum(CategoryTypeString)
-  type: 1 | 2
+  @IsOptional()
+  type?: 1 | 2
   
   @ApiProperty()
   @IsString()
@@ -55,11 +57,11 @@ export class AddCategoryDTO implements IAddCategoryDTO {
   name: string
 
   @ApiProperty()
-  @IsInt()
+  @IsNumberString()
   @IsNotEmpty()
   sort: number
 
   @ApiProperty()
-  @IsEnum(CategoryType)
+  @IsEnum(CategoryTypeString)
   type: 1 | 2
 }

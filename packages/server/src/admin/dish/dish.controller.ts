@@ -98,6 +98,8 @@ export class DishController {
   private async clearCache() {
     // 将所有的菜品缓存数据清理掉，所有以 SKY_TAKE_OUT_DISH_ 开头的 key
     const keys = await this.redisClient.keys(this.REDIS_KEY_PREFIX + '*')
-    await this.redisClient.del(keys)
+    if (keys.length > 0) {
+      await this.redisClient.del(keys)
+    }
   }
 }

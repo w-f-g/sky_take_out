@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IAdminSearchOrderDTO } from '@sky_take_out/types'
-import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator'
+import { IsDateString, IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator'
 import { OrderStrStatus } from 'src/utils/constant'
 
 export class AdminSearchOrderDTO implements IAdminSearchOrderDTO {
@@ -42,7 +42,7 @@ export class AdminSearchOrderDTO implements IAdminSearchOrderDTO {
 
 export class AdminConfirmOrderDTO {
   @ApiProperty()
-  @IsInt()
+  @IsNumberString()
   @IsNotEmpty()
   id: number
 }

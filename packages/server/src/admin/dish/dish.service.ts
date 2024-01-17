@@ -4,7 +4,7 @@ import { Dish, DishFlavor } from './entities/dish.entity'
 import { In, Repository } from 'typeorm'
 import { AddDishDTO, DishDTO, DishFlavorDTO, DishPageQueryDTO } from './dto/dish.dto'
 import { buildEntity, camelToSnake, isEmpty } from 'src/utils'
-import { DishPageResult, DishVO } from './vo/dish.vo'
+import { DishPageResult, DishPageVO, DishVO } from './vo/dish.vo'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
 import { IDishFlavor } from '@sky_take_out/types'
 import { SetmealDish } from 'src/admin/setmeal/entities/setmeal.entity'
@@ -61,7 +61,12 @@ export class DishService {
     }
 
     let where = Object.keys(querySqlMap)
-      .filter(k => !isEmpty(query[k]))
+      .filter(k => {
+        if (k === 'status') {
+          return query[k].toString() !== '' && !isEmpty(query[k])
+        }
+        return !isEmpty(query[k])
+      })
       .map(k => {
         const value = query[k]
         return `s.${camelToSnake(k)} ${querySqlMap[k](value)}`
@@ -88,11 +93,16 @@ export class DishService {
       ON d.category_id = c.id
       ${where}
     `
-    const pagesQuery = this.dishRepository.query(sql)
+    const pagesQuery: Promise<DishPageVO[]> = this.dishRepository.query(sql)
     const totalQuery = this.dishRepository.query(totalSql)
     const [records, total] = await Promise.all([pagesQuery, totalQuery])
     return {
-      records,
+      records: records.map(x => {
+        return {
+          ...x,
+          price: Number(x.price),
+        }
+      }),
       total: total[0].count,
     }
   }

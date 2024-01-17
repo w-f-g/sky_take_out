@@ -4,7 +4,7 @@ import { Setmeal, SetmealDish } from './entities/setmeal.entity'
 import { In, Repository } from 'typeorm'
 import { SetmealPageResult, SetmealVO } from './vo/setmeal.vo'
 import { buildEntity, camelToSnake, isEmpty } from 'src/utils'
-import { ISetmealDish } from '@sky_take_out/types'
+import { ISetmealDish, ISetmealPageVO } from '@sky_take_out/types'
 import { SetmealAddDTO, SetmealDTO, SetmealDishAdd, SetmealPageQueryDTO } from './dto/setmeal.dto'
 import { MessageConstant, StatusConstant } from 'src/utils/constant'
 import { Dish } from 'src/admin/dish/entities/dish.entity'
@@ -68,7 +68,12 @@ export class SetmealService {
     }
 
     let where = Object.keys(querySqlMap)
-      .filter(k => !isEmpty(query[k]))
+      .filter(k => {
+        if (k === 'status') {
+          return query[k].toString() !== '' && !isEmpty(query[k])
+        }
+        return !isEmpty(query[k])
+      })
       .map(k => {
         const value = query[k]
         return `s.${camelToSnake(k)} ${querySqlMap[k](value)}`
@@ -94,11 +99,16 @@ export class SetmealService {
       ON s.category_id = c.id
       ${where}
     `
-    const pagesQuery = this.setmealRepository.query(sql)
+    const pagesQuery: Promise<ISetmealPageVO[]> = this.setmealRepository.query(sql)
     const totalQuery = this.setmealRepository.query(totalSql)
     const [records, total] = await Promise.all([pagesQuery, totalQuery])
     return {
-      records,
+      records: records.map(x => {
+        return {
+          ...x,
+          price: Number(x.price),
+        }
+      }),
       total: total[0].count,
     }
   }

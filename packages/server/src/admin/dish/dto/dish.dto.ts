@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { IAddDish, IDish, IDishFlavor, IDishPageQueryDTO } from '@sky_take_out/types'
-import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString, ValidateIf } from 'class-validator'
 import { StatusConstant, SexType as StatusConstantStr } from 'src/utils/constant'
 
 export class AddDishDTO implements IAddDish {
@@ -81,6 +81,7 @@ export class DishPageQueryDTO implements IDishPageQueryDTO {
   @ApiPropertyOptional()
   @IsEnum(StatusConstantStr)
   @IsOptional()
+  @ValidateIf((_, value) => value !== '')
   status?: 0 | 1
 
   @ApiProperty()
