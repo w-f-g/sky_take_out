@@ -6,5 +6,6 @@ export * from './user'
 export * from './shopping-cart'
 export * from './address-book'
 export * from './order'
+export * from './report'
 
 export * from './common'

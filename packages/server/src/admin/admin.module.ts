@@ -5,6 +5,7 @@ import { DishModule } from './dish/dish.module'
 import { SetmealModule } from './setmeal/setmeal.module'
 import { ShopModule } from './shop/shop.module'
 import { AdminOrderModule } from './order/order.module'
+import { ReportModule } from './report/report.module'
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AdminOrderModule } from './order/order.module'
     SetmealModule,
     ShopModule,
     AdminOrderModule,
+    ReportModule,
   ],
 })
 export class AdminModule {}
