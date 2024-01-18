@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common'
+import { Controller, Get, Query, UseGuards } from '@nestjs/common'
 import { ReportService } from './report.service'
 import R from 'src/utils/response'
 import { ReportDTO } from './dto/report.dto'
@@ -20,25 +20,26 @@ export class ReportController {
 
   @ApiOperation({ summary: '查询销量排名top10接口' })
   @Get('/top10')
-  async getTop10Report(query: ReportDTO) {
+  async getTop10Report(@Query() query: ReportDTO) {
     return R.success(null)
   }
 
   @ApiOperation({ summary: '用户统计接口' })
   @Get('/userStatistics')
-  async getUserStatistics(query: ReportDTO) {
+  async getUserStatistics(@Query() query: ReportDTO) {
     return R.success(null)
   }
 
   @ApiOperation({ summary: '营业额统计接口' })
   @Get('/turnoverStatistics')
-  async getTurnoverStatistics(query: ReportDTO) {
-    return R.success(null)
+  async getTurnoverStatistics(@Query() query: ReportDTO) {
+    const res = await this.reportService.getTurnoverStatistics(query)
+    return R.success(res)
   }
 
   @ApiOperation({ summary: '订单统计接口' })
   @Get('/ordersStatistics')
-  async getOrdersStatistics(query: ReportDTO) {
+  async getOrdersStatistics(@Query() query: ReportDTO) {
     return R.success(null)
   }
 }
