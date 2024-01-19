@@ -143,6 +143,28 @@ export class ReportService {
 
   /** 查询销量排名top10接口 service */
   async getTop10Report({ begin, end }: ReportDTO): Promise<SalesTop10ReportVO> {
-    return null
+    const beginDate = new Date(begin)
+    const endDate = new Date(end)
+    const diff = endDate.getTime() - beginDate.getTime()
+    if (diff < 0) {
+      throw new HttpException('参数错误，end时间小于begin', HttpStatus.FORBIDDEN)
+    }
+    const beginTime = `${begin} 00:00:00`
+    const endTime = `${end} 23:59:59`
+
+    const query: Record<'name' | 'number', string>[] = await this.orderRepository.query(`
+      SELECT od.name, SUM(od.number) number
+      FROM order_detail od, orders o
+      WHERE od.order_id = o.id AND o.status = 5
+      AND o.order_time BETWEEN ? AND ?
+      GROUP BY od.name
+      ORDER BY number DESC
+      LIMIT 0,10
+    `, [beginTime, endTime])
+    
+    return {
+      nameList: query.map(x => x.name).join(),
+      numberList: query.map(x => x.number).join(),
+    }
   }
 }
