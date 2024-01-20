@@ -69,7 +69,7 @@ export class DishService {
       })
       .map(k => {
         const value = query[k]
-        return `s.${camelToSnake(k)} ${querySqlMap[k](value)}`
+        return `d.${camelToSnake(k)} ${querySqlMap[k](value)}`
       })
       .join(' AND ')
     where = where !== '' ? `WHERE ${where}` : ''
