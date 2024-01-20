@@ -2,8 +2,11 @@ import dayjs from 'dayjs'
 
 type DateType = string | number | Date
 
-export function dateFormat(date: DateType) {
-  return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+export function dateFormat(
+  date: DateType,
+  format = 'YYYY-MM-DD HH:mm:ss'
+) {
+  return dayjs(date).format(format)
 }
 
 export function dateAddFormat(date: DateType, day: number) {

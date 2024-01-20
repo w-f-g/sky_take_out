@@ -6,6 +6,7 @@ import { SetmealModule } from './setmeal/setmeal.module'
 import { ShopModule } from './shop/shop.module'
 import { AdminOrderModule } from './order/order.module'
 import { ReportModule } from './report/report.module'
+import { WorkspaceModule } from './workspace/workspace.module'
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ReportModule } from './report/report.module'
     ShopModule,
     AdminOrderModule,
     ReportModule,
+    WorkspaceModule,
   ],
 })
 export class AdminModule {}
