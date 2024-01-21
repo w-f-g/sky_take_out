@@ -24,7 +24,7 @@ export class WorkspaceService {
   private dishRepository: Repository<Dish>
 
   /** 查询今日运营数据 service */
-  async getBusinessData(): Promise<BusinessDataVO> {
+  async getBusinessData(beginTime: string, endTime: string): Promise<BusinessDataVO> {
     /**
      * 营业额：当日已完成订单的总金额
      * 有效订单：当日已完成订单的数量
@@ -32,9 +32,6 @@ export class WorkspaceService {
      * 平均客单价：营业额 / 有效订单数
      * 新增用户：当日新增用户的数量
      */
-    const today = dateFormat(new Date(), 'YYYY-MM-DD')
-    const beginTime = `${today} 00:00:00`
-    const endTime = `${today} 23:59:59`
     const timeWhere = Between(beginTime, endTime)
 
     const orderQueryBuilder = this.orderRepository.createQueryBuilder()
@@ -56,13 +53,18 @@ export class WorkspaceService {
         createTime: timeWhere,
       })
       .getRawOne<Record<'count', number>>()
+
     const [validOrders, orders, users] = await Promise.all([validOrdersPromise, ordersPromise, usersQueryPromise])
+    const validOrderAmount = validOrders.amount || 0
+    const validOrdersCount = +validOrders.count
+    const ordersCount = +orders.count
+
     return {
-      newUsers: users.count,
-      orderCompletionRate: validOrders.count / orders.count,
-      turnover: validOrders.amount,
-      unitPrice: validOrders.amount / validOrders.count,
-      validOrderCount: validOrders.count,
+      newUsers: +users.count,
+      orderCompletionRate: ordersCount === 0 ? 0 : validOrdersCount / ordersCount,
+      turnover: validOrderAmount,
+      unitPrice: validOrdersCount === 0 ? 0 : validOrderAmount / validOrdersCount,
+      validOrderCount: validOrdersCount,
     }
   }
 

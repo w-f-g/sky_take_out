@@ -4,6 +4,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swa
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 import R from 'src/utils/response'
 import { BusinessDataVO, OrderOverViewVO, OverViewVO } from './vo/workspace.vo'
+import { dateFormat } from '@sky_take_out/utils'
 
 @ApiBearerAuth('bearer')
 @ApiTags('数据统计相关接口')
@@ -16,7 +17,11 @@ export class WorkspaceController {
   @ApiOperation({ summary: '查询今日运营数据' })
   @Get('/businessData')
   async getBusinessData() {
-    const res = await this.workspaceService.getBusinessData()
+    const today = dateFormat(new Date(), 'YYYY-MM-DD')
+    const beginTime = `${today} 00:00:00`
+    const endTime = `${today} 23:59:59`
+    // 有点慢
+    const res = await this.workspaceService.getBusinessData(beginTime, endTime)
     return R.success(res)
   }
 

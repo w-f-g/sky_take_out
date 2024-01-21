@@ -1,15 +1,20 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common'
 import { ReportDTO } from './dto/report.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Order } from 'src/user/order/entities/order.entity'
 import { Between, FindOptionsWhere, LessThan, Repository } from 'typeorm'
 import { OrderStatus } from 'src/utils/constant'
 import { OrdersStatisticsVO, SalesTop10ReportVO, TurnoverStatisticsVO, UserStatisticsVO } from './vo/report.vo'
-import { dateAddFormat } from '@sky_take_out/utils'
+import { dateAddFormat, dateFormat, dateSubtractFormat } from '@sky_take_out/utils'
 import { isEmpty } from 'src/utils'
 import { User } from 'src/user/user/entities/user.entity'
+import { WorkspaceService } from '../workspace/workspace.service'
+import { resolve } from 'path'
+import { CellValue, Workbook } from 'exceljs'
 
 type CountQuery = Record<'count', string>
+
+const XLSX_TEMPLATE_PATH = resolve(process.cwd(), 'template/运营数据报表模板.xlsx')
 
 @Injectable()
 export class ReportService {
@@ -18,6 +23,9 @@ export class ReportService {
 
   @InjectRepository(User)
   private userRepository: Repository<User>
+
+  @Inject(WorkspaceService)
+  private workspaceService: WorkspaceService
 
   private common(begin: string, end: string) {
     const beginDate = new Date(begin)
@@ -166,5 +174,54 @@ export class ReportService {
       nameList: query.map(x => x.name).join(),
       numberList: query.map(x => x.number).join(),
     }
+  }
+
+  /** 导出Excel报表接口 service */
+  async exportReportExcel() {
+    const today = dateFormat(new Date(), 'YYYY-MM-DD')
+    const beginDate = dateSubtractFormat(today, 30)
+    const beginTime = `${beginDate} 00:00:00`
+    const endTime = `${today} 23:59:59`
+    const res = await this.workspaceService.getBusinessData(beginTime, endTime)
+
+    const workbook = new Workbook()
+    await workbook.xlsx.readFile(XLSX_TEMPLATE_PATH)
+    const worksheet = workbook.getWorksheet('Sheet1')
+    const setCell = (r: string | number, value: CellValue) => {
+      const cell = worksheet.getCell(r)
+      cell.value = value
+      cell.model.style.alignment.horizontal = 'center'
+    }
+    
+    setCell('B2', `时间：${beginTime}至${endTime}`)
+    setCell('C4', res.turnover)
+    setCell('E4', res.orderCompletionRate)
+    setCell('G4', res.newUsers)
+    setCell('C5', res.validOrderCount)
+    setCell('E5', res.unitPrice)
+
+    for (let i = 0; i < 30; i++) {
+      const time = dateAddFormat(beginDate, i)
+      const _beginTime = `${time} 00:00:00`
+      const _endTime = `${time} 23:59:59`
+      const _res = await this.workspaceService.getBusinessData(_beginTime, _endTime)
+      const rowNumber = 8 + i
+      setCell(`B${rowNumber}`, time)
+      setCell(`C${rowNumber}`, _res.turnover)
+      setCell(`D${rowNumber}`, _res.validOrderCount)
+      setCell(`E${rowNumber}`, _res.orderCompletionRate)
+      setCell(`F${rowNumber}`, _res.unitPrice)
+      setCell(`G${rowNumber}`, _res.newUsers)
+    }
+    worksheet.eachRow((row, rowNumber) => {
+      let height = 25
+      if (rowNumber === 1) {
+        height = 50
+      }
+      row.height = height
+    })
+    
+    const file = workbook.xlsx.writeBuffer()
+    return file
   }
 }
