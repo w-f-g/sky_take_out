@@ -1,10 +1,9 @@
 import { Controller, Get, Inject } from '@nestjs/common'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { RedisClientType } from 'redis'
 import { REDIS_SERVICE_KEY } from 'src/db/redis.service'
 import R from 'src/utils/response'
 
-@ApiBearerAuth('bearer')
 @ApiTags('C端-店铺操作接口')
 @Controller('/user/shop')
 export class UserShopController {

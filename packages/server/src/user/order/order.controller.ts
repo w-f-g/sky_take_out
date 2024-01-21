@@ -3,12 +3,11 @@ import { OrderService } from './order.service'
 import R from 'src/utils/response'
 import { HistoryOrdersDTO, OrderPaymentDTO, OrderSubmitDTO } from './dto/order.dto'
 import { HistoryOrdersVO, OrderSubmitVO, OrderVO } from './vo/order.vo'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
 import { isEmpty } from 'src/utils'
 import { OrderStatus } from 'src/utils/constant'
 
-@ApiBearerAuth('bearer')
 @ApiTags('C端-订单接口')
 @UseGuards(UserAuthGuard)
 @Controller('/user/order')

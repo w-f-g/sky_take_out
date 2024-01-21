@@ -1,6 +1,6 @@
 import { Controller, Get, HttpException, HttpStatus, Inject, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common'
 import { SetmealService } from './setmeal.service'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
 import R from 'src/utils/response'
 import { Setmeal } from 'src/admin/setmeal/entities/setmeal.entity'
@@ -9,7 +9,6 @@ import { REDIS_SERVICE_KEY } from 'src/db/redis.service'
 import { RedisClientType } from 'redis'
 import { isEmpty } from 'class-validator'
 
-@ApiBearerAuth('bearer')
 @ApiTags('C端-套餐浏览接口')
 @UseGuards(UserAuthGuard)
 @Controller('/user/setmeal')

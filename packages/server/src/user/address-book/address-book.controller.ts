@@ -1,12 +1,11 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { AddressBookService } from './address-book.service'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
 import R from 'src/utils/response'
 import { AddressBookDTO, EditAddressBookDTO } from './dto/address-book.dto'
 import { AddressBookVO } from './vo/address-book.vo'
 
-@ApiBearerAuth('bearer')
 @ApiTags('C端-地址簿接口')
 @UseGuards(UserAuthGuard)
 @Controller('/user/addressBook')

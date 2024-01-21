@@ -21,11 +21,6 @@ async function bootstrap() {
     .setTitle('苍穹外卖')
     .setDescription('苍穹外卖接口文档')
     .setVersion('1.0')
-    .addBearerAuth({
-      type: 'http',
-      name: 'bearer',
-      description: '基于 jwt 的认证',
-    })
     .build()
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig)
   SwaggerModule.setup('doc', app, swaggerDocument)

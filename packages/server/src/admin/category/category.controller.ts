@@ -1,13 +1,12 @@
 import { Body, Controller, Delete, Get, Param, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { CategoryService } from './category.service'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AddCategoryDTO, CategoryPageQueryDTO, EditCategoryDTO } from './dto/category.dto'
 import R from 'src/utils/response'
 import { CategoryPageVO } from './vo/category.vo'
 import { CategoryType, StatusConstant } from 'src/utils/constant'
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 
-@ApiBearerAuth('bearer')
 @ApiTags('分类相关接口')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/category')

@@ -4,13 +4,12 @@ import { EditEmployeeDTO, EmployeeDTO, EmployeeLoginDTO, EmployeePageDTO, Passwo
 import R from 'src/utils/response'
 import { EmployeeLoginVO, EmployeePageVO, EmployeeVO } from './vo/employee.vo'
 import { JwtService } from '@nestjs/jwt'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { SkipAuth } from 'src/auth/skip-auth.decorator'
 import { StatusConstant } from 'src/utils/constant'
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 
 @ApiTags('员工相关接口')
-@ApiBearerAuth('bearer')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/employee')
 export class EmployeeController {

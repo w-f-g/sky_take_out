@@ -1,12 +1,11 @@
 import { Controller, Get, UseGuards } from '@nestjs/common'
 import { WorkspaceService } from './workspace.service'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 import R from 'src/utils/response'
 import { BusinessDataVO, OrderOverViewVO, OverViewVO } from './vo/workspace.vo'
 import { dateFormat } from '@sky_take_out/utils'
 
-@ApiBearerAuth('bearer')
 @ApiTags('数据统计相关接口')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/workspace')

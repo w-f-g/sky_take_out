@@ -1,11 +1,10 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common'
 import { CategoryService } from './category.service'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
 import R from 'src/utils/response'
 import { CategoryVO } from 'src/admin/category/vo/category.vo'
 
-@ApiBearerAuth('bearer')
 @ApiTags('C端-分类接口')
 @UseGuards(UserAuthGuard)
 @Controller('/user/category')

@@ -2,12 +2,11 @@ import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common'
 import { ReportService } from './report.service'
 import R from 'src/utils/response'
 import { ReportDTO } from './dto/report.dto'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 import { OrdersStatisticsVO, SalesTop10ReportVO, TurnoverStatisticsVO, UserStatisticsVO } from './vo/report.vo'
 import { Response } from 'express'
 
-@ApiBearerAuth('bearer')
 @ApiTags('数据统计相关接口')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/report')

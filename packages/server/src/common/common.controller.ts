@@ -7,7 +7,7 @@ import { extname, resolve } from 'path'
 import { v4 as uuid_v4 } from 'uuid'
 import { Request } from 'express'
 import os from 'os'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { ApiTags } from '@nestjs/swagger'
 
 function getNetworkIp() {
   let needHost = '' // 打开的host
@@ -34,7 +34,6 @@ function getNetworkIp() {
   return needHost
 }
 
-@ApiBearerAuth('bearer')
 @ApiTags('通用接口')
 @Controller('/admin/common')
 export class CommonController {

@@ -1,12 +1,11 @@
 import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common'
 import { ShoppingCartService } from './shopping-cart.service'
 import R from 'src/utils/response'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
 import { ShoppingCartDTO } from './dto/shopping-cart.dto'
 import { ShoppingCartVO } from './vo/shopping-cart.vo'
 
-@ApiBearerAuth('bearer')
 @ApiTags('C端-购物车接口')
 @UseGuards(UserAuthGuard)
 @Controller('/user/shoppingCart')

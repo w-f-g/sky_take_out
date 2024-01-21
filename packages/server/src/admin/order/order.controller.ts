@@ -1,12 +1,11 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Put, Query, UseGuards } from '@nestjs/common'
 import { OrderService } from './order.service'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 import R from 'src/utils/response'
 import { AdminCancelOrderDTO, AdminConfirmOrderDTO, AdminRejectionOrderDTO, AdminSearchOrderDTO } from './dto/order.dto'
 import { AdminOrderStatisticsVO, AdminOrderVO, AdminSearchOrderPageResult } from './vo/order.vo'
 
-@ApiBearerAuth('bearer')
 @ApiTags('订单管理接口')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/order')

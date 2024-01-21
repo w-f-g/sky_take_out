@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Inject, Param, ParseArrayPipe, ParseEnumPipe, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { SetmealService } from './setmeal.service'
 import R from 'src/utils/response'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { SetmealPageResult, SetmealVO } from './vo/setmeal.vo'
 import { SetmealAddDTO, SetmealDTO, SetmealPageQueryDTO } from './dto/setmeal.dto'
 import { StatusConstant } from 'src/utils/constant'
@@ -9,7 +9,6 @@ import { AdminAuthGuard } from 'src/auth/AdminAuth.guard'
 import { REDIS_SERVICE_KEY } from 'src/db/redis.service'
 import { RedisClientType } from 'redis'
 
-@ApiBearerAuth('bearer')
 @ApiTags('套餐相关接口')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/setmeal')

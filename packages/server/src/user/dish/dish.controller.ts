@@ -1,6 +1,6 @@
 import { Controller, Get, HttpException, HttpStatus, Inject, ParseIntPipe, Query, UseGuards } from '@nestjs/common'
 import { DishService } from './dish.service'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UserAuthGuard } from 'src/auth/UserAuth.guard'
 import R from 'src/utils/response'
 import { DishVO } from 'src/admin/dish/vo/dish.vo'
@@ -8,7 +8,6 @@ import { REDIS_SERVICE_KEY } from 'src/db/redis.service'
 import { RedisClientType } from 'redis'
 import { isEmpty } from 'src/utils'
 
-@ApiBearerAuth('bearer')
 @ApiTags('C端-菜品浏览接口')
 @UseGuards(UserAuthGuard)
 @Controller('/user/dish')
