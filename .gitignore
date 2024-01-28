@@ -3,7 +3,7 @@ node_modules
 dist
 dist-ssr
 *.local
-packages/server/public
+packages/server/public/images
 packages/wxapp
 
 # Logs
