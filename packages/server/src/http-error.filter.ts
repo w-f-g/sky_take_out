@@ -24,6 +24,9 @@ export class HttpErrorFilter implements ExceptionFilter {
       message = username + MessageConstant.ALREADY_EXISTS
     }
  
-    response.status(HttpStatus.OK).json(R.error(message))
+    const status = exception.getStatus() === HttpStatus.UNAUTHORIZED 
+      ? HttpStatus.UNAUTHORIZED
+      : HttpStatus.OK
+    response.status(status).json(R.error(message))
   }
 }

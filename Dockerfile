@@ -31,7 +31,7 @@ COPY --from=build /server/public ./public
 COPY --from=build /server/template ./template
 COPY --from=build /server/node_modules ./node_modules
 COPY --from=build /server/dist ./dist
-COPY --from=build /server/package.json /server/.env.production .
+COPY --from=build /server/package.json /server/.env.production ./
 # 设置时区，解决定时任务时间不准的问题
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
