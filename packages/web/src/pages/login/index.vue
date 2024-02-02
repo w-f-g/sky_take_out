@@ -1,29 +1,52 @@
 <template>
   <div class="login">
     <div class="login-box">
-      <img src="@/assets/login/login-l.png" alt="">
+      <img src="@/assets/login/login-l.png" alt="" />
       <div class="login-form">
-        <Form class="a-form" :model="loginForm" ref="formRef" :rules="loginFormRlues">
+        <Form
+          class="a-form"
+          :model="loginForm"
+          ref="formRef"
+          :rules="loginFormRlues"
+        >
           <div class="login-form-title">
-            <img src="@/assets/login/icon_logo.png" style="width: 149px; height: 38px;" alt="" />
+            <img
+              src="@/assets/login/icon_logo.png"
+              style="width: 149px; height: 38px"
+              alt=""
+            />
           </div>
           <FormItem name="username" class="login-form-item">
-            <Input v-model:value="loginForm.username" :bordered="false" autocomplete="off" type="text" placeholder="帐号">
-            <template #prefix>
-              <UserOutlined />
-            </template>
+            <Input
+              v-model:value="loginForm.username"
+              :bordered="false"
+              autocomplete="off"
+              type="text"
+              placeholder="帐号"
+            >
+              <template #prefix>
+                <UserOutlined />
+              </template>
             </Input>
           </FormItem>
           <FormItem name="password" class="login-form-item">
-            <Input v-model:value="loginForm.password" @keyup.enter="handleSubmit" :bordered="false" autocomplete="off"
-              type="password" placeholder="密码">
-            <template #prefix>
-              <LockOutlined />
-            </template>
+            <Input
+              v-model:value="loginForm.password"
+              @keyup.enter="handleSubmit"
+              :bordered="false"
+              autocomplete="off"
+              type="password"
+              placeholder="密码"
+            >
+              <template #prefix>
+                <LockOutlined />
+              </template>
             </Input>
           </FormItem>
           <FormItem>
-            <Button class="login-btn" @click="handleSubmit" :loading="loadding">登录</Button>
+            <Button class="login-btn" @click="handleSubmit" :loading="loading"
+              >登录</Button
+            >
           </FormItem>
         </Form>
       </div>
@@ -39,7 +62,7 @@ import { useUserStore } from '@/stores/user'
 import type { FormInstance, Rule } from 'ant-design-vue/es/form'
 import { useRouter } from 'vue-router'
 
-type TLoginForm = Record<'username' | 'password', string>
+type TLoginForm = Record<'username' | 'password', string>;
 
 defineOptions({
   name: 'LoginPage',
@@ -50,7 +73,7 @@ const loginForm = reactive<TLoginForm>({
   username: '',
   password: '',
 })
-const loadding = ref(false)
+const loading = ref(false)
 
 const { setUserInfo } = useUserStore()
 const router = useRouter()
@@ -61,7 +84,7 @@ const loginFormRlues: Record<keyof TLoginForm, Rule[]> = {
 }
 
 function handleSubmit() {
-  loadding.value = true
+  loading.value = true
   formRef.value?.validate()
     .then(async () => {
       const params = toRaw(loginForm)
@@ -74,10 +97,9 @@ function handleSubmit() {
       }
     })
     .finally(() => {
-      loadding.value = false
+      loading.value = false
     })
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -108,7 +130,6 @@ function handleSubmit() {
 
   &-item {
     border-bottom: 1px solid #e9e9e8;
-
     .ant-input-affix-wrapper {
       padding: 0;
 
