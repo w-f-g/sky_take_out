@@ -26,7 +26,9 @@ const { opened } = useSidebar()
 const selectedKeys = computed(() => ([route.name as string]))
 const isCollapsed = computed(() => !opened.value)
 
-const menuItems = adminRoutes.map(({ name, meta }) => {
+const menuItems = adminRoutes
+.filter(({ meta }) => !meta.hidden)
+.map(({ name, meta }) => {
   return {
     key: name,
     label: meta.title,
@@ -47,6 +49,7 @@ const handleMenuSelect: SelectEventHandler = (info) => {
 .sidebar-view {
   width: 190px;
   position: fixed;
+  z-index: 998;
   top: 60px;
   left: 0;
   bottom: 0;

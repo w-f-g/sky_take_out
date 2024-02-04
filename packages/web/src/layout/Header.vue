@@ -37,7 +37,11 @@ defineOptions({
 <style lang="scss" scoped>
 .sky-header {
   height: 60px;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
   background: #ffc100;
   .logo-view {
     width: 80px;

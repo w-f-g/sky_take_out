@@ -40,6 +40,7 @@
           size="large"
           type="password"
           placeholder="请输入"
+          @keydown.enter="handleOk"
           v-model:value="passwordForm.newPasswordAgain"
         />
       </FormItem>

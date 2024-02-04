@@ -7,3 +7,98 @@ body,
 #app {
   height: 100%;
 }
+
+body {
+  background-color: #f3f4f7;
+}
+
+#app {
+  overflow: hidden;
+}
+
+.container-box {
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.form-label {
+  margin-right: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+//查询黑色按钮样式
+.normal-btn {
+  background: #333333;
+  color: white;
+  margin-left: 20px;
+}
+
+.continue {
+  border-color: #333333 !important;
+  background: #333333 !important;
+  color: #ffffff !important;
+}
+
+.continue:hover {
+  background-color: #999999 !important;
+  border-color: #999999 !important;
+  color: #ffffff !important;
+}
+
+.continue:active {
+  background-color: #2a2a2a !important;
+  border-color: #2a2a2a !important;
+  color: #ffffff !important;
+}
+
+//列表中的状态启用禁用以及小圆点统一样式
+.tableColumn-status {
+  display: flex;
+  align-items: center;
+}
+
+.tableColumn-status::before {
+  width: 5px;
+  height: 5px;
+  background: #1dc779;
+  border-radius: 50%;
+  content: '';
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.stop-use::before {
+  background-color: #BDBDBD;
+}
+
+.text-btn {
+  position: relative;
+  margin-right: 10px;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 14px;
+    background-color: #ebeef5;
+    top: 50%;
+    right: -5px;
+    transform: translateY(-50%);
+  }
+  &:last-child {
+    margin-right: 0;
+    &::after {
+      width: 0;
+    }
+  }
+}
+
+.blueBug {
+  color: #419eff!important;
+}
+
+.delBut {
+  color: #f56c6c!important;
+}
