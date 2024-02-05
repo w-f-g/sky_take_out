@@ -70,22 +70,29 @@ export class CategoryService {
   /**  根据id删除分类 service */
   async deleteCategoryServer(id: number) {
     const getDishCount = this.dishRepository.createQueryBuilder()
+      .select([
+        'COUNT(0) as count'
+      ])
       .where({
         categoryId: id,
-      }).getCount
+      })
+      .getRawOne<Record<'count', number>>()
 
     const getSetmealCount = this.setmealRepository.createQueryBuilder()
+      .select([
+        'COUNT(0) as count'
+      ])
       .where({
         categoryId: id,
-      }).getCount
-
-    const [dishCount, setmealCount] = await Promise.all([getDishCount(), getSetmealCount()])
+      })
+      .getRawOne<Record<'count', number>>()
+    const [dishCount, setmealCount] = await Promise.all([getDishCount, getSetmealCount])
     // 关联菜品的分类不能被删除
-    if (dishCount > 0) {
+    if (dishCount.count > 0) {
       throw new HttpException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH, HttpStatus.FORBIDDEN)
     }
     // 关联套餐的分类不能被删除
-    if (setmealCount> 0) {
+    if (setmealCount.count > 0) {
       throw new HttpException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL, HttpStatus.FORBIDDEN)
     }
     try {
