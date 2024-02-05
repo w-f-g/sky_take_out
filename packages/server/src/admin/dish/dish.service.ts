@@ -63,7 +63,7 @@ export class DishService {
     let where = Object.keys(querySqlMap)
       .filter(k => {
         if (k === 'status') {
-          return query[k].toString() !== '' && !isEmpty(query[k])
+          return !isEmpty(query[k]) && query[k].toString() !== ''
         }
         return !isEmpty(query[k])
       })
