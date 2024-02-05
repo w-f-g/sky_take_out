@@ -8,6 +8,8 @@
 import { Button } from 'ant-design-vue'
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.normal-btn.ant-btn {
+  font-size: 14px;
+}
 </style>

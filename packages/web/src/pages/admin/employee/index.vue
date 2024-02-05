@@ -6,6 +6,7 @@
         <Input
           class="w-44"
           size="large"
+          allow-clear
           v-model:value="employeeName"
           placeholder="请输入员工姓名"
           @keydown.enter="handleSearch"

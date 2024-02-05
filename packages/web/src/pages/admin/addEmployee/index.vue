@@ -10,13 +10,13 @@
         :wrapper-col="{ span: 7 }"
       >
         <FormItem label="账号" name="username">
-          <Input v-model:value="formData.username" placeholder="请输入账号" size="large" />
+          <Input class="h-[40px]" v-model:value="formData.username" placeholder="请输入账号" size="large" />
         </FormItem>
         <FormItem label="员工姓名" name="name">
-          <Input v-model:value="formData.name" placeholder="请输入员工姓名" size="large" />
+          <Input class="h-[40px]" v-model:value="formData.name" placeholder="请输入员工姓名" size="large" />
         </FormItem>
         <FormItem label="手机号" name="phone">
-          <Input v-model:value="formData.phone" placeholder="请输入手机号" size="large" />
+          <Input class="h-[40px]" v-model:value="formData.phone" placeholder="请输入手机号" size="large" />
         </FormItem>
         <FormItem label="性别" name="sex">
           <RadioGroup v-model:value="formData.sex" class="h-[40px] flex items-center">
@@ -25,7 +25,7 @@
           </RadioGroup>
         </FormItem>
         <FormItem label="身份证号" name="idNumber">
-          <Input v-model:value="formData.idNumber" placeholder="请输入身份证号" size="large" />
+          <Input class="h-[40px]" v-model:value="formData.idNumber" placeholder="请输入身份证号" size="large" />
         </FormItem>
       </Form>
       <div class="flex justify-center actions">

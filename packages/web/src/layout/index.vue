@@ -1,9 +1,9 @@
 <template>
   <div class="layout">
     <Header />
-    <main class="page-main">
+    <main :class="['page-main', !opened && 'is-collapsed']">
       <SideBar />
-      <section :class="['wrapper', !opened && 'is-collapsed']">
+      <section class="wrapper">
         <RouterView v-slot="{ Component }">
           <Transition
             mode="out-in"
@@ -35,14 +35,15 @@ defineOptions({
   .page-main {
     height: calc(100vh - 60px);
     margin-top: 60px;
+    margin-left: 190px;
     overflow-y: auto;
+    transition: margin-left .28s;
+    &.is-collapsed {
+      margin-left: 80px;
+    }
     .wrapper {
+      min-width: 1200px;
       padding: 20px;
-      margin-left: 190px;
-      transition: margin-left .28s;
-      &.is-collapsed {
-        margin-left: 80px;
-      }
     }
   }
 }

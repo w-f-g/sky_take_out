@@ -96,9 +96,14 @@ body {
 }
 
 .blueBug {
-  color: #419eff!important;
+  color: #419eff !important;
 }
 
 .delBut {
-  color: #f56c6c!important;
+  color: #f56c6c !important;
+}
+
+.ant-input,
+.ant-select-selector {
+  font-size: 14px !important;
 }
