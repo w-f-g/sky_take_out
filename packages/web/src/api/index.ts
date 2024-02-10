@@ -1,3 +1,5 @@
 export * from './employee'
 export * from './category'
 export * from './shop'
+export * from './dish'
+export * from './setmeal'
