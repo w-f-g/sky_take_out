@@ -60,7 +60,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { reactive, ref, toRaw } from 'vue'
 import { useUserStore } from '@/stores/user'
 import type { FormInstance, Rule } from 'ant-design-vue/es/form'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 type TLoginForm = Record<'username' | 'password', string>;
 
@@ -76,6 +76,7 @@ const loginForm = reactive<TLoginForm>({
 const loading = ref(false)
 
 const { setUserInfo } = useUserStore()
+const route = useRoute()
 const router = useRouter()
 
 const loginFormRlues: Record<keyof TLoginForm, Rule[]> = {
@@ -91,7 +92,8 @@ function handleSubmit() {
       try {
         await setUserInfo(params)
         message.success('登录成功')
-        router.replace('/')
+        const redirectPath = route.query.redirect as string
+        router.replace(redirectPath || '/')
       } catch (err: any) {
         message.error(err.message)
       }

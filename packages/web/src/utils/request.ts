@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/user'
 import { message } from 'ant-design-vue'
 import axios, { AxiosError } from 'axios'
 import { toValue } from 'vue'
+import { debounce } from 'lodash-es'
 
 const request = axios.create({
   baseURL: '/api',
@@ -20,6 +21,15 @@ request.interceptors.request.use(
   err => Promise.reject(err),
 )
 
+const logout = debounce(() => {
+  const { employeeLogout } = useUserStore()
+  message.warn('身份过期，请重新登录！')
+  employeeLogout().then(() => {
+    const fullpath = router.currentRoute.value.fullPath
+    router.push('/login?redirect=' + fullpath)
+  })
+}, 500)
+
 request.interceptors.response.use(
   response => {
     const res = response.data
@@ -28,8 +38,7 @@ request.interceptors.response.use(
   (err: AxiosError) => {
     const { response } = err
     if (response!.status === 401) {
-      message.warn('身份过期，请重新登录！')
-      router.push('/login')
+      logout()
     }
     return Promise.reject(err)
   },
