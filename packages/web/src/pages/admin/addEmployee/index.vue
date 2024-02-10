@@ -43,7 +43,7 @@ import NormalButton from '@/components/Button/NormalButton.vue'
 import PrimaryButton from '@/components/Button/PrimaryButton.vue'
 import HeadLabel from '@/components/HeadLabel/index.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { computed, onMounted, reactive, ref, toRaw } from 'vue'
+import { computed, reactive, ref, toRaw } from 'vue'
 import type { IAddEmployeeDTO } from '@sky_take_out/types'
 import { addEmployeeFormRules } from './config'
 import { editEmployee, addEmployee, getEmployeeInfo } from '@/api/employee'
@@ -130,10 +130,7 @@ defineOptions({
     } else {
       next()
     }
-  }
-})
-
-onMounted(async () => {
+  },
 })
 </script>
 
@@ -145,12 +142,6 @@ onMounted(async () => {
     background-color: transparent;
     margin-bottom: 0px;
     padding-left: 0px;
-  }
-  :deep(.ant-form-item .ant-form-item-label > label) {
-    height: 40px;
-  }
-  :deep(.ant-form-item .ant-input) {
-    font-size: 14px;
   }
   .actions {
     transform: translateY(10px);

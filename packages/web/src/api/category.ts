@@ -58,5 +58,24 @@ export const deleteCategory = async (id: number) => {
   if (res.code === 0) {
     throw new Error(res.msg)
   }
-
 }
+
+export const getCategoryByType = async (type: 1 | 2) => {
+  const res: IResponse<ICategoryVO[]> = await request({
+    url: '/admin/category/list',
+    params: {
+      type,
+    },
+  })
+  if (res.code === 1) {
+    return res.data.map(x => {
+      return {
+        label: x.name,
+        value: x.id,
+      }
+    })
+  }
+  throw new Error(res.msg)
+}
+
+export type TSelectOptions = Awaited<ReturnType<typeof getCategoryByType>>

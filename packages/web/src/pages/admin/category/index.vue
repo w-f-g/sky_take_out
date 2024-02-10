@@ -1,5 +1,5 @@
 <template>
-  <div class="container-box p-[30px]">
+  <div class="container-box" style="padding: 30px;">
     <div class="search flex justify-between mb-5">
       <div class="flex items-center">
         <div>

@@ -6,7 +6,11 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      script: {
+        defineModel: true,
+      },
+    }),
     vueJsx(),
   ],
   resolve: {
@@ -17,6 +21,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
+        // target: 'http://localhost:8080',
         target: 'http://121.36.14.60:8080',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')

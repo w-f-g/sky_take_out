@@ -8,7 +8,12 @@ body,
   height: 100%;
 }
 
+ul, li {
+  list-style: none;
+}
+
 body {
+  font-size: 14px;
   background-color: #f3f4f7;
 }
 
@@ -106,4 +111,8 @@ body {
 .ant-input,
 .ant-select-selector {
   font-size: 14px !important;
+}
+
+.ant-form-item .ant-form-item-label > label {
+  height: 40px;
 }

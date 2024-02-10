@@ -84,9 +84,9 @@ const formRules: Record<string, RuleObject[]> = {
     {
       validator(rule, value, callback) {
         if (value !== passwordForm.newPassword) {
-          callback('密码不一致，请重新输入密码')
+          return Promise.reject('密码不一致，请重新输入密码')
         } else {
-          callback()
+          return Promise.resolve()
         }
       },
       trigger: 'blur',

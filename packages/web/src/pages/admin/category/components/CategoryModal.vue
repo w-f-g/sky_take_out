@@ -62,16 +62,16 @@ const rules: Record<keyof TFormData, RuleObject[]> = {
   categoryName: [
     {
       required: true,
-      validator(rule, value, callback) {
+      validator(rule, value) {
         const reg = new RegExp('^[A-Za-z\u4e00-\u9fa5]+$')
         if (!value) {
-          callback(`${type.value === 1 ? '菜品' : '套餐'}分类名称不能为空`)
+          return Promise.reject(`${type.value === 1 ? '菜品' : '套餐'}分类名称不能为空`)
         } else if (value.length < 2 || value.length > 20) {
-          callback('分类名称输入不符，请输入2-20个字符')
+          return Promise.reject('分类名称输入不符，请输入2-20个字符')
         } else if (!reg.test(value)) {
-          callback('分类名称包含特殊字符')
+          return Promise.reject('分类名称包含特殊字符')
         } else {
-          callback()
+          return Promise.resolve()
         }
       },
       trigger: 'blur',
@@ -80,18 +80,18 @@ const rules: Record<keyof TFormData, RuleObject[]> = {
   sort: [
     {
       required: true,
-      validator(rule, value, callback) {
+      validator(rule, value) {
         const reg = new RegExp('^\\d+$')
         if (value) {
           if (!reg.test(value)) {
-            callback('排序只能输入数字类型')
+            return Promise.reject('排序只能输入数字类型')
           } else if (Number(value) > 99) {
-            callback('排序只能输入0-99数字')
+            return Promise.reject('排序只能输入0-99数字')
           } else {
-            callback()
+            return Promise.resolve()
           }
         } else {
-          callback('排序不能为空')
+          return Promise.reject('排序不能为空')
         }
       },
       trigger: 'blur',
@@ -165,8 +165,5 @@ async function handleAddAgain() {
 <style lang="scss" scoped>
 .add-dish-form {
   padding: 30px 10px 0;
-  :deep(.ant-form-item .ant-form-item-label > label) {
-    height: 40px;
-  }
 }
 </style>
