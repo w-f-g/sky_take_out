@@ -16,6 +16,14 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     component: LoginPage,
   },
+  {
+    path: '/404',
+    component: () => import('@/pages/NotFound.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/404',
+  }
 ]
 
 const router = createRouter({
