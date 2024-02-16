@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { IPageResult, IResponse, ISetmealPageQueryDTO, ISetmealPageVO, ISetmealVO } from '@sky_take_out/types'
+import type { IPageResult, IResponse, ISetmealAddDTO, ISetmealEditDTO, ISetmealPageQueryDTO, ISetmealPageVO, ISetmealVO } from '@sky_take_out/types'
 
 export const getSetmealList = async (params: ISetmealPageQueryDTO) => {
   const res: IResponse<IPageResult<ISetmealPageVO>> = await request({
@@ -46,4 +46,26 @@ export const getSetmealInfo = async (id: string) => {
     return res.data
   }
   throw new Error(res.msg)
+}
+
+export const addSetmeal = async (data: ISetmealAddDTO) => {
+  const res: IResponse = await request({
+    url: '/admin/setmeal',
+    method: 'post',
+    data,
+  })
+  if (res.code === 0) {
+    throw new Error(res.msg)
+  }
+}
+
+export const editSetmeal = async (data: ISetmealEditDTO) => {
+  const res: IResponse = await request({
+    url: '/admin/setmeal',
+    method: 'put',
+    data,
+  })
+  if (res.code === 0) {
+    throw new Error(res.msg)
+  }
 }

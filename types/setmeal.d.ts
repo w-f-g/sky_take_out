@@ -45,7 +45,7 @@ export interface ISetmealDishAdd extends Omit<ISetmealDish, 'id'> {}
 
 export interface ISetmealEditDTO extends Omit<ISetmeal, 'status'> {}
 
-export interface ISetmealAddDTO extends Omit<ISetmeal, 'id' | 'setmealDishes' | 'status'> {
+export interface ISetmealAddDTO extends Omit<ISetmeal, 'id' | 'setmealDishes'> {
   setmealDishes: ISetmealDishAdd[],
 }
 

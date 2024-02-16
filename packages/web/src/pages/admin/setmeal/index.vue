@@ -8,6 +8,7 @@
             class="w-44"
             size="large"
             allow-clear
+            v-model:value="searchObj.name"
             placeholder="请填写套餐名称"
             @keydown.enter="handleSearch"
           />
@@ -17,6 +18,7 @@
           <Select
             size="large"
             allow-clear
+            v-model:value="searchObj.categoryId"
             style="width: 160px;"
             placeholder="请选择"
           >
@@ -49,7 +51,7 @@
             @click="handleDeleteSetmeals(tableSelectionRow as string[])"
             :disabled="!tableSelectionRow.length"
           >批量删除</Button>
-        <PrimaryButton class="ml-5" @click="router.push('/dish/setmeal')">+ 新建套餐</PrimaryButton>
+        <PrimaryButton class="ml-5" @click="router.push('/setmeal/add')">+ 新建套餐</PrimaryButton>
       </div>
     </div>
     <Table

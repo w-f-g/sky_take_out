@@ -9,7 +9,7 @@ export default {
   }
 }
 
-type RuleKey = Omit<ISetmealAddDTO, 'status' | 'description' | 'setmealDishes'>
+type RuleKey = Omit<ISetmealAddDTO, 'status' | 'description'>
 
 export const addSetmealFormRules: Record<keyof RuleKey, RuleObject[]> = {
   name: [
@@ -32,6 +32,9 @@ export const addSetmealFormRules: Record<keyof RuleKey, RuleObject[]> = {
       },
       trigger: 'blur',
     },
+  ],
+  setmealDishes: [
+    { required: true, message: '请选择套餐菜品' }
   ],
   image: [
     { required: true, message: '套餐图片不能为空' },

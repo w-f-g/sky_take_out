@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { IAddDish, IDish, IDishPageQueryDTO, IDishPageVO, IDishVO, IPageResult, IResponse } from '@sky_take_out/types'
+import type { IAddDish, IDish, IDishEntity, IDishPageQueryDTO, IDishPageVO, IDishVO, IPageResult, IResponse } from '@sky_take_out/types'
 
 export const getDishList = async (params: IDishPageQueryDTO) => {
   const res: IResponse<IPageResult<IDishPageVO>> = await request({
@@ -68,4 +68,17 @@ export const deleteDishs = async (ids: string[]) => {
   if (res.code === 0) {
     throw new Error(res.msg)
   }
+}
+
+export const getDishListByCategoryId = async (categoryId: number) => {
+  const res: IResponse<IDishEntity[]> = await request({
+    url: '/admin/dish/list',
+    params: {
+      categoryId,
+    },
+  })
+  if (res.code === 1) {
+    return res.data
+  }
+  throw new Error(res.msg)
 }
