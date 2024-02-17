@@ -56,6 +56,7 @@ export class OrderService {
       payStatus: PayStatus.UN_PAID,
       status: OrderStatus.PENDING_PAYMENT,
       number: Date.now(),
+      address: addressBook.detail,
       phone: addressBook.phone,
       consignee: addressBook.consignee,
       userId,
