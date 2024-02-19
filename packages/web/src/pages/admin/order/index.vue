@@ -124,9 +124,10 @@ import NormalButton from '@/components/Button/NormalButton.vue'
 import type { IAdminOrderVO, IAdminSearchOrderDTO, IAdminSearchOrderVO } from '@sky_take_out/types'
 import { RadioButton, RadioGroup, Input, RangePicker, Table, Button, message, type RadioChangeEvent } from 'ant-design-vue'
 import type { ColumnsType, TablePaginationConfig } from 'ant-design-vue/es/table'
-import { computed, onMounted, reactive, ref, shallowRef, toRaw } from 'vue'
+import { computed, onMounted, reactive, ref, shallowRef, toRaw, watch } from 'vue'
 import { cancelOrderModal, rejectionOrderModal } from './components/modal'
 import OrderInfoModal from './components/OrderInfoModal.vue'
+import { useRoute } from 'vue-router'
 
 const modules = import.meta.glob('./config.ts', { eager: true })['./config.ts'] as object
 const _columns = Object.entries(modules)
@@ -180,6 +181,8 @@ let _searchObj: TSearch = {
   number: '',
   dateTimes: ['', ''],
 }
+
+const route = useRoute()
 
 const orderTypes$ = reactive(orderTypes)
 const searchObj: TSearch = reactive({
@@ -364,7 +367,16 @@ async function handleModalOk(flag: boolean) {
 }
 
 onMounted(() => {
-  getOrderPageList(1)
+  if (route.query.status !== undefined) {
+    const _s = Number(route.query.status as string)
+    if (!isNaN(_s) && _s > 1 && _s < 7) {
+      _searchObj.orderType = _s as TOrderType
+    } else {
+      _searchObj.orderType = 0
+    }
+    searchObj.orderType = _searchObj.orderType
+  }
+  getOrderPageList(1, _searchObj)
 })
 
 defineOptions({

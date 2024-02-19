@@ -63,7 +63,7 @@
       </FormItem>
     </Form>
     <div class="flex justify-center actions">
-      <Button size="large" @click="router.push('/dish')">取消</Button>
+      <Button size="large" @click="router.back()">取消</Button>
       <NormalButton @click="handleSave(false)">保存</NormalButton>
       <PrimaryButton @click="handleSave(true)" v-if="!id">保存并继续</PrimaryButton>
     </div>
