@@ -6,7 +6,7 @@ import R from 'src/utils/response'
 import { BusinessDataVO, OrderOverViewVO, OverViewVO } from './vo/workspace.vo'
 import { dateFormat } from '@sky_take_out/utils'
 
-@ApiTags('数据统计相关接口')
+@ApiTags('工作台接口')
 @UseGuards(AdminAuthGuard)
 @Controller('/admin/workspace')
 export class WorkspaceController {
