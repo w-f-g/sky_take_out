@@ -4,6 +4,8 @@ export default {
     'src/**/*.css',
     'src/**/*.scss',
     'src/**/*.vue',
+    'src/**/*.ts',
+    'src/**/*.tsx',
   ],
   theme: {
     extend: {},

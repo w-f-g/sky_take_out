@@ -122,7 +122,7 @@ import { Input, Table, Button, type TablePaginationConfig, message, Modal, Selec
 import NormalButton from '@/components/Button/NormalButton.vue'
 import PrimaryButton from '@/components/Button/PrimaryButton.vue'
 import { columns } from './config'
-import { onMounted, reactive, ref, shallowRef, toRaw } from 'vue'
+import { onMounted, reactive, shallowRef, toRaw } from 'vue'
 import { getCategoryByType } from '@/api/category'
 import type { Key } from 'ant-design-vue/es/table/interface'
 import { useRouter } from 'vue-router'

@@ -163,6 +163,9 @@ importers:
       ant-design-vue:
         specifier: 4.x
         version: 4.1.1(vue@3.3.10)
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
