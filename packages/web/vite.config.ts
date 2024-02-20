@@ -26,6 +26,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')
       },
+      '/ws': {
+        target: 'ws://121.36.14.60:8081',
+        changeOrigin: true,
+        ws: true,
+      }
     },
   },
 })
