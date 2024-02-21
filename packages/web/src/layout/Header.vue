@@ -50,7 +50,7 @@ onMounted(async () => {
     await orderSocket.connect()
     orderSocket.listen((e) => {
       const key = 'message_order_' + e.orderId
-      const isOrderPage = router.currentRoute.value.path !== '/order'
+      const isNotOrderPage = router.currentRoute.value.path !== '/order'
       audio1.value!.currentTime = 0
       audio2.value!.currentTime = 0
       if (e.type === 1) {
@@ -61,7 +61,7 @@ onMounted(async () => {
       api.info({
         key,
         message: e.type === 1 ? '待接单' : '催单',
-        duration: isOrderPage ? 3 : null,
+        duration: !isNotOrderPage ? 3 : null,
         description: () => {
           if (e.type === 1) {
             return (
@@ -73,7 +73,7 @@ onMounted(async () => {
           )
         },
         onClick() {
-          if (isOrderPage) {
+          if (isNotOrderPage) {
             router.push('/order?status=2')
           }
           api.destroy(key)

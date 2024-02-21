@@ -128,6 +128,7 @@ import { computed, onMounted, reactive, ref, shallowRef, toRaw, watch } from 'vu
 import { cancelOrderModal, rejectionOrderModal } from './components/modal'
 import OrderInfoModal from './components/OrderInfoModal.vue'
 import { useRoute } from 'vue-router'
+import { orderSocket } from '@/utils'
 
 const modules = import.meta.glob('./config.ts', { eager: true })['./config.ts'] as object
 const _columns = Object.entries(modules)
@@ -377,6 +378,11 @@ onMounted(() => {
     searchObj.orderType = _searchObj.orderType
   }
   getOrderPageList(1, _searchObj)
+  orderSocket.listen((data) => {
+    if (data.type === 1) {
+      getOrderPageList(pageData.currentPage, _searchObj)
+    }
+  })
 })
 
 defineOptions({

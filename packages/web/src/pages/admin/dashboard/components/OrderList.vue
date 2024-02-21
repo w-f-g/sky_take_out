@@ -67,6 +67,7 @@ import { cancelOrderModal, rejectionOrderModal } from '@/pages/admin/order/compo
 import OrderInfoModal from '@/pages/admin/order/components/OrderInfoModal.vue'
 import { columns2, columns3 } from '@/pages/admin/order/config'
 import type { IAdminOrderVO, IAdminSearchOrderDTO, IAdminSearchOrderVO } from '@sky_take_out/types'
+import { orderSocket } from '@/utils'
 
 const props = defineProps<{
   orderType: 2 | 3,
@@ -180,6 +181,11 @@ async function handleModalOk(flag: boolean) {
 
 onMounted(() => {
   getOrderPageList(1)
+  orderSocket.listen((data) => {
+    if (data.type === 1) {
+      getOrderPageList(pageData.currentPage)
+    }
+  })
 })
 </script>
 
