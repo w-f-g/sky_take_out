@@ -167,8 +167,8 @@ importers:
         specifier: ^1.11.10
         version: 1.11.10
       echarts:
-        specifier: ^5.5.0
-        version: 5.5.0
+        specifier: ^5.3.2
+        version: 5.3.2
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -3821,11 +3821,11 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /echarts@5.5.0:
-    resolution: {integrity: sha512-rNYnNCzqDAPCr4m/fqyUFv7fD9qIsd50S6GDFgO1DxZhncCsNsG7IfUlAlvZe5oSEQxtsjnHiUuppzccry93Xw==}
+  /echarts@5.3.2:
+    resolution: {integrity: sha512-LWCt7ohOKdJqyiBJ0OGBmE9szLdfA9sGcsMEi+GGoc6+Xo75C+BkcT/6NNGRHAWtnQl2fNow05AQjznpap28TQ==}
     dependencies:
       tslib: 2.3.0
-      zrender: 5.5.0
+      zrender: 5.3.1
     dev: false
 
   /ee-first@1.1.1:
@@ -8725,8 +8725,8 @@ packages:
       readable-stream: 3.6.2
     dev: false
 
-  /zrender@5.5.0:
-    resolution: {integrity: sha512-O3MilSi/9mwoovx77m6ROZM7sXShR/O/JIanvzTwjN3FORfLSr81PsUGd7jlaYOeds9d8tw82oP44+3YucVo+w==}
+  /zrender@5.3.1:
+    resolution: {integrity: sha512-7olqIjy0gWfznKr6vgfnGBk7y4UtdMvdwFmK92vVQsQeDPyzkHW1OlrLEKg6GHz1W5ePf0FeN1q2vkl/HFqhXw==}
     dependencies:
       tslib: 2.3.0
     dev: false

@@ -1,0 +1,109 @@
+<template>
+  <div class="h-full" ref="node"></div>
+</template>
+
+<script setup lang="ts">
+import { useChart } from '@/hooks/chart'
+import type { EChartsOption } from 'echarts'
+
+const props = defineProps<{
+  options: EChartsOption,
+}>()
+
+const _options: EChartsOption = {
+  tooltip: {
+    trigger: 'axis',
+    backgroundColor: '#fff', //背景颜色（此时为默认色）
+    borderRadius: 2, //边框圆角
+    textStyle: {
+      color: '#333', //字体颜色
+      fontSize: 12, //字体大小
+      fontWeight: 300,
+    },
+  },
+  grid: {
+    top: '5%',
+    left: '20',
+    right: '50',
+    bottom: '12%',
+    containLabel: true,
+  },
+  xAxis: {
+    type: 'category',
+    data: [],
+    boundaryGap: false,
+    axisLabel: {
+      //X轴字体颜色
+      color: '#666',
+      fontSize: '12px',
+    },
+    axisLine: {
+      //X轴线颜色
+      lineStyle: {
+        color: '#E5E4E4',
+        width: 1, //x轴线的宽度
+      },
+    },
+  },
+  yAxis: {
+    type: 'value',
+    min: 0,
+    axisLabel: {
+      color: '#666',
+      fontSize: '12px',
+    },
+  },
+  series: [
+    {
+      name: '用户总量',
+      type: 'line',
+      data: [],
+      smooth: false, //否平滑曲线
+      showSymbol: false, //未显示鼠标上移的圆点
+      symbolSize: 10,
+      // symbol:"circle", //设置折线点定位实心点
+      lineStyle: {
+        color: '#FFD000',
+      },
+      itemStyle: {
+        color: '#FFD000',
+      },
+      emphasis: {
+        itemStyle: {
+          color: '#fff',
+          borderWidth: 5,
+          borderColor: '#FFC100',
+        }
+      },
+    },
+    {
+      name: '新增用户',
+      type: 'line',
+      data: [],
+      smooth: false, //否平滑曲线
+      showSymbol: false, //未显示鼠标上移的圆点
+      symbolSize: 10, //圆点大小
+      lineStyle: {
+        color: '#FD7F7F',
+      },
+      itemStyle: {
+        color: '#FD7F7F',
+      },
+      emphasis: {
+        itemStyle: {
+          // 圆点颜色
+          color: '#fff',
+          borderWidth: 5,
+          borderColor: '#FD7F7F',
+        }
+      },
+    },
+  ],
+}
+
+const { node } = useChart(props, _options)
+</script>
+
+<style scoped>
+
+</style>
