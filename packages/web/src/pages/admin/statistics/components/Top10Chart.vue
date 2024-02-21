@@ -13,19 +13,8 @@ const props = defineProps<{
 
 const _options: EChartsOption = {
   tooltip: {
-    formatter: (params) => {
-      const data = Array.isArray(params) ? params[0] : params
-      return `
-        <div>
-          ${data.name}
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            ${data.marker}${data.value}
-          </div>
-       </div>
-      `
-    },
-    borderColor: '#ffffff',
-    borderRadius: 2, //边框圆角
+    trigger: 'axis',
+    backgroundColor: '#fff', //背景颜色（此时为默认色）
     textStyle: {
       color: '#333', //字体颜色
       fontSize: 12, //字体大小

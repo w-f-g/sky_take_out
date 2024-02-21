@@ -13,31 +13,13 @@ const props = defineProps<{
 const _options: EChartsOption = {
   tooltip: {
     trigger: 'axis',
-    formatter: (params) => {
-      if (!Array.isArray(params)) return ''
-      return `
-        <div style="color: #333; font-size: 12px; font-weight: 300;">
-          ${params[0].name}
-          ${
-            params.map(data => {
-              return `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div style="margin-right: 10px;">${data.marker}<span>${data.seriesName}</span></div>
-                  <span>${data.value}</span>
-                </div>
-              `
-            }).join('')
-          }
-       </div>
-      `
+    backgroundColor: '#fff', //背景颜色（此时为默认色）
+    borderRadius: 2, //边框圆角
+    textStyle: {
+      color: '#333', //字体颜色
+      fontSize: 12, //字体大小
+      fontWeight: 300,
     },
-    // backgroundColor: '#fff', //背景颜色（此时为默认色）
-    // borderRadius: 2, //边框圆角
-    // textStyle: {
-    //   color: '#333', //字体颜色
-    //   fontSize: 12, //字体大小
-    //   fontWeight: 300,
-    // },
   },
   grid: {
     top: '5%',

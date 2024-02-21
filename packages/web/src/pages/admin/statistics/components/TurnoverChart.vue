@@ -13,24 +13,6 @@ const props = defineProps<{
 const _options: EChartsOption = {
   tooltip: {
     trigger: 'axis',
-    formatter: (params) => {
-      if (!Array.isArray(params)) return ''
-      return `
-        <div style="color: #333; font-size: 12px; font-weight: 300;">
-          ${params[0].name}
-          ${
-            params.map(data => {
-              return `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div style="margin-right: 10px;">${data.marker}<span>${data.seriesName}</span></div>
-                  <span>${data.value}</span>
-                </div>
-              `
-            }).join('')
-          }
-       </div>
-      `
-    },
   },
   grid: {
     top: '5%',
