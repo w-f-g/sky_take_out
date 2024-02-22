@@ -14,3 +14,100 @@
 5. 由于小程序源码中 **再来一单** 请求方法定义的有问题，所以修改了下 `packages\wxapp\common\vendor.js` 的代码，见下图。
 ![36702288E8D7CB2B](E:\project\servers\sky_take_out\images\36702288E8D7CB2B.png)
 6. 接入百度地图判断是否超出配送范围功能没做。
+
+## 启动
+```bash
+# 进入到 packages/server 路径
+pnpm start
+
+# or
+pnpm start:dev
+```
+
+## 部署
+
+```bash
+# 在 workspace 根路径下运行
+pnpm build:server
+```
+等到命令执行完毕以后访问 workspace 根目录下的 `dist` 文件夹，找到文件夹中的 `sky_take_out_server.tar.gz`，将它上传到你的服务器，然后在服务器中执行以下命令。
+```bash
+# 载入 docker 镜像
+docker load < sky_take_out_server.tar.gz
+
+# 运行 docker 容器
+docker run -d -p 8080:8080 -p 8081:8081 -v /var/sky_take_out/public:/app/public sky_take_out_server
+```
+
+# 前端-管理端
+技术栈：vue3+ts+pinia
+
+## 启动
+```bash
+# 进入到 packages/web 路径
+pnpm dev
+```
+
+## 部署
+```bash
+# 在 workspace 根路径下执行
+pnpm build:web
+
+# or
+# 进入到 packages/web 路径
+pnpm build
+```
+执行完打包命令以后，访问 workspace 根目录的 `dish` 文件夹，找到 `sky` 文件夹，将它压缩好以后上传到你的服务器，然后找到你的 `nginx.conf` 文件，参考如下配置进行修改。
+
+```conf
+user  nginx;
+worker_processes  auto;
+
+error_log  /var/log/nginx/error.log notice;
+pid        /var/run/nginx.pid;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    gzip  on;
+    gzip_static on;
+
+    server {
+        listen       5174;
+        server_name  localhost;
+        proxy_set_header Host $host:$server_port;
+
+        location / {
+            root    /app;
+
+            set $gz ".gz";
+            if (-f $request_filename$gz) {
+                rewrite $request_filename $request_filename$gz break;
+            }
+
+            try_files   $uri $uri/ /index.html;
+        }
+        
+        location /api {
+            proxy_pass http://127.0.0.1:8080;
+        }
+    }
+}
+```
+**注意：**由于我在打包的时候就将产物进行了 gzip 压缩，所以在你的 nginx 配置中需要开启 `gzip_static`。

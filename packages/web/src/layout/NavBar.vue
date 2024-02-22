@@ -53,6 +53,7 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import ShopStatusModal from './components/ShopStatusModal.vue'
 import PasswordModal from './components/PasswordModal.vue'
+import { orderSocket } from '@/utils'
 
 const router = useRouter()
 
@@ -68,6 +69,7 @@ const shopPasswordModalOpen = ref(false)
 
 async function handleLogout() {
   await employeeLogout()
+  orderSocket.close()
   router.push('/login')
 }
 

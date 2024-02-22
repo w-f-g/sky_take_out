@@ -33,7 +33,7 @@ import { useSidebar } from '@/hooks/sidebar'
 import logoPng from '@/assets/login/logo.png'
 import miniLogoPng from '@/assets/login/mini-logo.png'
 import NavBar from './NavBar.vue'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { orderSocket } from '@/utils'
 import { notification } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
@@ -87,10 +87,6 @@ onMounted(async () => {
       duration: 2,
     })
   }
-})
-
-onUnmounted(() => {
-  orderSocket.close()
 })
 
 defineOptions({

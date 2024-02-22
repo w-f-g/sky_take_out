@@ -387,17 +387,6 @@ onMounted(() => {
 
 defineOptions({
   name: 'OrderPage',
-  beforeRouteEnter(to, from, next) {
-    console.log(to, from)
-    if (from.path === to.path) {
-      next({
-        ...to,
-        replace: true,
-      })
-      return
-    }
-    next()
-  }
 })
 </script>
 

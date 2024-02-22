@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/user'
 import { message } from 'ant-design-vue'
 import axios, { AxiosError } from 'axios'
 import { toValue } from 'vue'
-import { debounce } from 'lodash-es'
+import debounce from 'lodash.debounce'
 
 const request = axios.create({
   baseURL: '/api',

@@ -1,6 +1,6 @@
 import { init } from 'echarts'
 import type { EChartsType, EChartsOption } from 'echarts'
-import { debounce } from 'lodash-es'
+import debounce from 'lodash.debounce'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 type Props = {
