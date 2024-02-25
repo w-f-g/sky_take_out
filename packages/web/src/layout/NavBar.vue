@@ -47,7 +47,7 @@
 import { useUserInfo } from '@/hooks/user'
 import { useShopStore } from '@/stores/shop'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { CaretDownOutlined, CaretUpOutlined, LockOutlined, PoweroffOutlined } from '@ant-design/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
@@ -59,7 +59,6 @@ const router = useRouter()
 
 const shopStore = useShopStore()
 const { status } = storeToRefs(shopStore)
-const { getShopStatus } = shopStore
 
 const { employeeLogout } = useUserStore()
 const { name } = useUserInfo()
@@ -72,10 +71,6 @@ async function handleLogout() {
   orderSocket.close()
   router.push('/login')
 }
-
-onMounted(() => {
-  getShopStatus()
-})
 </script>
 
 <style lang="scss" scoped>

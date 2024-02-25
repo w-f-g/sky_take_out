@@ -22,11 +22,17 @@ import { RouterView } from 'vue-router'
 import Header from './Header.vue'
 import SideBar from './SideBar.vue'
 import { useSidebar } from '@/hooks/sidebar'
+import { useShopStore } from '@/stores/shop'
 
 const { opened } = useSidebar()
 
 defineOptions({
-  name: 'AppLayout'
+  name: 'AppLayout',
+  async beforeRouteEnter(to, from, next) {
+    const { getShopStatus } = useShopStore()
+    await getShopStatus()
+    next()
+  }
 })
 </script>
 
