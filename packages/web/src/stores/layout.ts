@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 
 export const useLayoutStore = defineStore('layout', () => {
   const sidebar = reactive({

@@ -28,3 +28,4 @@ coverage
 *.tsbuildinfo
 vite.config.ts.*
 stats.html
+dist-electron

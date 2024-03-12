@@ -1,5 +1,15 @@
 <template>
   <div class="login">
+    <div v-if="isShowWinActions" class="flex win-actions justify-end">
+      <div class="drag-bar flex-1 overflow-hidden"></div>
+      <div class="flex" @click="handleActionClick">
+        <div v-if="IS_DEV" data-action-type="more" class="icon more"></div>
+        <div data-action-type="minimize" class="icon minimize"></div>
+        <div v-if="!isMaximize" data-action-type="unmaximize" class="icon maximize"></div>
+        <div v-else data-action-type="maximize" class="icon unmaximize"></div>
+        <div data-action-type="close" class="icon close"></div>
+      </div>
+    </div>
     <div class="login-box">
       <img src="@/assets/login/login-l.png" alt="" />
       <div class="login-form">
@@ -61,12 +71,16 @@ import { reactive, ref, toRaw } from 'vue'
 import { useUserStore } from '@/stores/user'
 import type { FormInstance, Rule } from 'ant-design-vue/es/form'
 import { useRoute, useRouter } from 'vue-router'
+import { useAppActionBar } from '@/hooks/appActionBar'
+import { IS_DEV } from '@/utils'
 
 type TLoginForm = Record<'username' | 'password', string>;
 
 defineOptions({
   name: 'LoginPage',
 })
+
+const { isMaximize, isShowWinActions, handleActionClick } = useAppActionBar()
 
 const formRef = ref<FormInstance>()
 const loginForm = reactive<TLoginForm>({
@@ -108,6 +122,48 @@ function handleSubmit() {
 .login {
   @apply flex justify-center items-center h-full;
   background-color: #333;
+  $winActionsHeight: 32px;
+
+  .win-actions {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $winActionsHeight;
+    .drag-bar {
+      -webkit-app-region: drag;
+    }
+    .icon {
+      height: $winActionsHeight;
+      padding: 0 20px;
+      &.more {
+        background: url("@/assets/win-icons/more-white.svg") center no-repeat;
+        background-size: 20px;
+      }
+      &.minimize {
+        background: url("@/assets/win-icons/minimize-white.svg") center no-repeat;
+        background-size: 20px;
+      }
+      &.maximize {
+        background: url("@/assets/win-icons/maximize-white.svg") center no-repeat;
+        background-size: 20px;
+      }
+      &.unmaximize {
+        background: url("@/assets/win-icons/unmaximize-white.svg") center no-repeat;
+        background-size: 20px;
+      }
+      &.close {
+        background: url("@/assets/win-icons/close-white.svg") center no-repeat;
+        background-size: 20px;
+        &:hover {
+          background-color: #e81123;
+        }
+      }
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
 }
 
 .login-box {
