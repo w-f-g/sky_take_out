@@ -54,7 +54,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: resolve(__dirname, '../../dist/sky'),
+    outDir: resolve(process.cwd(), 'dist-electron/html'),
     rollupOptions: {
       output: {
         entryFileNames: 'js/[name].[hash].js',

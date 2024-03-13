@@ -1,0 +1,6 @@
+appId: 'com.example.app'
+productName: '苍穹外卖'
+directories:
+  app: 'dist-electron'
+  output: '../../dist/app'
+asar: true

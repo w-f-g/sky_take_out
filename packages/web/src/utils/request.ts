@@ -4,9 +4,10 @@ import { message } from 'ant-design-vue'
 import axios, { AxiosError } from 'axios'
 import { toValue } from 'vue'
 import debounce from 'lodash.debounce'
+import { REQUEST_BASE_URL } from '.'
 
 const request = axios.create({
-  baseURL: '/api',
+  baseURL: REQUEST_BASE_URL,
 })
 
 request.interceptors.request.use(

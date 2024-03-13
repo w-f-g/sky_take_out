@@ -23,7 +23,7 @@ function createWindow() {
     win.webContents.openDevTools()
     win.loadURL('http://localhost:5173')
   } else {
-    const path = resolve(__dirname, '../dist/index.html')
+    const path = resolve(__dirname, './html/index.html')
     win.loadFile(path)
   }
   return win

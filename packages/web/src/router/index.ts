@@ -1,8 +1,9 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import LoginPage from '@/pages/login/index.vue'
 import Layout from '@/layout/index.vue'
 import { BASE_URL } from '@/utils'
 import adminRoutes from './admin'
+import { IS_ELECTRON } from '@/utils/application'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -27,7 +28,9 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(BASE_URL),
+  history: IS_ELECTRON
+    ? createWebHashHistory(BASE_URL)
+    : createWebHistory(BASE_URL),
   routes,
 })
 
