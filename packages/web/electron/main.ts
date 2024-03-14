@@ -8,6 +8,8 @@ import handleTray from './utils/tray'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
+const IS_DEV = process.env.NODE_ENV === 'development'
+
 function createWindow() {
   const win = new BrowserWindow({
     minWidth: 800,
@@ -16,11 +18,12 @@ function createWindow() {
     title: '苍穹外卖',
     frame: false,
     webPreferences: {
+      devTools: IS_DEV,
       preload: resolve(__dirname, './preload/index.mjs'),
     }
   })
-  if (process.env.NODE_ENV === 'development') {
-    win.webContents.openDevTools()
+  if (IS_DEV) {
+    // win.webContents.openDevTools()
     win.loadURL('http://localhost:5173')
   } else {
     const path = resolve(__dirname, './html/index.html')
