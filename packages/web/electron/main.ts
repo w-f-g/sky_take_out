@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray } from 'electron'
+import { app, BrowserWindow, Menu, Tray } from 'electron'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { resolve } from 'path'
@@ -45,6 +45,9 @@ app.whenReady().then(() => {
     }
   })
   mainIPC(win)
+
+  const menu = Menu.buildFromTemplate([])
+  Menu.setApplicationMenu(menu)
 })
 
 app.on('window-all-closed', () => {

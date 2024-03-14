@@ -16,14 +16,3 @@ contextBridge.exposeInMainWorld(
     }
   } as IElectronAPI,
 )
-
-const excludes = ['r', 'R', '0', '+', '-', 'w', 'm']
-window.addEventListener('keydown', e => {
-  if (e.ctrlKey && process.env.NODE_ENV !== 'development') {
-    console.log(e.key)
-    const flag = excludes.indexOf(e.key) >= 0
-    if (flag) {
-      e.preventDefault()
-    }
-  }
-})
