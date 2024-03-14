@@ -5,3 +5,5 @@ export const setScreenType = (type: string) => {
     window.electron.setScreenType(type)
   }
 }
+
+export const listenWinSizeChange = window.electron?.listenWinSizeChange

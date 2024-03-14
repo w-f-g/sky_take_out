@@ -5,7 +5,7 @@
       <div class="flex" @click="handleActionClick">
         <div v-if="IS_DEV" data-action-type="more" class="icon more"></div>
         <div data-action-type="minimize" class="icon minimize"></div>
-        <div v-if="!isMaximize" data-action-type="unmaximize" class="icon maximize"></div>
+        <div v-if="isMaximize" data-action-type="unmaximize" class="icon maximize"></div>
         <div v-else data-action-type="maximize" class="icon unmaximize"></div>
         <div data-action-type="close" class="icon close"></div>
       </div>
@@ -186,4 +186,4 @@ defineOptions({
     font-size: 20px;
   }
 }
-</style>isMaximized, , setScreenType, setScreenTypeimport type { useAppActionBar } from '@/hooks/appActionBar', useAppActionBar
+</style>

@@ -9,5 +9,10 @@ contextBridge.exposeInMainWorld(
     setScreenType: (type: string) => {
       ipcRenderer.send('detach:service', { type })
     },
+    listenWinSizeChange: (cb) => {
+      ipcRenderer.on('win_size_change', (_, data) => {
+        cb(data)
+      })
+    }
   } as IElectronAPI,
 )

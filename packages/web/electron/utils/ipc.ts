@@ -2,7 +2,13 @@ import { BrowserWindow, ipcMain } from 'electron'
 
 export const mainIPC = (win: BrowserWindow) => {
   // 判断是否是满屏状态
-  ipcMain.handle('get_is_maximized', () => win.isMaximizable())
+  ipcMain.handle('get_is_maximized', () => win.isMaximized())
+
+  const handleSizeChange = () => {
+    win.webContents.send('win_size_change', win.isMaximized())
+  }
+  win.on('maximize', handleSizeChange)
+  win.on('unmaximize', handleSizeChange)
 
   const operation = {
     more: () => {
