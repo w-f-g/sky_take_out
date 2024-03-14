@@ -4,3 +4,7 @@ directories:
   app: 'dist-electron'
   output: '../../dist/app'
 asar: true
+win:
+  icon: './electron/public/favicon.ico'
+  artifactName: 'sky-take-out'
+  target: 'dir'

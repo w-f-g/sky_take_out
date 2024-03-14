@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "main.js",
+  "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
     "dev:app": "vite --config ./electron/vite.config.ts",
