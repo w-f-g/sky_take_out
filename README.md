@@ -111,3 +111,7 @@ http {
 }
 ```
 **注意：**由于我在打包的时候就将产物进行了 gzip 压缩，所以在你的 nginx 配置中需要开启 `gzip_static`。
+
+## 桌面端
+
+我尝试用 electron 打包成桌面端应用，可查看 application 分支，改动有点多就没有合并到 master 分支。
